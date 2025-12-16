@@ -1,6 +1,6 @@
 # Cereyan - İstanbul Film Takvimi
 
-A minimal, elegant calendar of independent and arthouse film screenings in Istanbul.
+A calendar maintained by the Cereyan team of independent and arthouse film screenings in Istanbul.
 
 **Live:** [cereyan.vercel.app](https://cereyan.vercel.app) • **Newsletter:** [cereyan.substack.com](https://cereyan.substack.com)
 
