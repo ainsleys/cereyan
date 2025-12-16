@@ -28,10 +28,14 @@ export interface Screening {
   eventSeries?: string;
   /** External link to tickets or more info */
   link?: string;
-  /** Editorial note from the programmer */
+  /** Editorial note from the programmer (Turkish) */
   programmersNote?: string;
-  /** Film synopsis */
+  /** Editorial note from the programmer (English) */
+  programmersNoteEn?: string;
+  /** Film synopsis (Turkish) */
   synopsis?: string;
+  /** Film synopsis (English) */
+  synopsisEn?: string;
   /** True if screening spans multiple days (e.g., "13-17.12.2025") */
   isDateRange?: boolean;
   /** End date for date ranges (ISO format) */

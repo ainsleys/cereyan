@@ -11,7 +11,15 @@ interface Props {
 
 const { screening, lang, index = 0 } = Astro.props;
 
-const hasExpandedContent = screening.programmersNote || screening.synopsis;
+// Get localized content (fall back to Turkish if English not available)
+const note = lang === 'en' 
+  ? (screening.programmersNoteEn || screening.programmersNote) 
+  : screening.programmersNote;
+const synopsis = lang === 'en' 
+  ? (screening.synopsisEn || screening.synopsis) 
+  : screening.synopsis;
+
+const hasExpandedContent = note || synopsis;
 const cardId = `screening-${screening.id}`;
 ---
 
@@ -66,24 +74,24 @@ const cardId = `screening-${screening.id}`;
       id={cardId}
       class="expandable-content hidden mt-4 pt-4 border-t border-cinema-gray/50"
     >
-      {screening.programmersNote && (
+      {note && (
         <div class="mb-3">
           <h4 class="text-xs font-semibold uppercase tracking-wider text-cereyan-pink mb-2">
             {t(lang, 'screening.programmersNote')}
           </h4>
           <p class="text-sm text-cinema-text-muted leading-relaxed">
-            {screening.programmersNote}
+            {note}
           </p>
         </div>
       )}
       
-      {screening.synopsis && (
+      {synopsis && (
         <div>
           <h4 class="text-xs font-semibold uppercase tracking-wider text-cinema-text-muted mb-2">
             {t(lang, 'screening.synopsis')}
           </h4>
           <p class="text-sm text-cinema-text-muted leading-relaxed">
-            {screening.synopsis}
+            {synopsis}
           </p>
         </div>
       )}
