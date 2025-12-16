@@ -44,32 +44,21 @@ const { weeks, currentWeekId, lang } = Astro.props;
   <div class="hidden sm:block overflow-x-auto scrollbar-hide">
     <div class="flex items-center gap-1 min-w-max pb-2">
         {weeks.map((week) => {
-          const isSelected = week.id === currentWeekId;
           const isCurrent = week.isCurrent;
           
-          // Determine the style classes
-          let styleClasses = "relative px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap";
-          
-          if (isSelected) {
-            // SELECTED: Solid pink background
-            styleClasses += " bg-cereyan-pink text-cinema-black font-semibold";
-          } else if (isCurrent) {
-            // CURRENT (not selected): Pink border outline
-            styleClasses += " ring-2 ring-cereyan-pink/60 text-cereyan-pink hover:bg-cereyan-pink/10";
-          } else if (week.isPast) {
-            // PAST: Dimmed
-            styleClasses += " text-cinema-text-muted/50 hover:text-cinema-text-muted hover:bg-cinema-gray/30";
-          } else {
-            // FUTURE: Normal muted
-            styleClasses += " text-cinema-text-muted hover:text-cinema-text hover:bg-cinema-gray/50";
-          }
-          
           return (
-            <a href={`?week=${week.id}`} class={styleClasses}>
+            <a 
+              href={`?week=${week.id}`} 
+              class="relative px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap text-cinema-text-muted"
+              data-week-tab
+              data-week-id={week.id}
+              data-is-current={isCurrent.toString()}
+              data-is-past={week.isPast.toString()}
+            >
               {lang === 'tr' ? week.label : week.labelEn}
-              {/* Pulsing dot ONLY for current week when NOT selected */}
-              {isCurrent && !isSelected && (
-                <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-cereyan-pink rounded-full animate-pulse ring-2 ring-cinema-black"></span>
+              {/* Pulsing dot for current week - visibility controlled by JS */}
+              {isCurrent && (
+                <span class="week-dot absolute -top-1 -right-1 w-2.5 h-2.5 bg-cereyan-pink rounded-full animate-pulse ring-2 ring-cinema-black" style="display: none;"></span>
               )}
             </a>
           );
@@ -114,3 +103,51 @@ const { weeks, currentWeekId, lang } = Astro.props;
     scrollbar-width: none;
   }
 </style>
+
+<script>
+  // Handle week selection visual state client-side
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedWeek = urlParams.get('week');
+    
+    // Get all week tab links
+    const weekTabs = document.querySelectorAll('[data-week-tab]');
+    
+    weekTabs.forEach(tab => {
+      const weekId = tab.getAttribute('data-week-id');
+      const isCurrent = tab.getAttribute('data-is-current') === 'true';
+      const isSelected = selectedWeek ? weekId === selectedWeek : isCurrent;
+      
+      // Reset classes
+      tab.className = 'relative px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap';
+      
+      if (isSelected) {
+        // Selected: solid pink background
+        tab.classList.add('bg-cereyan-pink', 'text-cinema-black', 'font-semibold');
+        // Remove the pulsing dot if selected
+        const dot = tab.querySelector('.week-dot');
+        if (dot) dot.style.display = 'none';
+      } else if (isCurrent) {
+        // Current but not selected: pink ring + visible dot
+        tab.classList.add('ring-2', 'ring-cereyan-pink/60', 'text-cereyan-pink', 'hover:bg-cereyan-pink/10');
+        const dot = tab.querySelector('.week-dot');
+        if (dot) dot.style.display = 'block';
+      } else {
+        // Past or future
+        const isPast = tab.getAttribute('data-is-past') === 'true';
+        if (isPast) {
+          tab.classList.add('text-cinema-text-muted/50', 'hover:text-cinema-text-muted', 'hover:bg-cinema-gray/30');
+        } else {
+          tab.classList.add('text-cinema-text-muted', 'hover:text-cinema-text', 'hover:bg-cinema-gray/50');
+        }
+      }
+    });
+    
+    // Also update the mobile dropdown
+    const select = document.getElementById('week-select') as HTMLSelectElement;
+    if (select && selectedWeek) {
+      const option = select.querySelector(`option[value="?week=${selectedWeek}"]`) as HTMLOptionElement;
+      if (option) option.selected = true;
+    }
+  });
+</script>
