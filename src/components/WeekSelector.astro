@@ -47,27 +47,29 @@ const { weeks, currentWeekId, lang } = Astro.props;
           const isSelected = week.id === currentWeekId;
           const isCurrent = week.isCurrent;
           
+          // Determine the style classes
+          let styleClasses = "relative px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap";
+          
+          if (isSelected) {
+            // SELECTED: Solid pink background
+            styleClasses += " bg-cereyan-pink text-cinema-black font-semibold";
+          } else if (isCurrent) {
+            // CURRENT (not selected): Pink border outline
+            styleClasses += " ring-2 ring-cereyan-pink/60 text-cereyan-pink hover:bg-cereyan-pink/10";
+          } else if (week.isPast) {
+            // PAST: Dimmed
+            styleClasses += " text-cinema-text-muted/50 hover:text-cinema-text-muted hover:bg-cinema-gray/30";
+          } else {
+            // FUTURE: Normal muted
+            styleClasses += " text-cinema-text-muted hover:text-cinema-text hover:bg-cinema-gray/50";
+          }
+          
           return (
-            <a
-              href={`?week=${week.id}`}
-              class:list={[
-                "relative px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap",
-                // Selected week: underline effect
-                isSelected && "selected-week text-cinema-text",
-                // Current week (not selected): subtle glow
-                isCurrent && !isSelected && "current-week-indicator",
-                // Past weeks
-                !isSelected && week.isPast && "text-cinema-text-muted/50 hover:text-cinema-text-muted hover:bg-cinema-gray/30",
-                // Future weeks (not current, not selected)
-                !isSelected && !week.isPast && !isCurrent && "text-cinema-text-muted hover:text-cinema-text hover:bg-cinema-gray/50",
-                // Current week styling when not selected
-                !isSelected && isCurrent && "text-cereyan-pink hover:bg-cereyan-pink/10"
-              ]}
-            >
+            <a href={`?week=${week.id}`} class={styleClasses}>
               {lang === 'tr' ? week.label : week.labelEn}
-              {/* Pulsing dot for current week */}
-              {isCurrent && (
-                <span class="absolute -top-1 -right-1 w-2 h-2 bg-cereyan-pink rounded-full animate-pulse"></span>
+              {/* Pulsing dot ONLY for current week when NOT selected */}
+              {isCurrent && !isSelected && (
+                <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-cereyan-pink rounded-full animate-pulse ring-2 ring-cinema-black"></span>
               )}
             </a>
           );
@@ -111,16 +113,4 @@ const { weeks, currentWeekId, lang } = Astro.props;
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
-  /* Selected week: underline accent */
-  .selected-week {
-    background: linear-gradient(to bottom, transparent 85%, #E8A0D0 85%);
-    background-size: 100% 100%;
-  }
-  
-  /* Current week when not selected: subtle border */
-  .current-week-indicator {
-    box-shadow: inset 0 0 0 1px rgba(232, 160, 208, 0.4);
-  }
 </style>
-
