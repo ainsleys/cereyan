@@ -2,10 +2,10 @@
 
 ## Project Overview
 
-Cereyan is a bilingual (Turkish/English) static website that displays a weekly calendar of independent and art cinema screenings happening in Istanbul. The site is inspired by [Screen Slate](https://www.screenslate.com/) but tailored for Istanbul's film culture.
+Cereyan is a bilingual (Turkish/English) static website that displays a weekly calendar of independent and art cinema screenings happening in Istanbul. 
 
 **Live Site:** https://cereyan.vercel.app  
-**Repository:** https://github.com/ainsleys/cereyan (private)  
+**Repository:** https://github.com/ainsleys/cereyan
 **Content Source:** https://cereyan.substack.com
 
 ---
@@ -288,7 +288,7 @@ interface Venue {
 ## Contact & Resources
 
 - **Substack:** https://cereyan.substack.com
-- **Instagram:** @cereyan.ist
+- **Instagram:** @cereyanistanbul
 - **Vercel Dashboard:** https://vercel.com/ainsleys-projects-8547ac1c/cereyan
 
 ---
