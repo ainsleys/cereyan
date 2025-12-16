@@ -1,9 +1,12 @@
 ---
+/**
+ * Base layout component for all pages
+ * Includes Header, Footer, and meta tags
+ */
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import type { Language } from '../i18n/translations';
-import { t } from '../i18n/translations';
 
 interface Props {
   title?: string;

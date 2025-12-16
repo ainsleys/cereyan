@@ -1,11 +1,27 @@
+/**
+ * Internationalization (i18n) module for Cereyan
+ * Supports Turkish (default) and English languages
+ */
+
+// =============================================================================
+// Language Configuration
+// =============================================================================
+
+/** Available languages with their native names */
 export const languages = {
   tr: 'Türkçe',
   en: 'English',
 } as const;
 
+/** Language code type */
 export type Language = keyof typeof languages;
 
+/** Default language for the site */
 export const defaultLang: Language = 'tr';
+
+// =============================================================================
+// Translation Strings
+// =============================================================================
 
 export const translations = {
   tr: {
@@ -14,18 +30,18 @@ export const translations = {
     'nav.venues': 'Mekanlar',
     'nav.about': 'Hakkında',
     'nav.archive': 'Arşiv',
-    
+
     // Header
     'site.title': 'Cereyan',
     'site.subtitle': 'İstanbul Film Takvimi',
-    
+
     // Calendar
     'calendar.thisWeek': 'Bu Hafta',
     'calendar.nextWeek': 'Gelecek Hafta',
     'calendar.previousWeek': 'Önceki Hafta',
     'calendar.noScreenings': 'Bu hafta gösterim bulunmuyor.',
     'calendar.selectWeek': 'Hafta Seçin',
-    
+
     // Days of week
     'day.monday': 'Pazartesi',
     'day.tuesday': 'Salı',
@@ -34,7 +50,7 @@ export const translations = {
     'day.friday': 'Cuma',
     'day.saturday': 'Cumartesi',
     'day.sunday': 'Pazar',
-    
+
     // Months
     'month.january': 'Ocak',
     'month.february': 'Şubat',
@@ -48,7 +64,7 @@ export const translations = {
     'month.october': 'Ekim',
     'month.november': 'Kasım',
     'month.december': 'Aralık',
-    
+
     // Screening card
     'screening.time': 'Saat',
     'screening.venue': 'Mekan',
@@ -61,47 +77,47 @@ export const translations = {
     'screening.variousVenues': 'Farklı Mekanlar',
     'screening.until': "'ye kadar",
     'screening.withQA': 'Söyleşili',
-    
+
     // Venues
     'venues.title': 'Mekanlar',
-    'venues.subtitle': 'İstanbul\'da bağımsız sinema mekanları',
+    'venues.subtitle': "İstanbul'da bağımsız sinema mekanları",
     'venues.address': 'Adres',
     'venues.description': 'Açıklama',
-    
+
     // Filters
     'filter.all': 'Tümü',
     'filter.byVenue': 'Mekana Göre',
     'filter.byEvent': 'Etkinliğe Göre',
-    
+
     // Archive
     'archive.title': 'Arşiv',
     'archive.subtitle': 'Geçmiş haftaların gösterimleri',
     'archive.backToCalendar': 'Takvime Dön',
-    
+
     // Footer
-    'footer.madeWith': 'İstanbul\'da sinema sevgisiyle yapıldı',
+    'footer.madeWith': "İstanbul'da sinema sevgisiyle yapıldı",
     'footer.subscribe': 'Bültene Abone Ol',
-    'footer.substack': 'Substack\'te takip et',
+    'footer.substack': "Substack'te takip et",
   },
-  
+
   en: {
     // Navigation
     'nav.calendar': 'Calendar',
     'nav.venues': 'Venues',
     'nav.about': 'About',
     'nav.archive': 'Archive',
-    
+
     // Header
     'site.title': 'Cereyan',
     'site.subtitle': 'Istanbul Film Calendar',
-    
+
     // Calendar
     'calendar.thisWeek': 'This Week',
     'calendar.nextWeek': 'Next Week',
     'calendar.previousWeek': 'Previous Week',
     'calendar.noScreenings': 'No screenings this week.',
     'calendar.selectWeek': 'Select Week',
-    
+
     // Days of week
     'day.monday': 'Monday',
     'day.tuesday': 'Tuesday',
@@ -110,7 +126,7 @@ export const translations = {
     'day.friday': 'Friday',
     'day.saturday': 'Saturday',
     'day.sunday': 'Sunday',
-    
+
     // Months
     'month.january': 'January',
     'month.february': 'February',
@@ -124,7 +140,7 @@ export const translations = {
     'month.october': 'October',
     'month.november': 'November',
     'month.december': 'December',
-    
+
     // Screening card
     'screening.time': 'Time',
     'screening.venue': 'Venue',
@@ -137,23 +153,23 @@ export const translations = {
     'screening.variousVenues': 'Various Venues',
     'screening.until': ' (until)',
     'screening.withQA': 'with Q&A',
-    
+
     // Venues
     'venues.title': 'Venues',
     'venues.subtitle': 'Independent cinema venues in Istanbul',
     'venues.address': 'Address',
     'venues.description': 'Description',
-    
+
     // Filters
     'filter.all': 'All',
     'filter.byVenue': 'By Venue',
     'filter.byEvent': 'By Event',
-    
+
     // Archive
     'archive.title': 'Archive',
     'archive.subtitle': 'Past weeks screenings',
     'archive.backToCalendar': 'Back to Calendar',
-    
+
     // Footer
     'footer.madeWith': 'Made with cinema love in Istanbul',
     'footer.subscribe': 'Subscribe to Newsletter',
@@ -161,16 +177,28 @@ export const translations = {
   },
 } as const;
 
-export type TranslationKey = keyof typeof translations.tr;
+/** Type for all available translation keys */
+export type TranslationKey = keyof (typeof translations)['tr'];
 
+// =============================================================================
+// Helper Functions
+// =============================================================================
+
+/**
+ * Get a translated string for the given language and key
+ * Falls back to Turkish, then to the key itself if not found
+ */
 export function t(lang: Language, key: TranslationKey): string {
-  return translations[lang][key] || translations.tr[key] || key;
+  return translations[lang][key] ?? translations.tr[key] ?? key;
 }
 
+/**
+ * Get the localized path for a given language
+ * Turkish (default) paths have no prefix, English paths get /en prefix
+ */
 export function getLocalizedPath(lang: Language, path: string): string {
   if (lang === defaultLang) {
     return path;
   }
   return `/${lang}${path}`;
 }
-

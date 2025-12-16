@@ -1,63 +1,118 @@
-import type { Language } from '../i18n/translations';
-import { t } from '../i18n/translations';
+/**
+ * Date manipulation utilities for Cereyan calendar
+ */
 
+import type { Language } from '../i18n/translations';
+
+// =============================================================================
+// Constants
+// =============================================================================
+
+/** Turkish month names */
 const MONTHS_TR = [
   'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-  'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
-];
+  'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık',
+] as const;
 
+/** English month names */
 const MONTHS_EN = [
   'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
+  'July', 'August', 'September', 'October', 'November', 'December',
+] as const;
 
-const DAYS_TR = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
-const DAYS_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+/** Turkish day names (starting from Sunday to match JS Date.getDay()) */
+const DAYS_TR = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'] as const;
+
+/** English day names */
+const DAYS_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const;
+
+/** Milliseconds in a day */
+const MS_PER_DAY = 86400000;
+
+// =============================================================================
+// Parsing Functions
+// =============================================================================
 
 /**
- * Parse Turkish date format (DD.MM.YYYY) to ISO format
+ * Parse Turkish date format (DD.MM.YYYY) to ISO format (YYYY-MM-DD)
+ * Handles special formats like date ranges and "until" dates
  */
 export function parseTurkishDate(dateStr: string): string {
-  // Handle date ranges like "13-17.12.2025"
+  // Handle date ranges like "13-17.12.2025" - return start date
   if (dateStr.includes('-') && !dateStr.includes('.')) {
-    return dateStr; // Return as-is for special handling
+    return dateStr;
   }
-  
-  // Handle "until" dates like "18.12.2025'ye kadar"
+
+  // Clean "until" suffix
   const cleanDate = dateStr.replace(/'ye kadar$/, '').trim();
-  
+
   // Check for date range format "13-17.12.2025"
   const rangeMatch = cleanDate.match(/^(\d{1,2})-(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
   if (rangeMatch) {
-    const [, startDay, endDay, month, year] = rangeMatch;
+    const [, startDay, , month, year] = rangeMatch;
     return `${year}-${month.padStart(2, '0')}-${startDay.padStart(2, '0')}`;
   }
-  
+
   // Standard format "DD.MM.YYYY"
   const parts = cleanDate.split('.');
   if (parts.length !== 3) return dateStr;
-  
+
   const [day, month, year] = parts;
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 }
 
+// =============================================================================
+// Formatting Functions
+// =============================================================================
+
 /**
- * Format ISO date to localized display
+ * Format ISO date to localized display (e.g., "16 Aralık" or "December 16")
  */
 export function formatDate(isoDate: string, lang: Language): string {
   const date = new Date(isoDate);
   const day = date.getDate();
-  const month = lang === 'tr' ? MONTHS_TR[date.getMonth()] : MONTHS_EN[date.getMonth()];
-  return `${day} ${month}`;
+  const months = lang === 'tr' ? MONTHS_TR : MONTHS_EN;
+  return `${day} ${months[date.getMonth()]}`;
 }
 
 /**
- * Get day name from ISO date
+ * Get localized day name from ISO date
  */
 export function getDayName(isoDate: string, lang: Language): string {
   const date = new Date(isoDate);
-  return lang === 'tr' ? DAYS_TR[date.getDay()] : DAYS_EN[date.getDay()];
+  const days = lang === 'tr' ? DAYS_TR : DAYS_EN;
+  return days[date.getDay()];
 }
+
+/**
+ * Format date for HTML date input/comparison (YYYY-MM-DD)
+ */
+export function toISODateString(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+
+/**
+ * Format week range for display (e.g., "16-22 Aralık" or "December 16-22")
+ */
+export function formatWeekRange(startDate: Date, endDate: Date, lang: Language): string {
+  const startDay = startDate.getDate();
+  const endDay = endDate.getDate();
+  const months = lang === 'tr' ? MONTHS_TR : MONTHS_EN;
+  const startMonth = months[startDate.getMonth()];
+  const endMonth = months[endDate.getMonth()];
+
+  // Same month: "16-22 Aralık"
+  if (startDate.getMonth() === endDate.getMonth()) {
+    return `${startDay}-${endDay} ${startMonth}`;
+  }
+
+  // Different months: "30 Kasım - 6 Aralık"
+  return `${startDay} ${startMonth} - ${endDay} ${endMonth}`;
+}
+
+// =============================================================================
+// Week Calculation Functions
+// =============================================================================
 
 /**
  * Get the Monday of the week containing the given date
@@ -65,6 +120,7 @@ export function getDayName(isoDate: string, lang: Language): string {
 export function getWeekStart(date: Date): Date {
   const d = new Date(date);
   const day = d.getDay();
+  // Adjust: if Sunday (0), go back 6 days; otherwise go back (day - 1) days
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   d.setDate(diff);
   d.setHours(0, 0, 0, 0);
@@ -82,60 +138,66 @@ export function getWeekEnd(date: Date): Date {
 }
 
 /**
- * Get ISO week number
+ * Get ISO week string (e.g., "2025-W51")
  */
 export function getISOWeek(date: Date): string {
   const d = new Date(date);
   d.setHours(0, 0, 0, 0);
+  // Set to nearest Thursday (ISO week date system)
   d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7));
   const week1 = new Date(d.getFullYear(), 0, 4);
-  const weekNum = 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7);
+  const weekNum = 1 + Math.round(
+    ((d.getTime() - week1.getTime()) / MS_PER_DAY - 3 + ((week1.getDay() + 6) % 7)) / 7
+  );
   return `${d.getFullYear()}-W${weekNum.toString().padStart(2, '0')}`;
 }
 
 /**
- * Format week range for display
+ * Check if a date string falls within a week range
  */
-export function formatWeekRange(startDate: Date, endDate: Date, lang: Language): string {
-  const startDay = startDate.getDate();
-  const endDay = endDate.getDate();
-  const startMonth = lang === 'tr' ? MONTHS_TR[startDate.getMonth()] : MONTHS_EN[startDate.getMonth()];
-  const endMonth = lang === 'tr' ? MONTHS_TR[endDate.getMonth()] : MONTHS_EN[endDate.getMonth()];
-  
-  if (startDate.getMonth() === endDate.getMonth()) {
-    return `${startDay}-${endDay} ${startMonth}`;
-  }
-  return `${startDay} ${startMonth} - ${endDay} ${endMonth}`;
+export function isDateInWeek(dateStr: string, weekStart: Date, weekEnd: Date): boolean {
+  const date = new Date(dateStr);
+  return date >= weekStart && date <= weekEnd;
 }
 
-/**
- * Generate array of weeks for navigation
- */
-export function generateWeeks(screenings: { date: string }[], weeksToShow: number = 8): { 
-  id: string; 
-  start: Date; 
+// =============================================================================
+// Week Generation
+// =============================================================================
+
+/** Week data structure for navigation */
+export interface WeekInfo {
+  id: string;
+  start: Date;
   end: Date;
   label: string;
   labelEn: string;
   isCurrent: boolean;
-}[] {
+}
+
+/**
+ * Generate array of weeks for calendar navigation
+ * Includes past weeks (archive) and future weeks
+ */
+export function generateWeeks(
+  _screenings: { date: string }[],
+  weeksToShow = 8
+): WeekInfo[] {
   const now = new Date();
   const currentWeekStart = getWeekStart(now);
-  
-  // Find the earliest and latest dates in screenings
-  const dates = screenings.map(s => new Date(s.date)).filter(d => !isNaN(d.getTime()));
-  
-  const weeks: { id: string; start: Date; end: Date; label: string; labelEn: string; isCurrent: boolean }[] = [];
-  
+
+  const weeks: WeekInfo[] = [];
+
   // Start from 4 weeks ago to show archive
   const archiveStart = new Date(currentWeekStart);
   archiveStart.setDate(archiveStart.getDate() - 28);
-  
-  for (let i = 0; i < weeksToShow + 4; i++) {
+
+  const totalWeeks = weeksToShow + 4; // Include archive weeks
+
+  for (let i = 0; i < totalWeeks; i++) {
     const weekStart = new Date(archiveStart);
-    weekStart.setDate(weekStart.getDate() + (i * 7));
+    weekStart.setDate(weekStart.getDate() + i * 7);
     const weekEnd = getWeekEnd(weekStart);
-    
+
     weeks.push({
       id: getISOWeek(weekStart),
       start: weekStart,
@@ -145,22 +207,6 @@ export function generateWeeks(screenings: { date: string }[], weeksToShow: numbe
       isCurrent: weekStart.getTime() === currentWeekStart.getTime(),
     });
   }
-  
+
   return weeks;
 }
-
-/**
- * Check if a date falls within a week
- */
-export function isDateInWeek(dateStr: string, weekStart: Date, weekEnd: Date): boolean {
-  const date = new Date(dateStr);
-  return date >= weekStart && date <= weekEnd;
-}
-
-/**
- * Format date for HTML date input/comparison
- */
-export function toISODateString(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
-

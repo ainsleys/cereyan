@@ -1,8 +1,16 @@
+/**
+ * CSV parsing utilities for importing screening data
+ */
+
 import type { Screening, CSVRow } from '../types';
 import { parseTurkishDate } from './dates';
 
+// =============================================================================
+// Internal Helpers
+// =============================================================================
+
 /**
- * Generate a unique ID for a screening
+ * Generate a unique, URL-safe ID for a screening
  */
 function generateId(row: CSVRow, index: number): string {
   const dateSlug = row.Tarih.replace(/[.\s']/g, '-').toLowerCase();
@@ -14,39 +22,43 @@ function generateId(row: CSVRow, index: number): string {
   return `${dateSlug}-${titleSlug}-${index}`;
 }
 
-/**
- * Normalize venue name to ID
- */
-function normalizeVenueId(venue: string): string {
-  const venueMap: Record<string, string> = {
-    'Sinematek': 'sinematek',
-    'Fransız Kültür': 'fransiz-kultur',
-    'SALT Beyoğlu': 'salt-beyoglu',
-    'İstanbul Modern': 'istanbul-modern',
-    'Atlas 1948': 'atlas-1948',
-    'Beyoğlu Sineması': 'beyoglu-sinemasi',
-    'Cine Majestic': 'cine-majestic',
-    'CKM': 'ckm',
-    'Postane': 'postane',
-    'Farklı Mekanlar': 'various',
-  };
-  
-  return venueMap[venue] || venue.toLowerCase().replace(/[^a-z0-9]/gi, '-');
-}
+/** Mapping of venue display names to URL-safe IDs */
+const VENUE_ID_MAP: Record<string, string> = {
+  'Sinematek': 'sinematek',
+  'Fransız Kültür': 'fransiz-kultur',
+  'SALT Beyoğlu': 'salt-beyoglu',
+  'İstanbul Modern': 'istanbul-modern',
+  'Atlas 1948': 'atlas-1948',
+  'Beyoğlu Sineması': 'beyoglu-sinemasi',
+  'Cine Majestic': 'cine-majestic',
+  'CKM': 'ckm',
+  'Postane': 'postane',
+  'Farklı Mekanlar': 'various',
+};
 
 /**
- * Parse date string and detect special formats
+ * Normalize venue name to URL-safe ID
  */
-function parseDateInfo(dateStr: string): {
+function normalizeVenueId(venue: string): string {
+  return VENUE_ID_MAP[venue] ?? venue.toLowerCase().replace(/[^a-z0-9]/gi, '-');
+}
+
+/** Parsed date information */
+interface ParsedDateInfo {
   date: string;
   dateDisplay: string;
   isDateRange: boolean;
   endDate?: string;
   isUntilDate: boolean;
-} {
+}
+
+/**
+ * Parse date string and detect special formats (ranges, "until" dates)
+ */
+function parseDateInfo(dateStr: string): ParsedDateInfo {
   const isUntilDate = dateStr.includes("'ye kadar");
   const cleanDate = dateStr.replace(/'ye kadar$/, '').trim();
-  
+
   // Check for date range "13-17.12.2025"
   const rangeMatch = cleanDate.match(/^(\d{1,2})-(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
   if (rangeMatch) {
@@ -59,7 +71,7 @@ function parseDateInfo(dateStr: string): {
       isUntilDate,
     };
   }
-  
+
   return {
     date: parseTurkishDate(cleanDate),
     dateDisplay: dateStr,
@@ -69,75 +81,18 @@ function parseDateInfo(dateStr: string): {
 }
 
 /**
- * Parse CSV content to screenings array
- */
-export function parseCSV(csvContent: string): Screening[] {
-  const lines = csvContent.trim().split('\n');
-  if (lines.length < 2) return [];
-  
-  const headers = lines[0].split(',').map(h => h.trim());
-  const screenings: Screening[] = [];
-  
-  for (let i = 1; i < lines.length; i++) {
-    // Handle CSV with quoted fields containing commas or newlines
-    const values = parseCSVLine(lines[i]);
-    if (values.length < 4) continue;
-    
-    const row: CSVRow = {
-      Tarih: values[0]?.trim() || '',
-      Gösterim: values[1]?.trim() || '',
-      Saat: values[2]?.trim() || '',
-      Mekan: values[3]?.trim() || '',
-      Etkinlik: values[4]?.trim() || undefined,
-      Link: values[5]?.trim() || undefined,
-      Not: values[6]?.trim() || undefined,
-      Özet: values[7]?.trim() || undefined,
-    };
-    
-    if (!row.Tarih || !row.Gösterim) continue;
-    
-    const dateInfo = parseDateInfo(row.Tarih);
-    
-    const screening: Screening = {
-      id: generateId(row, i),
-      date: dateInfo.date,
-      dateDisplay: dateInfo.dateDisplay,
-      filmTitle: row.Gösterim,
-      time: row.Saat,
-      venue: row.Mekan,
-      venueId: normalizeVenueId(row.Mekan),
-      eventSeries: row.Etkinlik || undefined,
-      link: row.Link || undefined,
-      programmersNote: row.Not || undefined,
-      synopsis: row.Özet || undefined,
-      isDateRange: dateInfo.isDateRange,
-      endDate: dateInfo.endDate,
-      isUntilDate: dateInfo.isUntilDate,
-    };
-    
-    screenings.push(screening);
-  }
-  
-  // Sort by date, then by time
-  return screenings.sort((a, b) => {
-    const dateCompare = a.date.localeCompare(b.date);
-    if (dateCompare !== 0) return dateCompare;
-    return a.time.localeCompare(b.time);
-  });
-}
-
-/**
- * Parse a single CSV line, handling quoted fields
+ * Parse a single CSV line, properly handling quoted fields
  */
 function parseCSVLine(line: string): string[] {
   const result: string[] = [];
   let current = '';
   let inQuotes = false;
-  
+
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
-    
+
     if (char === '"') {
+      // Handle escaped quotes ("")
       if (inQuotes && line[i + 1] === '"') {
         current += '"';
         i++;
@@ -151,35 +106,97 @@ function parseCSVLine(line: string): string[] {
       current += char;
     }
   }
-  
+
   result.push(current);
   return result;
 }
 
+// =============================================================================
+// Public API
+// =============================================================================
+
 /**
- * Convert screenings array back to CSV
+ * Parse CSV content into an array of Screening objects
+ * Expects CSV format: Tarih,Gösterim,Saat,Mekan,Etkinlik,Link,Not,Özet
+ */
+export function parseCSV(csvContent: string): Screening[] {
+  const lines = csvContent.trim().split('\n');
+  if (lines.length < 2) return [];
+
+  // Skip header row
+  const screenings: Screening[] = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const values = parseCSVLine(lines[i]);
+    if (values.length < 4) continue;
+
+    const row: CSVRow = {
+      Tarih: values[0]?.trim() ?? '',
+      Gösterim: values[1]?.trim() ?? '',
+      Saat: values[2]?.trim() ?? '',
+      Mekan: values[3]?.trim() ?? '',
+      Etkinlik: values[4]?.trim() || undefined,
+      Link: values[5]?.trim() || undefined,
+      Not: values[6]?.trim() || undefined,
+      Özet: values[7]?.trim() || undefined,
+    };
+
+    // Skip rows without required fields
+    if (!row.Tarih || !row.Gösterim) continue;
+
+    const dateInfo = parseDateInfo(row.Tarih);
+
+    screenings.push({
+      id: generateId(row, i),
+      date: dateInfo.date,
+      dateDisplay: dateInfo.dateDisplay,
+      filmTitle: row.Gösterim,
+      time: row.Saat,
+      venue: row.Mekan,
+      venueId: normalizeVenueId(row.Mekan),
+      eventSeries: row.Etkinlik,
+      link: row.Link,
+      programmersNote: row.Not,
+      synopsis: row.Özet,
+      isDateRange: dateInfo.isDateRange,
+      endDate: dateInfo.endDate,
+      isUntilDate: dateInfo.isUntilDate,
+    });
+  }
+
+  // Sort by date, then by time
+  return screenings.sort((a, b) => {
+    const dateCompare = a.date.localeCompare(b.date);
+    if (dateCompare !== 0) return dateCompare;
+    return a.time.localeCompare(b.time);
+  });
+}
+
+/**
+ * Convert screenings array back to CSV format
+ * Useful for exporting/editing data
  */
 export function toCSV(screenings: Screening[]): string {
   const headers = ['Tarih', 'Gösterim', 'Saat', 'Mekan', 'Etkinlik', 'Link', 'Not', 'Özet'];
   const lines = [headers.join(',')];
-  
+
   for (const s of screenings) {
     const values = [
       s.dateDisplay,
       s.filmTitle,
       s.time,
       s.venue,
-      s.eventSeries || '',
-      s.link || '',
-      s.programmersNote || '',
-      s.synopsis || '',
-    ].map(v => v.includes(',') || v.includes('"') || v.includes('\n') 
-      ? `"${v.replace(/"/g, '""')}"` 
-      : v
+      s.eventSeries ?? '',
+      s.link ?? '',
+      s.programmersNote ?? '',
+      s.synopsis ?? '',
+    ].map((v) =>
+      v.includes(',') || v.includes('"') || v.includes('\n')
+        ? `"${v.replace(/"/g, '""')}"`
+        : v
     );
     lines.push(values.join(','));
   }
-  
+
   return lines.join('\n');
 }
-

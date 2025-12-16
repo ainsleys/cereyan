@@ -43,7 +43,7 @@ const { weeks, currentWeekId, lang } = Astro.props;
   <!-- Desktop: Horizontal tabs -->
   <div class="hidden sm:block overflow-x-auto scrollbar-hide">
     <div class="flex items-center gap-1 min-w-max pb-2">
-      {weeks.map((week, index) => (
+        {weeks.map((week) => (
         <a
           href={`?week=${week.id}`}
           class:list={[

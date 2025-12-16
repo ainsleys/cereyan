@@ -1,96 +1,125 @@
+/**
+ * Global styles for Cereyan
+ * Uses Tailwind CSS with custom components and utilities
+ */
+
+/* Google Fonts - DM Sans, Instrument Serif, IBM Plex Mono */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* =============================================================================
+   Base Styles
+   ============================================================================= */
+
 @layer base {
   html {
     @apply scroll-smooth;
   }
-  
+
   body {
     @apply bg-cinema-black text-cinema-text antialiased;
     font-feature-settings: 'ss01' on, 'ss02' on;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar (WebKit browsers) */
   ::-webkit-scrollbar {
     @apply w-2;
   }
-  
+
   ::-webkit-scrollbar-track {
     @apply bg-cinema-darker;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     @apply bg-cinema-gray-light rounded-full;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-cereyan-pink;
   }
 }
 
+/* =============================================================================
+   Component Styles
+   ============================================================================= */
+
 @layer components {
+  /* Brand gradient */
   .cereyan-gradient {
     background: linear-gradient(135deg, #E8A0D0 0%, #D080B8 100%);
   }
-  
+
+  /* Glow effect for hover states */
   .cereyan-glow {
     box-shadow: 0 0 30px rgba(232, 160, 208, 0.15);
   }
-  
+
+  /* Screening card - main content card style */
   .screening-card {
-    @apply bg-cinema-darker border border-cinema-gray rounded-lg p-4 
+    @apply bg-cinema-darker border border-cinema-gray rounded-lg p-4
            transition-all duration-300 ease-out
            hover:border-cereyan-pink/50 hover:cereyan-glow;
   }
-  
+
+  /* Week navigation tab */
   .week-tab {
     @apply px-4 py-2 text-sm font-medium transition-colors duration-200
            text-cinema-text-muted hover:text-cereyan-pink;
   }
-  
+
   .week-tab-active {
     @apply text-cereyan-pink border-b-2 border-cereyan-pink;
   }
-  
+
+  /* Date section header */
   .date-header {
     @apply text-xs font-semibold tracking-widest-xl uppercase text-cereyan-pink mb-4;
   }
-  
+
+  /* Venue tag - shows cinema venue name */
   .venue-tag {
     @apply text-xs px-2 py-1 rounded bg-cinema-gray text-cinema-text-muted;
   }
-  
+
+  /* Event series tag - shows retrospective/series name */
   .event-tag {
     @apply text-xs px-2 py-1 rounded bg-cereyan-pink/20 text-cereyan-pink;
   }
-  
+
+  /* Primary button */
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-4 py-2 
+    @apply inline-flex items-center gap-2 px-4 py-2
            bg-cereyan-pink text-cinema-black font-medium rounded
            transition-all duration-200
            hover:bg-cereyan-pink-light hover:scale-105;
   }
-  
+
+  /* External link style */
   .link-external {
-    @apply text-cereyan-pink hover:text-cereyan-pink-light 
+    @apply text-cereyan-pink hover:text-cereyan-pink-light
            underline underline-offset-2 decoration-cereyan-pink/50
            transition-colors duration-200;
   }
 }
 
+/* =============================================================================
+   Utility Classes
+   ============================================================================= */
+
 @layer utilities {
+  /* Better text wrapping for headings */
   .text-balance {
     text-wrap: balance;
   }
-  
+
+  /* Fade-in animation */
   .animate-fade-in {
     animation: fadeIn 0.3s ease-out forwards;
   }
-  
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -101,11 +130,11 @@
       transform: translateY(0);
     }
   }
-  
+
+  /* Staggered animation delays for lists */
   .stagger-1 { animation-delay: 0.05s; }
   .stagger-2 { animation-delay: 0.1s; }
   .stagger-3 { animation-delay: 0.15s; }
   .stagger-4 { animation-delay: 0.2s; }
   .stagger-5 { animation-delay: 0.25s; }
 }
-
