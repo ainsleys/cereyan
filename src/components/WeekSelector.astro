@@ -41,8 +41,8 @@ const { weeks, currentWeekId, lang } = Astro.props;
   </div>
 
   <!-- Desktop: Horizontal tabs -->
-  <div class="hidden sm:block overflow-x-auto scrollbar-hide">
-    <div class="flex items-center gap-1 min-w-max pb-2">
+  <div class="hidden sm:block overflow-x-auto overflow-y-visible scrollbar-hide">
+    <div class="flex items-center gap-1 min-w-max pb-2 pt-3">
         {weeks.map((week) => {
           const isCurrent = week.isCurrent;
           
@@ -149,18 +149,24 @@ const { weeks, currentWeekId, lang } = Astro.props;
     background: rgba(42, 42, 42, 0.3);
   }
   
+  /* Ensure dots aren't clipped */
+  .week-tab {
+    overflow: visible;
+  }
+  
   /* Pulsing dot for current week */
   .week-dot {
     position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 10px;
-    height: 10px;
+    top: -3px;
+    right: -3px;
+    width: 8px;
+    height: 8px;
     background: #E8A0D0;
     border-radius: 50%;
     animation: pulse 2s infinite;
     box-shadow: 0 0 0 2px #0A0A0A;
     display: none; /* Hidden by default, shown via JS */
+    z-index: 10;
   }
   
   @keyframes pulse {
