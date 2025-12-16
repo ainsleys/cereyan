@@ -1,0 +1,43 @@
+---
+import type { Screening } from '../types';
+import type { Language } from '../i18n/translations';
+import { getDayName, formatDate } from '../utils/dates';
+import ScreeningCard from './ScreeningCard.astro';
+
+interface Props {
+  date: string;
+  screenings: Screening[];
+  lang: Language;
+}
+
+const { date, screenings, lang } = Astro.props;
+
+const dayName = getDayName(date, lang);
+const formattedDate = formatDate(date, lang);
+---
+
+<section class="mb-10" data-day-section={date}>
+  <!-- Date header -->
+  <header class="mb-4 pb-2 border-b border-cinema-gray/50">
+    <div class="flex items-baseline gap-3">
+      <h2 class="date-header mb-0">
+        {dayName}
+      </h2>
+      <span class="text-sm text-cinema-text-muted">
+        {formattedDate}
+      </span>
+    </div>
+  </header>
+
+  <!-- Screenings list -->
+  <div class="space-y-4">
+    {screenings.map((screening, index) => (
+      <ScreeningCard 
+        screening={screening} 
+        lang={lang} 
+        index={index}
+      />
+    ))}
+  </div>
+</section>
+

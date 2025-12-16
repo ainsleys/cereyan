@@ -1,0 +1,127 @@
+---
+import type { Language } from '../i18n/translations';
+import { t } from '../i18n/translations';
+import type { Venue } from '../types';
+
+interface Props {
+  venues: Venue[];
+  lang: Language;
+}
+
+const { venues, lang } = Astro.props;
+
+// Filter out the "various" venue and sort alphabetically
+const filterableVenues = venues
+  .filter(v => v.id !== 'various')
+  .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+---
+
+<div class="venue-filter mb-6">
+  <div class="flex items-center gap-2 mb-3">
+    <svg class="w-4 h-4 text-cereyan-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+    </svg>
+    <span class="text-xs font-medium uppercase tracking-wider text-cinema-text-muted">
+      {t(lang, 'filter.byVenue')}
+    </span>
+  </div>
+  
+  <div class="flex flex-wrap gap-2" id="venue-filters">
+    <!-- All button -->
+    <button
+      data-venue="all"
+      class="venue-filter-btn active px-3 py-1.5 text-xs font-medium rounded-full 
+             bg-cereyan-pink/20 text-cereyan-pink border border-cereyan-pink/30
+             hover:bg-cereyan-pink/30 transition-all"
+    >
+      {t(lang, 'filter.all')}
+    </button>
+    
+    <!-- Individual venue buttons -->
+    {filterableVenues.map((venue) => (
+      <button
+        data-venue={venue.id}
+        class="venue-filter-btn px-3 py-1.5 text-xs font-medium rounded-full 
+               bg-cinema-gray/50 text-cinema-text-muted border border-cinema-gray
+               hover:border-cereyan-pink/50 hover:text-cinema-text transition-all"
+      >
+        {venue.name}
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  // Handle venue filtering
+  const filterButtons = document.querySelectorAll('.venue-filter-btn');
+  const screeningCards = document.querySelectorAll('[data-venue-id]');
+  const daySections = document.querySelectorAll('[data-day-section]');
+  
+  // Track selected venues (for multi-select)
+  let selectedVenues: Set<string> = new Set(['all']);
+  
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const venueId = btn.getAttribute('data-venue');
+      if (!venueId) return;
+      
+      if (venueId === 'all') {
+        // Clear all selections and select "all"
+        selectedVenues.clear();
+        selectedVenues.add('all');
+      } else {
+        // Remove "all" if selecting specific venue
+        selectedVenues.delete('all');
+        
+        // Toggle this venue
+        if (selectedVenues.has(venueId)) {
+          selectedVenues.delete(venueId);
+          // If nothing selected, go back to "all"
+          if (selectedVenues.size === 0) {
+            selectedVenues.add('all');
+          }
+        } else {
+          selectedVenues.add(venueId);
+        }
+      }
+      
+      // Update button states
+      filterButtons.forEach(b => {
+        const id = b.getAttribute('data-venue');
+        if (selectedVenues.has(id!)) {
+          b.classList.add('active', 'bg-cereyan-pink/20', 'text-cereyan-pink', 'border-cereyan-pink/30');
+          b.classList.remove('bg-cinema-gray/50', 'text-cinema-text-muted', 'border-cinema-gray');
+        } else {
+          b.classList.remove('active', 'bg-cereyan-pink/20', 'text-cereyan-pink', 'border-cereyan-pink/30');
+          b.classList.add('bg-cinema-gray/50', 'text-cinema-text-muted', 'border-cinema-gray');
+        }
+      });
+      
+      // Filter screenings
+      const showAll = selectedVenues.has('all');
+      
+      screeningCards.forEach(card => {
+        const cardVenue = card.getAttribute('data-venue-id');
+        const shouldShow = showAll || selectedVenues.has(cardVenue!);
+        
+        if (shouldShow) {
+          (card as HTMLElement).style.display = '';
+          (card as HTMLElement).classList.add('animate-fade-in');
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+      
+      // Hide day sections with no visible screenings
+      daySections.forEach(section => {
+        const visibleCards = section.querySelectorAll('[data-venue-id]:not([style*="display: none"])');
+        if (visibleCards.length === 0) {
+          (section as HTMLElement).style.display = 'none';
+        } else {
+          (section as HTMLElement).style.display = '';
+        }
+      });
+    });
+  });
+</script>
+

@@ -1,0 +1,52 @@
+---
+import type { Language } from '../i18n/translations';
+import { languages } from '../i18n/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+// Calculate paths for language switch
+function getAlternatePath(targetLang: Language): string {
+  if (targetLang === 'tr') {
+    // Remove /en prefix if present
+    return currentPath.replace(/^\/en/, '') || '/';
+  } else {
+    // Add /en prefix
+    if (currentPath.startsWith('/en')) {
+      return currentPath;
+    }
+    return `/en${currentPath === '/' ? '' : currentPath}`;
+  }
+}
+---
+
+<div class="flex items-center gap-1 text-sm">
+  <a 
+    href={getAlternatePath('tr')}
+    class:list={[
+      "px-2 py-1 rounded transition-colors",
+      lang === 'tr' 
+        ? "bg-cereyan-pink/20 text-cereyan-pink font-medium" 
+        : "text-cinema-text-muted hover:text-cinema-text"
+    ]}
+  >
+    TR
+  </a>
+  <span class="text-cinema-gray">/</span>
+  <a 
+    href={getAlternatePath('en')}
+    class:list={[
+      "px-2 py-1 rounded transition-colors",
+      lang === 'en' 
+        ? "bg-cereyan-pink/20 text-cereyan-pink font-medium" 
+        : "text-cinema-text-muted hover:text-cinema-text"
+    ]}
+  >
+    EN
+  </a>
+</div>
+

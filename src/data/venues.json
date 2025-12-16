@@ -1,0 +1,82 @@
+[
+  {
+    "id": "sinematek",
+    "name": "Sinematek",
+    "neighborhood": "Kadıköy",
+    "address": "Caferağa Mahallesi, Moda Caddesi No:30, Kadıköy",
+    "description": "Kadıköy Belediyesi'nin sinema arşivi ve gösterim salonu. Klasik ve sanat sineması odaklı programlama.",
+    "descriptionEn": "Kadıköy Municipality's cinema archive and screening hall. Classic and art cinema focused programming."
+  },
+  {
+    "id": "fransiz-kultur",
+    "name": "Fransız Kültür",
+    "neighborhood": "Taksim",
+    "address": "İstiklal Caddesi No:4, Beyoğlu",
+    "description": "Institut Français de Turquie. Fransız ve dünya sinemasından seçkin gösterimler.",
+    "descriptionEn": "Institut Français de Turquie. Select screenings from French and world cinema."
+  },
+  {
+    "id": "salt-beyoglu",
+    "name": "SALT Beyoğlu",
+    "neighborhood": "Beyoğlu",
+    "address": "İstiklal Caddesi No:136, Beyoğlu",
+    "description": "Çağdaş sanat ve kültür kurumu. Deneysel ve avant-garde sinema programları.",
+    "descriptionEn": "Contemporary art and culture institution. Experimental and avant-garde cinema programs."
+  },
+  {
+    "id": "istanbul-modern",
+    "name": "İstanbul Modern",
+    "neighborhood": "Karaköy",
+    "address": "Kılıçali Paşa Mahallesi, Tophane İskelesi Caddesi No:1, Beyoğlu",
+    "description": "Türkiye'nin ilk modern sanat müzesi. Sinema programı dünya festivallerinden seçkiler sunuyor.",
+    "descriptionEn": "Turkey's first modern art museum. Cinema program features selections from world festivals."
+  },
+  {
+    "id": "atlas-1948",
+    "name": "Atlas 1948 Sineması",
+    "neighborhood": "Beyoğlu",
+    "address": "Atlas Pasajı, İstiklal Caddesi No:209, Beyoğlu",
+    "description": "İstanbul'un en eski sinemalarından biri. Restore edilmiş tarihi atmosferde bağımsız sinema.",
+    "descriptionEn": "One of Istanbul's oldest cinemas. Independent cinema in a restored historic atmosphere."
+  },
+  {
+    "id": "beyoglu-sinemasi",
+    "name": "Beyoğlu Sineması",
+    "neighborhood": "Beyoğlu",
+    "address": "İstiklal Caddesi No:140, Beyoğlu",
+    "description": "Beyoğlu Belediyesi kültür merkezi. Günlük gösterimler ve özel etkinlikler.",
+    "descriptionEn": "Beyoğlu Municipality cultural center. Daily screenings and special events."
+  },
+  {
+    "id": "cine-majestic",
+    "name": "Cine Majestic",
+    "neighborhood": "Kadıköy",
+    "address": "Caferağa Mahallesi, Moda Caddesi No:20/A, Kadıköy",
+    "description": "Kadıköy'ün butik sinema salonu. Sanat filmleri ve klasikler.",
+    "descriptionEn": "Kadıköy's boutique cinema. Art films and classics."
+  },
+  {
+    "id": "ckm",
+    "name": "CKM (Caddebostan Kültür Merkezi)",
+    "neighborhood": "Kadıköy",
+    "address": "Caddebostan Mahallesi, Bağdat Caddesi No:298, Kadıköy",
+    "description": "Kadıköy Belediyesi kültür merkezi. Çeşitli sinema etkinlikleri ve festivaller.",
+    "descriptionEn": "Kadıköy Municipality cultural center. Various cinema events and festivals."
+  },
+  {
+    "id": "postane",
+    "name": "Postane",
+    "neighborhood": "Sirkeci",
+    "address": "Hobyar Mahallesi, Büyük Postane Caddesi No:25, Fatih",
+    "description": "Tarihi postane binasında kültür merkezi. Bağımsız film gösterimleri ve söyleşiler.",
+    "descriptionEn": "Cultural center in the historic post office building. Independent film screenings and talks."
+  },
+  {
+    "id": "various",
+    "name": "Farklı Mekanlar",
+    "neighborhood": "İstanbul",
+    "description": "Birden fazla mekanda gösterim. Detaylar için etkinlik linkine bakınız.",
+    "descriptionEn": "Screenings at multiple venues. See event link for details."
+  }
+]
+

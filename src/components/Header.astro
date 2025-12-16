@@ -1,0 +1,61 @@
+---
+import type { Language } from '../i18n/translations';
+import { t, getLocalizedPath } from '../i18n/translations';
+import LanguageToggle from './LanguageToggle.astro';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const navItems = [
+  { key: 'nav.calendar' as const, path: '/', pathEn: '/' },
+  { key: 'nav.venues' as const, path: '/mekanlar', pathEn: '/venues' },
+];
+
+function getNavPath(item: typeof navItems[0]): string {
+  const basePath = lang === 'en' ? item.pathEn : item.path;
+  return getLocalizedPath(lang, basePath);
+}
+---
+
+<header class="sticky top-0 z-50 bg-cinema-black/95 backdrop-blur-sm border-b border-cinema-gray">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 sm:h-20">
+      <!-- Logo -->
+      <a href={getLocalizedPath(lang, '/')} class="flex items-center gap-3 group">
+        <img 
+          src="/logo.svg" 
+          alt="Cereyan logo" 
+          class="w-10 h-10 sm:w-12 sm:h-12"
+        />
+        <div class="flex flex-col">
+          <span class="font-display font-bold text-lg sm:text-xl tracking-widest text-cinema-text group-hover:text-cereyan-pink transition-colors">
+            CEREYAN
+          </span>
+          <span class="hidden sm:block text-[10px] tracking-widest uppercase text-cinema-text-muted">
+            {t(lang, 'site.subtitle')}
+          </span>
+        </div>
+      </a>
+
+      <!-- Navigation -->
+      <nav class="flex items-center gap-2 sm:gap-6">
+        {navItems.map((item) => (
+          <a 
+            href={getNavPath(item)}
+            class="text-sm font-medium text-cinema-text-muted hover:text-cereyan-pink transition-colors"
+          >
+            {t(lang, item.key)}
+          </a>
+        ))}
+        
+        <div class="w-px h-5 bg-cinema-gray hidden sm:block"></div>
+        
+        <LanguageToggle lang={lang} />
+      </nav>
+    </div>
+  </div>
+</header>
+

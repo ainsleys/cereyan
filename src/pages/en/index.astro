@@ -1,0 +1,133 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import WeekSelector from '../../components/WeekSelector.astro';
+import VenueFilter from '../../components/VenueFilter.astro';
+import DaySection from '../../components/DaySection.astro';
+import { t } from '../../i18n/translations';
+import { getWeekStart, getWeekEnd, getISOWeek, formatWeekRange, toISODateString } from '../../utils/dates';
+import type { Screening, Venue } from '../../types';
+
+import screeningsData from '../../data/screenings.json';
+import venuesData from '../../data/venues.json';
+
+const lang = 'en';
+const screenings = screeningsData as Screening[];
+const venues = venuesData as Venue[];
+
+// Get week from URL params or default to current week
+const url = new URL(Astro.request.url);
+const weekParam = url.searchParams.get('week');
+
+const now = new Date();
+const currentWeekStart = getWeekStart(now);
+const currentWeekId = getISOWeek(currentWeekStart);
+
+// Parse selected week or use current
+let selectedWeekStart: Date;
+if (weekParam) {
+  // Parse ISO week format "2025-W51"
+  const match = weekParam.match(/^(\d{4})-W(\d{2})$/);
+  if (match) {
+    const [, year, week] = match;
+    const jan4 = new Date(parseInt(year), 0, 4);
+    const weekStart = new Date(jan4);
+    weekStart.setDate(jan4.getDate() - jan4.getDay() + 1 + (parseInt(week) - 1) * 7);
+    selectedWeekStart = weekStart;
+  } else {
+    selectedWeekStart = currentWeekStart;
+  }
+} else {
+  selectedWeekStart = currentWeekStart;
+}
+
+const selectedWeekEnd = getWeekEnd(selectedWeekStart);
+const selectedWeekId = getISOWeek(selectedWeekStart);
+
+// Generate weeks for navigation (4 past + 8 future)
+const weeks: { id: string; label: string; labelEn: string; isCurrent: boolean; isPast: boolean }[] = [];
+const archiveStart = new Date(currentWeekStart);
+archiveStart.setDate(archiveStart.getDate() - 28); // 4 weeks back
+
+for (let i = 0; i < 12; i++) {
+  const weekStart = new Date(archiveStart);
+  weekStart.setDate(weekStart.getDate() + (i * 7));
+  const weekEnd = getWeekEnd(weekStart);
+  const weekId = getISOWeek(weekStart);
+  
+  weeks.push({
+    id: weekId,
+    label: formatWeekRange(weekStart, weekEnd, 'tr'),
+    labelEn: formatWeekRange(weekStart, weekEnd, 'en'),
+    isCurrent: weekId === currentWeekId,
+    isPast: weekStart < currentWeekStart,
+  });
+}
+
+// Filter screenings for selected week
+const weekScreenings = screenings.filter(s => {
+  const screeningDate = new Date(s.date);
+  return screeningDate >= selectedWeekStart && screeningDate <= selectedWeekEnd;
+});
+
+// Group screenings by date
+const screeningsByDate = weekScreenings.reduce((acc, screening) => {
+  const date = screening.date;
+  if (!acc[date]) {
+    acc[date] = [];
+  }
+  acc[date].push(screening);
+  return acc;
+}, {} as Record<string, Screening[]>);
+
+// Sort dates
+const sortedDates = Object.keys(screeningsByDate).sort();
+---
+
+<Layout lang={lang}>
+  <div class="space-y-6">
+    <!-- Page header -->
+    <header class="text-center mb-8">
+      <h1 class="sr-only">{t(lang, 'site.subtitle')}</h1>
+      <p class="text-cinema-text-muted text-sm">
+        {t(lang, 'site.subtitle')}
+      </p>
+    </header>
+
+    <!-- Week selector -->
+    <WeekSelector 
+      weeks={weeks} 
+      currentWeekId={selectedWeekId} 
+      lang={lang} 
+    />
+
+    <!-- Venue filter -->
+    {sortedDates.length > 0 && (
+      <VenueFilter venues={venues} lang={lang} />
+    )}
+
+    <!-- Screenings -->
+    {sortedDates.length > 0 ? (
+      <div>
+        {sortedDates.map(date => (
+          <DaySection 
+            date={date}
+            screenings={screeningsByDate[date]}
+            lang={lang}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-cinema-gray/50 flex items-center justify-center">
+          <svg class="w-8 h-8 text-cinema-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+          </svg>
+        </div>
+        <p class="text-cinema-text-muted">
+          {t(lang, 'calendar.noScreenings')}
+        </p>
+      </div>
+    )}
+  </div>
+</Layout>
+

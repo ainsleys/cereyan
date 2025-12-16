@@ -1,0 +1,104 @@
+---
+import type { Language } from '../i18n/translations';
+import { t } from '../i18n/translations';
+
+interface Week {
+  id: string;
+  label: string;
+  labelEn: string;
+  isCurrent: boolean;
+  isPast: boolean;
+}
+
+interface Props {
+  weeks: Week[];
+  currentWeekId: string;
+  lang: Language;
+}
+
+const { weeks, currentWeekId, lang } = Astro.props;
+---
+
+<div class="mb-8">
+  <!-- Mobile: Dropdown -->
+  <div class="sm:hidden">
+    <label for="week-select" class="sr-only">{t(lang, 'calendar.selectWeek')}</label>
+    <select 
+      id="week-select"
+      class="w-full bg-cinema-darker border border-cinema-gray rounded-lg px-4 py-3 text-cinema-text focus:border-cereyan-pink focus:outline-none focus:ring-1 focus:ring-cereyan-pink"
+      onchange="window.location.href = this.value"
+    >
+      {weeks.map((week) => (
+        <option 
+          value={`?week=${week.id}`}
+          selected={week.id === currentWeekId}
+        >
+          {lang === 'tr' ? week.label : week.labelEn}
+          {week.isCurrent ? ` (${t(lang, 'calendar.thisWeek')})` : ''}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <!-- Desktop: Horizontal tabs -->
+  <div class="hidden sm:block overflow-x-auto scrollbar-hide">
+    <div class="flex items-center gap-1 min-w-max pb-2">
+      {weeks.map((week, index) => (
+        <a
+          href={`?week=${week.id}`}
+          class:list={[
+            "relative px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap",
+            week.id === currentWeekId
+              ? "bg-cereyan-pink/20 text-cereyan-pink"
+              : week.isPast
+                ? "text-cinema-text-muted/50 hover:text-cinema-text-muted hover:bg-cinema-gray/30"
+                : "text-cinema-text-muted hover:text-cinema-text hover:bg-cinema-gray/50"
+          ]}
+        >
+          {lang === 'tr' ? week.label : week.labelEn}
+          {week.isCurrent && (
+            <span class="absolute -top-1 -right-1 w-2 h-2 bg-cereyan-pink rounded-full"></span>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- Navigation arrows for context -->
+  <div class="hidden sm:flex items-center justify-between mt-3 px-1">
+    <button 
+      onclick="document.querySelector('.overflow-x-auto').scrollBy({left: -200, behavior: 'smooth'})"
+      class="text-cinema-text-muted hover:text-cereyan-pink transition-colors"
+      aria-label={t(lang, 'calendar.previousWeek')}
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    
+    <span class="text-xs text-cinema-text-muted uppercase tracking-wider">
+      {t(lang, 'calendar.selectWeek')}
+    </span>
+    
+    <button 
+      onclick="document.querySelector('.overflow-x-auto').scrollBy({left: 200, behavior: 'smooth'})"
+      class="text-cinema-text-muted hover:text-cereyan-pink transition-colors"
+      aria-label={t(lang, 'calendar.nextWeek')}
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
+
