@@ -19,7 +19,7 @@ interface Props {
 const { weeks, currentWeekId, lang } = Astro.props;
 ---
 
-<div class="mb-8">
+<div class="week-selector mb-8">
   <!-- Mobile: Dropdown -->
   <div class="sm:hidden">
     <label for="week-select" class="sr-only">{t(lang, 'calendar.selectWeek')}</label>
@@ -49,16 +49,14 @@ const { weeks, currentWeekId, lang } = Astro.props;
           return (
             <a 
               href={`?week=${week.id}`} 
-              class="relative px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap text-cinema-text-muted"
-              data-week-tab
+              class="week-tab"
               data-week-id={week.id}
               data-is-current={isCurrent.toString()}
               data-is-past={week.isPast.toString()}
             >
               {lang === 'tr' ? week.label : week.labelEn}
-              {/* Pulsing dot for current week - visibility controlled by JS */}
               {isCurrent && (
-                <span class="week-dot absolute -top-1 -right-1 w-2.5 h-2.5 bg-cereyan-pink rounded-full animate-pulse ring-2 ring-cinema-black" style="display: none;"></span>
+                <span class="week-dot"></span>
               )}
             </a>
           );
@@ -102,6 +100,73 @@ const { weeks, currentWeekId, lang } = Astro.props;
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  
+  /* Base week tab styles */
+  .week-tab {
+    position: relative;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+    color: #888888; /* cinema-text-muted */
+  }
+  
+  .week-tab:hover {
+    color: #E8E8E8; /* cinema-text */
+    background: rgba(42, 42, 42, 0.5); /* cinema-gray/50 */
+  }
+  
+  /* Selected week - solid pink background */
+  .week-tab.is-selected {
+    background: #E8A0D0; /* cereyan-pink */
+    color: #0A0A0A; /* cinema-black */
+    font-weight: 600;
+  }
+  
+  .week-tab.is-selected:hover {
+    background: #F2C4E3; /* cereyan-pink-light */
+  }
+  
+  /* Current week (not selected) - pink outline */
+  .week-tab.is-current:not(.is-selected) {
+    box-shadow: inset 0 0 0 2px rgba(232, 160, 208, 0.6);
+    color: #E8A0D0; /* cereyan-pink */
+  }
+  
+  .week-tab.is-current:not(.is-selected):hover {
+    background: rgba(232, 160, 208, 0.1);
+  }
+  
+  /* Past week - dimmed */
+  .week-tab.is-past:not(.is-selected):not(.is-current) {
+    color: rgba(136, 136, 136, 0.5); /* cinema-text-muted/50 */
+  }
+  
+  .week-tab.is-past:not(.is-selected):not(.is-current):hover {
+    color: #888888;
+    background: rgba(42, 42, 42, 0.3);
+  }
+  
+  /* Pulsing dot for current week */
+  .week-dot {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 10px;
+    height: 10px;
+    background: #E8A0D0;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 0 2px #0A0A0A;
+    display: none; /* Hidden by default, shown via JS */
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+  }
 </style>
 
 <script>
@@ -111,35 +176,28 @@ const { weeks, currentWeekId, lang } = Astro.props;
     const selectedWeek = urlParams.get('week');
     
     // Get all week tab links
-    const weekTabs = document.querySelectorAll('[data-week-tab]');
+    const weekTabs = document.querySelectorAll('.week-tab');
     
     weekTabs.forEach(tab => {
       const weekId = tab.getAttribute('data-week-id');
       const isCurrent = tab.getAttribute('data-is-current') === 'true';
+      const isPast = tab.getAttribute('data-is-past') === 'true';
       const isSelected = selectedWeek ? weekId === selectedWeek : isCurrent;
       
-      // Reset classes
-      tab.className = 'relative px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap';
-      
+      // Add appropriate classes
       if (isSelected) {
-        // Selected: solid pink background
-        tab.classList.add('bg-cereyan-pink', 'text-cinema-black', 'font-semibold');
-        // Remove the pulsing dot if selected
+        tab.classList.add('is-selected');
+      }
+      if (isCurrent) {
+        tab.classList.add('is-current');
+        // Show the pulsing dot only if NOT selected
         const dot = tab.querySelector('.week-dot');
-        if (dot) dot.style.display = 'none';
-      } else if (isCurrent) {
-        // Current but not selected: pink ring + visible dot
-        tab.classList.add('ring-2', 'ring-cereyan-pink/60', 'text-cereyan-pink', 'hover:bg-cereyan-pink/10');
-        const dot = tab.querySelector('.week-dot');
-        if (dot) dot.style.display = 'block';
-      } else {
-        // Past or future
-        const isPast = tab.getAttribute('data-is-past') === 'true';
-        if (isPast) {
-          tab.classList.add('text-cinema-text-muted/50', 'hover:text-cinema-text-muted', 'hover:bg-cinema-gray/30');
-        } else {
-          tab.classList.add('text-cinema-text-muted', 'hover:text-cinema-text', 'hover:bg-cinema-gray/50');
+        if (dot && !isSelected) {
+          (dot as HTMLElement).style.display = 'block';
         }
+      }
+      if (isPast) {
+        tab.classList.add('is-past');
       }
     });
     
