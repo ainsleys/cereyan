@@ -97,6 +97,7 @@ export const translations = {
     
     // Past screenings divider
     'calendar.pastScreenings': 'Geçmiş Gösterimler',
+    'calendar.viewPastScreenings': 'Bu haftanın geçmiş gösterimlerini gör',
 
     // Footer
     'footer.madeWith': "İstanbul'da sinema sevgisiyle yapıldı",
@@ -177,6 +178,7 @@ export const translations = {
     
     // Past screenings divider
     'calendar.pastScreenings': 'Past Screenings',
+    'calendar.viewPastScreenings': "View this week's past screenings",
 
     // Footer
     'footer.madeWith': 'Made with cinema love in Istanbul',

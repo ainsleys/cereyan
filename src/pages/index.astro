@@ -79,15 +79,17 @@ const screeningsByDate = weekScreenings.reduce((acc, screening) => {
   return acc;
 }, {} as Record<string, Screening[]>);
 
-// Get today's date (start of day for comparison)
+// Get today's date in local timezone (YYYY-MM-DD format)
 const today = new Date();
-today.setHours(0, 0, 0, 0);
-const todayISO = today.toISOString().split('T')[0];
+const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
 // Split dates into upcoming (today and future) and past
 const allDates = Object.keys(screeningsByDate).sort();
 const upcomingDates = allDates.filter(date => date >= todayISO);
 const pastDates = allDates.filter(date => date < todayISO).sort().reverse(); // Most recent first
+
+// Check if we're viewing the current week (for "view past screenings" link)
+const isCurrentWeek = selectedWeekId === currentWeekId;
 ---
 
 <Layout lang={lang}>
@@ -116,17 +118,18 @@ const pastDates = allDates.filter(date => date < todayISO).sort().reverse(); // 
     {allDates.length > 0 ? (
       <div>
         {/* Upcoming screenings (today and future) */}
-        {upcomingDates.map(date => (
+        {upcomingDates.map((date, index) => (
           <DaySection 
             date={date}
             screenings={screeningsByDate[date]}
             lang={lang}
+            showPastScreeningsLink={index === 0 && isCurrentWeek && pastDates.length > 0}
           />
         ))}
         
         {/* Past screenings divider */}
         {pastDates.length > 0 && (
-          <div class="flex items-center gap-4 my-8">
+          <div id="past-screenings" class="flex items-center gap-4 my-8 scroll-mt-4">
             <div class="flex-1 h-px bg-cinema-gray/50"></div>
             <span class="text-sm text-cinema-text-muted uppercase tracking-wider font-medium">
               {t(lang, 'calendar.pastScreenings')}
