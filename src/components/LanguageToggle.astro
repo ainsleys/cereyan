@@ -11,17 +11,35 @@ interface Props {
 const { lang } = Astro.props;
 const currentPath = Astro.url.pathname;
 
+// Path mappings between languages (TR path -> EN path)
+const pathMappings: Record<string, string> = {
+  '/': '/',
+  '/mekanlar': '/venues',
+};
+
+// Create reverse mapping (EN path -> TR path)
+const reversePathMappings: Record<string, string> = {};
+for (const [tr, en] of Object.entries(pathMappings)) {
+  reversePathMappings[en] = tr;
+}
+
 // Calculate paths for language switch
 function getAlternatePath(targetLang: Language): string {
   if (targetLang === 'tr') {
-    // Remove /en prefix if present
-    return currentPath.replace(/^\/en/, '') || '/';
+    // Going from EN to TR
+    // Remove /en prefix first
+    const pathWithoutPrefix = currentPath.replace(/^\/en\/?/, '/') || '/';
+    // Check if there's a mapping
+    return reversePathMappings[pathWithoutPrefix] || pathWithoutPrefix;
   } else {
-    // Add /en prefix
+    // Going from TR to EN
+    // Check if there's a mapping for this path
+    const mappedPath = pathMappings[currentPath] || currentPath;
+    // Add /en prefix if not already present
     if (currentPath.startsWith('/en')) {
       return currentPath;
     }
-    return `/en${currentPath === '/' ? '' : currentPath}`;
+    return `/en${mappedPath === '/' ? '' : mappedPath}`;
   }
 }
 ---
