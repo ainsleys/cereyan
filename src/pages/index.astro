@@ -79,8 +79,15 @@ const screeningsByDate = weekScreenings.reduce((acc, screening) => {
   return acc;
 }, {} as Record<string, Screening[]>);
 
-// Sort dates
-const sortedDates = Object.keys(screeningsByDate).sort();
+// Get today's date (start of day for comparison)
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const todayISO = today.toISOString().split('T')[0];
+
+// Split dates into upcoming (today and future) and past
+const allDates = Object.keys(screeningsByDate).sort();
+const upcomingDates = allDates.filter(date => date >= todayISO);
+const pastDates = allDates.filter(date => date < todayISO).sort().reverse(); // Most recent first
 ---
 
 <Layout lang={lang}>
@@ -101,14 +108,35 @@ const sortedDates = Object.keys(screeningsByDate).sort();
     />
 
     <!-- Venue filter -->
-    {sortedDates.length > 0 && (
+    {allDates.length > 0 && (
       <VenueFilter venues={venues} lang={lang} />
     )}
 
     <!-- Screenings -->
-    {sortedDates.length > 0 ? (
+    {allDates.length > 0 ? (
       <div>
-        {sortedDates.map(date => (
+        {/* Upcoming screenings (today and future) */}
+        {upcomingDates.map(date => (
+          <DaySection 
+            date={date}
+            screenings={screeningsByDate[date]}
+            lang={lang}
+          />
+        ))}
+        
+        {/* Past screenings divider */}
+        {pastDates.length > 0 && (
+          <div class="flex items-center gap-4 my-8">
+            <div class="flex-1 h-px bg-cinema-gray/50"></div>
+            <span class="text-sm text-cinema-text-muted uppercase tracking-wider font-medium">
+              {t(lang, 'calendar.pastScreenings')}
+            </span>
+            <div class="flex-1 h-px bg-cinema-gray/50"></div>
+          </div>
+        )}
+        
+        {/* Past screenings (most recent first) */}
+        {pastDates.map(date => (
           <DaySection 
             date={date}
             screenings={screeningsByDate[date]}

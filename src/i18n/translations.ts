@@ -72,6 +72,7 @@ export const translations = {
     'screening.programmersNote': 'Programcı Notu',
     'screening.synopsis': 'Özet',
     'screening.moreInfo': 'Detaylı Bilgi',
+    'screening.cereyanTake': "Cereyan'ın Yorumu",
     'screening.buyTickets': 'Bilet Al',
     'screening.variousTimes': 'Farklı Saatler',
     'screening.variousVenues': 'Farklı Mekanlar',
@@ -93,6 +94,9 @@ export const translations = {
     'archive.title': 'Arşiv',
     'archive.subtitle': 'Geçmiş haftaların gösterimleri',
     'archive.backToCalendar': 'Takvime Dön',
+    
+    // Past screenings divider
+    'calendar.pastScreenings': 'Geçmiş Gösterimler',
 
     // Footer
     'footer.madeWith': "İstanbul'da sinema sevgisiyle yapıldı",
@@ -148,6 +152,7 @@ export const translations = {
     'screening.programmersNote': "Programmer's Note",
     'screening.synopsis': 'Synopsis',
     'screening.moreInfo': 'More Info',
+    'screening.cereyanTake': "Cereyan's Take",
     'screening.buyTickets': 'Get Tickets',
     'screening.variousTimes': 'Various Times',
     'screening.variousVenues': 'Various Venues',
@@ -169,6 +174,9 @@ export const translations = {
     'archive.title': 'Archive',
     'archive.subtitle': 'Past weeks screenings',
     'archive.backToCalendar': 'Back to Calendar',
+    
+    // Past screenings divider
+    'calendar.pastScreenings': 'Past Screenings',
 
     // Footer
     'footer.madeWith': 'Made with cinema love in Istanbul',

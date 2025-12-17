@@ -33,8 +33,19 @@ const cardId = `screening-${screening.id}`;
   <div class="flex items-start justify-between gap-4">
     <div class="flex-1 min-w-0">
       <!-- Film title -->
-      <h3 class="font-display font-semibold text-lg text-cinema-text group-hover:text-cereyan-pink transition-colors leading-tight">
-        {screening.filmTitle}
+      <h3 class="font-display font-semibold text-lg leading-tight">
+        {screening.link ? (
+          <a 
+            href={screening.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-cinema-text hover:text-cereyan-pink transition-colors"
+          >
+            {screening.filmTitle}
+          </a>
+        ) : (
+          <span class="text-cinema-text">{screening.filmTitle}</span>
+        )}
       </h3>
       
       <!-- Venue and Event Series -->
@@ -109,7 +120,7 @@ const cardId = `screening-${screening.id}`;
         <svg class="w-4 h-4 expand-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
-        <span class="expand-text">{t(lang, 'screening.moreInfo')}</span>
+        <span class="expand-text">{t(lang, 'screening.cereyanTake')}</span>
       </button>
     ) : (
       <div></div>
