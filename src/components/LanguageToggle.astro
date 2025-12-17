@@ -33,22 +33,21 @@ function getAlternatePath(targetLang: Language): string {
       "px-2 py-1 rounded transition-colors",
       lang === 'tr' 
         ? "bg-cereyan-pink/20 text-cereyan-pink font-medium" 
-        : "text-cinema-text-muted hover:text-cinema-text"
+        : "text-text-muted hover:text-text"
     ]}
   >
     TR
   </a>
-  <span class="text-cinema-gray">/</span>
+  <span class="text-border">/</span>
   <a 
     href={getAlternatePath('en')}
     class:list={[
       "px-2 py-1 rounded transition-colors",
       lang === 'en' 
         ? "bg-cereyan-pink/20 text-cereyan-pink font-medium" 
-        : "text-cinema-text-muted hover:text-cinema-text"
+        : "text-text-muted hover:text-text"
     ]}
   >
     EN
   </a>
 </div>
-

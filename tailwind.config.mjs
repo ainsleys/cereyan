@@ -9,21 +9,25 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Brand colors derived from the logo
+        // Brand accent color
         cereyan: {
-          pink: '#E8A0D0',
-          'pink-light': '#F2C4E3',
-          'pink-dark': '#D080B8',
+          pink: '#C74B9B',
+          'pink-light': '#D86AAF',
+          'pink-dark': '#A33D80',
         },
-        // Cinema-inspired dark palette
-        cinema: {
-          black: '#0A0A0A',      // Primary background
-          darker: '#121212',     // Card backgrounds
-          dark: '#1A1A1A',       // Secondary surfaces
-          gray: '#2A2A2A',       // Borders
-          'gray-light': '#3A3A3A', // Lighter borders
-          text: '#E8E8E8',       // Primary text
-          'text-muted': '#888888', // Secondary text
+        // Light theme palette
+        surface: {
+          DEFAULT: '#FFFFFF',     // Page background
+          card: '#FFFFFF',        // Card background
+          muted: '#F5F5F5',       // Secondary surfaces
+        },
+        border: {
+          DEFAULT: '#E5E5E5',
+          light: '#F0F0F0',
+        },
+        text: {
+          DEFAULT: '#171717',     // Primary text
+          muted: '#737373',       // Secondary text
         },
       },
       fontFamily: {

@@ -33,18 +33,18 @@ const cardId = `screening-${screening.id}`;
   <div class="flex items-start justify-between gap-4">
     <div class="flex-1 min-w-0">
       <!-- Film title -->
-      <h3 class="font-display font-semibold text-lg leading-tight">
+      <h3 class="font-display font-semibold text-xl sm:text-2xl leading-tight">
         {screening.link ? (
           <a 
             href={screening.link}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-cinema-text hover:text-cereyan-pink transition-colors"
+            class="text-text hover:text-cereyan-pink transition-colors"
           >
             {screening.filmTitle}
           </a>
         ) : (
-          <span class="text-cinema-text">{screening.filmTitle}</span>
+          <span class="text-text">{screening.filmTitle}</span>
         )}
       </h3>
       
@@ -67,12 +67,12 @@ const cardId = `screening-${screening.id}`;
         {screening.time}
       </span>
       {screening.isDateRange && (
-        <span class="text-xs text-cinema-text-muted mt-1">
+        <span class="text-xs text-text-muted mt-1">
           {screening.dateDisplay}
         </span>
       )}
       {screening.isUntilDate && (
-        <span class="text-xs text-cinema-text-muted mt-1">
+        <span class="text-xs text-text-muted mt-1">
           {t(lang, 'screening.until')}
         </span>
       )}
@@ -83,14 +83,14 @@ const cardId = `screening-${screening.id}`;
   {hasExpandedContent && (
     <div 
       id={cardId}
-      class="expandable-content hidden mt-4 pt-4 border-t border-cinema-gray/50"
+      class="expandable-content hidden mt-4 pt-4 border-t border-border"
     >
       {note && (
         <div class="mb-3">
           <h4 class="text-xs font-semibold uppercase tracking-wider text-cereyan-pink mb-2">
             {t(lang, 'screening.cereyanTake')}
           </h4>
-          <p class="text-sm text-cinema-text-muted leading-relaxed">
+          <p class="text-sm text-text-muted leading-relaxed">
             {note}
           </p>
         </div>
@@ -98,10 +98,10 @@ const cardId = `screening-${screening.id}`;
       
       {synopsis && (
         <div>
-          <h4 class="text-xs font-semibold uppercase tracking-wider text-cinema-text-muted mb-2">
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
             {t(lang, 'screening.synopsis')}
           </h4>
-          <p class="text-sm text-cinema-text-muted leading-relaxed">
+          <p class="text-sm text-text-muted leading-relaxed">
             {synopsis}
           </p>
         </div>
@@ -110,10 +110,10 @@ const cardId = `screening-${screening.id}`;
   )}
 
   <!-- Action row -->
-  <div class="flex items-center justify-between mt-4 pt-3 border-t border-cinema-gray/30">
+  <div class="flex items-center justify-between mt-4 pt-3 border-t border-border-light">
     {hasExpandedContent ? (
       <button 
-        class="expand-btn text-xs text-cinema-text-muted hover:text-cereyan-pink transition-colors flex items-center gap-1"
+        class="expand-btn text-xs text-text-muted hover:text-cereyan-pink transition-colors flex items-center gap-1"
         data-target={cardId}
         aria-expanded="false"
       >
@@ -163,4 +163,3 @@ const cardId = `screening-${screening.id}`;
     });
   });
 </script>
-

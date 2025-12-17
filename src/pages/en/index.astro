@@ -97,7 +97,7 @@ const isCurrentWeek = selectedWeekId === currentWeekId;
     <!-- Page header -->
     <header class="text-center mb-8">
       <h1 class="sr-only">{t(lang, 'site.subtitle')}</h1>
-      <p class="text-cinema-text-muted text-sm">
+      <p class="text-text-muted text-sm">
         {t(lang, 'site.subtitle')}
       </p>
     </header>
@@ -130,11 +130,11 @@ const isCurrentWeek = selectedWeekId === currentWeekId;
         {/* Past screenings divider */}
         {pastDates.length > 0 && (
           <div id="past-screenings" class="flex items-center gap-4 my-8 scroll-mt-4">
-            <div class="flex-1 h-px bg-cinema-gray/50"></div>
-            <span class="text-sm text-cinema-text-muted uppercase tracking-wider font-medium">
+            <div class="flex-1 h-px bg-border"></div>
+            <span class="text-sm text-text-muted uppercase tracking-wider font-medium">
               {t(lang, 'calendar.pastScreenings')}
             </span>
-            <div class="flex-1 h-px bg-cinema-gray/50"></div>
+            <div class="flex-1 h-px bg-border"></div>
           </div>
         )}
         
@@ -149,12 +149,12 @@ const isCurrentWeek = selectedWeekId === currentWeekId;
       </div>
     ) : (
       <div class="text-center py-16">
-        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-cinema-gray/50 flex items-center justify-center">
-          <svg class="w-8 h-8 text-cinema-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-surface-muted flex items-center justify-center">
+          <svg class="w-8 h-8 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
           </svg>
         </div>
-        <p class="text-cinema-text-muted">
+        <p class="text-text-muted">
           {t(lang, 'calendar.noScreenings')}
         </p>
       </div>

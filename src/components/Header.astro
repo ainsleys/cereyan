@@ -20,7 +20,7 @@ function getNavPath(item: typeof navItems[0]): string {
 }
 ---
 
-<header class="sticky top-0 z-50 bg-cinema-black/95 backdrop-blur-sm border-b border-cinema-gray">
+<header class="sticky top-0 z-50 bg-surface/95 backdrop-blur-sm border-b border-border">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 sm:h-20">
       <!-- Logo -->
@@ -31,10 +31,10 @@ function getNavPath(item: typeof navItems[0]): string {
           class="w-10 h-10 sm:w-12 sm:h-12"
         />
         <div class="flex flex-col">
-          <span class="font-display font-bold text-lg sm:text-xl tracking-widest text-cinema-text group-hover:text-cereyan-pink transition-colors">
+          <span class="font-display font-bold text-lg sm:text-xl tracking-widest text-text group-hover:text-cereyan-pink transition-colors">
             CEREYAN
           </span>
-          <span class="hidden sm:block text-[10px] tracking-widest uppercase text-cinema-text-muted">
+          <span class="hidden sm:block text-[10px] tracking-widest uppercase text-text-muted">
             {t(lang, 'site.subtitle')}
           </span>
         </div>
@@ -45,17 +45,16 @@ function getNavPath(item: typeof navItems[0]): string {
         {navItems.map((item) => (
           <a 
             href={getNavPath(item)}
-            class="text-sm font-medium text-cinema-text-muted hover:text-cereyan-pink transition-colors"
+            class="text-sm font-medium text-text-muted hover:text-cereyan-pink transition-colors"
           >
             {t(lang, item.key)}
           </a>
         ))}
         
-        <div class="w-px h-5 bg-cinema-gray hidden sm:block"></div>
+        <div class="w-px h-5 bg-border hidden sm:block"></div>
         
         <LanguageToggle lang={lang} />
       </nav>
     </div>
   </div>
 </header>
-

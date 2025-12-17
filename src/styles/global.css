@@ -1,5 +1,5 @@
 /**
- * Global styles for Cereyan
+ * Global styles for Cereyan - Light Theme
  * Uses Tailwind CSS with custom components and utilities
  */
 
@@ -20,7 +20,7 @@
   }
 
   body {
-    @apply bg-cinema-black text-cinema-text antialiased;
+    @apply bg-surface text-text antialiased;
     font-feature-settings: 'ss01' on, 'ss02' on;
   }
 
@@ -30,11 +30,11 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-cinema-darker;
+    @apply bg-surface-muted;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-cinema-gray-light rounded-full;
+    @apply bg-border rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -49,25 +49,25 @@
 @layer components {
   /* Brand gradient */
   .cereyan-gradient {
-    background: linear-gradient(135deg, #E8A0D0 0%, #D080B8 100%);
+    background: linear-gradient(135deg, #C74B9B 0%, #A33D80 100%);
   }
 
   /* Glow effect for hover states */
   .cereyan-glow {
-    box-shadow: 0 0 30px rgba(232, 160, 208, 0.15);
+    box-shadow: 0 4px 20px rgba(199, 75, 155, 0.15);
   }
 
   /* Screening card - main content card style */
   .screening-card {
-    @apply bg-cinema-darker border border-cinema-gray rounded-lg p-4
+    @apply bg-surface-card border border-border rounded-lg p-4
            transition-all duration-300 ease-out
-           hover:border-cereyan-pink/50 hover:cereyan-glow;
+           hover:border-cereyan-pink/40 hover:cereyan-glow;
   }
 
   /* Week navigation tab */
   .week-tab {
     @apply px-4 py-2 text-sm font-medium transition-colors duration-200
-           text-cinema-text-muted hover:text-cereyan-pink;
+           text-text-muted hover:text-cereyan-pink;
   }
 
   .week-tab-active {
@@ -81,18 +81,19 @@
 
   /* Venue tag - shows cinema venue name */
   .venue-tag {
-    @apply text-xs px-2 py-1 rounded bg-cinema-gray text-cinema-text-muted;
+    @apply text-xs px-2 py-1 rounded bg-surface-muted text-text-muted;
   }
 
   /* Event series tag - shows retrospective/series name */
   .event-tag {
-    @apply text-xs px-2 py-1 rounded bg-cereyan-pink/20 text-cereyan-pink;
+    @apply text-xs px-2 py-1 rounded text-cereyan-pink font-medium;
+    background-color: #FDF2F8;
   }
 
   /* Primary button */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-4 py-2
-           bg-cereyan-pink text-cinema-black font-medium rounded
+           bg-cereyan-pink text-white font-medium rounded
            transition-all duration-200
            hover:bg-cereyan-pink-light hover:scale-105;
   }

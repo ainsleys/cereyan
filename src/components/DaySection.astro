@@ -20,20 +20,20 @@ const formattedDate = formatDate(date, lang);
 
 <section class="mb-10" data-day-section={date}>
   <!-- Date header -->
-  <header class="mb-4 pb-2 border-b border-cinema-gray/50">
+  <header class="mb-4 pb-2 border-b border-border">
     <div class="flex items-baseline justify-between gap-3">
       <div class="flex items-baseline gap-3">
         <h2 class="date-header mb-0">
           {dayName}
         </h2>
-        <span class="text-sm text-cinema-text-muted">
+        <span class="text-sm text-text-muted">
           {formattedDate}
         </span>
       </div>
       {showPastScreeningsLink && (
         <a 
           href="#past-screenings" 
-          class="text-xs text-cinema-text-muted hover:text-cereyan-pink transition-colors flex items-center gap-1"
+          class="text-xs text-text-muted hover:text-cereyan-pink transition-colors flex items-center gap-1"
         >
           {t(lang, 'calendar.viewPastScreenings')}
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,4 +55,3 @@ const formattedDate = formatDate(date, lang);
     ))}
   </div>
 </section>
-
