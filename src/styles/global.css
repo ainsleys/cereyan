@@ -60,8 +60,9 @@
   /* Screening card - main content card style */
   .screening-card {
     @apply bg-surface-card border border-border rounded-lg p-4
-           transition-all duration-300 ease-out
-           hover:border-cereyan-pink/40 hover:cereyan-glow;
+           shadow-sm transition-all duration-300 ease-out
+           hover:shadow-md hover:-translate-y-0.5
+           border-l-4 border-l-cereyan-pink/60;
   }
 
   /* Week navigation tab */
@@ -76,12 +77,12 @@
 
   /* Date section header */
   .date-header {
-    @apply text-xs font-semibold tracking-widest-xl uppercase text-cereyan-pink mb-4;
+    @apply text-sm font-bold tracking-widest uppercase text-cereyan-pink mb-4;
   }
 
   /* Venue tag - shows cinema venue name */
   .venue-tag {
-    @apply text-xs px-2 py-1 rounded bg-surface-muted text-text-muted;
+    @apply text-xs px-2.5 py-1 rounded-md bg-surface-muted text-text-muted font-medium;
   }
 
   /* Event series tag - shows retrospective/series name */

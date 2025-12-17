@@ -18,12 +18,12 @@ export default {
         // Light theme palette
         surface: {
           DEFAULT: '#FFFFFF',     // Page background
-          card: '#FFFFFF',        // Card background
-          muted: '#F5F5F5',       // Secondary surfaces
+          card: '#F9FAFB',        // Card background (subtle gray)
+          muted: '#F3F4F6',       // Secondary surfaces
         },
         border: {
-          DEFAULT: '#E5E5E5',
-          light: '#F0F0F0',
+          DEFAULT: '#E5E7EB',
+          light: '#F3F4F6',
         },
         text: {
           DEFAULT: '#171717',     // Primary text

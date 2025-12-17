@@ -21,6 +21,15 @@ const synopsis = lang === 'en'
 
 const hasExpandedContent = note || synopsis;
 const cardId = `screening-${screening.id}`;
+
+// Translate special values
+const displayTime = screening.time === 'Farklı Saatler' 
+  ? t(lang, 'screening.variousTimes')
+  : screening.time;
+
+const displayVenue = screening.venue === 'Farklı Mekanlar'
+  ? t(lang, 'screening.variousVenues')
+  : screening.venue;
 ---
 
 <article 
@@ -51,7 +60,7 @@ const cardId = `screening-${screening.id}`;
       <!-- Venue and Event Series -->
       <div class="flex flex-wrap items-center gap-2 mt-2">
         <span class="venue-tag">
-          {screening.venue}
+          {displayVenue}
         </span>
         {screening.eventSeries && (
           <span class="event-tag">
@@ -64,7 +73,7 @@ const cardId = `screening-${screening.id}`;
     <!-- Time -->
     <div class="flex flex-col items-end shrink-0">
       <span class="font-mono text-sm text-cereyan-pink font-medium">
-        {screening.time}
+        {displayTime}
       </span>
       {screening.isDateRange && (
         <span class="text-xs text-text-muted mt-1">
@@ -113,7 +122,7 @@ const cardId = `screening-${screening.id}`;
   <div class="flex items-center justify-between mt-4 pt-3 border-t border-border-light">
     {hasExpandedContent ? (
       <button 
-        class="expand-btn text-xs text-text-muted hover:text-cereyan-pink transition-colors flex items-center gap-1"
+        class="expand-btn text-xs font-medium text-cereyan-pink hover:text-cereyan-pink-dark transition-colors flex items-center gap-1.5 px-2 py-1 -ml-2 rounded hover:bg-cereyan-pink/10"
         data-target={cardId}
         aria-expanded="false"
       >
