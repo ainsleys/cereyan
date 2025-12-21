@@ -12,202 +12,119 @@ interface Week {
 
 interface Props {
   weeks: Week[];
-  currentWeekId: string;
+  currentWeekId: string;  // The selected week (from URL or default)
   lang: Language;
 }
 
 const { weeks, currentWeekId, lang } = Astro.props;
+
+// Find indices
+const selectedIndex = weeks.findIndex(w => w.id === currentWeekId);
+const actualCurrentIndex = weeks.findIndex(w => w.isCurrent);
+const isOnCurrentWeek = selectedIndex === actualCurrentIndex;
+
+// Get previous and next week info
+const prevWeek = selectedIndex > 0 ? weeks[selectedIndex - 1] : null;
+const nextWeek = selectedIndex < weeks.length - 1 ? weeks[selectedIndex + 1] : null;
+const selectedWeek = weeks[selectedIndex];
 ---
 
-<div class="week-selector mb-8">
-  <!-- Mobile: Dropdown -->
-  <div class="sm:hidden">
-    <label for="week-select" class="sr-only">{t(lang, 'calendar.selectWeek')}</label>
-    <select 
-      id="week-select"
-      class="w-full bg-white border border-border rounded-lg px-4 py-3 text-text focus:border-cereyan-pink focus:outline-none focus:ring-1 focus:ring-cereyan-pink"
-      onchange="window.location.href = this.value"
-    >
-      {weeks.map((week) => (
-        <option 
-          value={`?week=${week.id}`}
-          selected={week.id === currentWeekId}
+<nav class="week-selector mb-8" aria-label={t(lang, 'calendar.selectWeek')}>
+  <div class="flex flex-col items-center gap-3">
+    
+    <!-- Main navigation row -->
+    <div class="flex items-center justify-center gap-4 w-full max-w-md">
+      <!-- Previous week arrow -->
+      {prevWeek ? (
+        <a 
+          href={prevWeek.isCurrent ? '?' : `?week=${prevWeek.id}`}
+          class="week-arrow"
+          aria-label={t(lang, 'calendar.previousWeek')}
         >
-          {lang === 'tr' ? week.label : week.labelEn}
-          {week.isCurrent ? ` (${t(lang, 'calendar.thisWeek')})` : ''}
-        </option>
-      ))}
-    </select>
-  </div>
-
-  <!-- Desktop: Horizontal tabs -->
-  <div class="hidden sm:block overflow-x-auto overflow-y-visible scrollbar-hide">
-    <div class="flex items-center gap-1 min-w-max pb-2 pt-3">
-        {weeks.map((week) => {
-          const isCurrent = week.isCurrent;
-          
-          return (
-            <a 
-              href={`?week=${week.id}`} 
-              class="week-tab"
-              data-week-id={week.id}
-              data-is-current={isCurrent.toString()}
-              data-is-past={week.isPast.toString()}
-            >
-              {lang === 'tr' ? week.label : week.labelEn}
-              {isCurrent && (
-                <span class="week-dot"></span>
-              )}
-            </a>
-          );
-        })}
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </a>
+      ) : (
+        <span class="week-arrow week-arrow-disabled" aria-hidden="true">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </span>
+      )}
+      
+      <!-- Current week display -->
+      <div class="flex-1 text-center">
+        <h2 class="week-display text-xl sm:text-2xl font-serif font-medium text-text">
+          {lang === 'tr' ? selectedWeek?.label : selectedWeek?.labelEn}
+        </h2>
+      </div>
+      
+      <!-- Next week arrow -->
+      {nextWeek ? (
+        <a 
+          href={nextWeek.isCurrent ? '?' : `?week=${nextWeek.id}`}
+          class="week-arrow"
+          aria-label={t(lang, 'calendar.nextWeek')}
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      ) : (
+        <span class="week-arrow week-arrow-disabled" aria-hidden="true">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
+      )}
     </div>
-  </div>
-
-  <!-- Navigation arrows for context -->
-  <div class="hidden sm:flex items-center justify-between mt-3 px-1">
-    <button 
-      onclick="document.querySelector('.overflow-x-auto').scrollBy({left: -200, behavior: 'smooth'})"
-      class="text-text-muted hover:text-cereyan-pink transition-colors"
-      aria-label={t(lang, 'calendar.previousWeek')}
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
     
-    <span class="text-xs text-text-muted uppercase tracking-wider">
-      {t(lang, 'calendar.selectWeek')}
-    </span>
+    <!-- "Current week" return link (only shown when not on current week) -->
+    {!isOnCurrentWeek && (
+      <a 
+        href="?" 
+        class="current-week-link text-sm text-cereyan-pink hover:text-cereyan-pink-dark transition-colors"
+      >
+        ← {t(lang, 'calendar.thisWeek')}
+      </a>
+    )}
     
-    <button 
-      onclick="document.querySelector('.overflow-x-auto').scrollBy({left: 200, behavior: 'smooth'})"
-      class="text-text-muted hover:text-cereyan-pink transition-colors"
-      aria-label={t(lang, 'calendar.nextWeek')}
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
   </div>
-</div>
+</nav>
 
 <style>
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  /* Base week tab styles */
-  .week-tab {
-    position: relative;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    border-radius: 0.5rem;
-    transition: all 0.2s;
-    white-space: nowrap;
-    color: #737373; /* text-muted */
-    overflow: visible;
-  }
-  
-  .week-tab:hover {
-    color: #171717; /* text */
-    background: #F5F5F5; /* surface-muted */
-  }
-  
-  /* Selected week - solid pink background */
-  .week-tab.is-selected {
-    background: #C74B9B; /* cereyan-pink */
-    color: #FFFFFF;
-    font-weight: 600;
-  }
-  
-  .week-tab.is-selected:hover {
-    background: #D86AAF; /* cereyan-pink-light */
-  }
-  
-  /* Current week (not selected) - pink outline */
-  .week-tab.is-current:not(.is-selected) {
-    box-shadow: inset 0 0 0 2px rgba(199, 75, 155, 0.5);
-    color: #C74B9B; /* cereyan-pink */
-  }
-  
-  .week-tab.is-current:not(.is-selected):hover {
-    background: rgba(199, 75, 155, 0.08);
-  }
-  
-  /* Past week - dimmed */
-  .week-tab.is-past:not(.is-selected):not(.is-current) {
-    color: rgba(115, 115, 115, 0.5); /* text-muted/50 */
-  }
-  
-  .week-tab.is-past:not(.is-selected):not(.is-current):hover {
-    color: #737373;
-    background: #F5F5F5;
-  }
-  
-  /* Pulsing dot for current week */
-  .week-dot {
-    position: absolute;
-    top: -3px;
-    right: -3px;
-    width: 8px;
-    height: 8px;
-    background: #C74B9B;
+  .week-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    animation: pulse 2s infinite;
-    box-shadow: 0 0 0 2px #FFFFFF;
-    display: none; /* Hidden by default, shown via JS */
-    z-index: 10;
+    color: #737373;
+    background: transparent;
+    border: 1px solid #E5E5E5;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
   }
   
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.1); }
+  a.week-arrow:hover {
+    color: #C74B9B;
+    border-color: #C74B9B;
+    background: rgba(199, 75, 155, 0.05);
+  }
+  
+  .week-arrow-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  .week-display {
+    min-width: 180px;
+  }
+  
+  .current-week-link {
+    font-weight: 500;
   }
 </style>
-
-<script>
-  // Handle week selection visual state client-side
-  document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const selectedWeek = urlParams.get('week');
-    
-    // Get all week tab links
-    const weekTabs = document.querySelectorAll('.week-tab');
-    
-    weekTabs.forEach(tab => {
-      const weekId = tab.getAttribute('data-week-id');
-      const isCurrent = tab.getAttribute('data-is-current') === 'true';
-      const isPast = tab.getAttribute('data-is-past') === 'true';
-      const isSelected = selectedWeek ? weekId === selectedWeek : isCurrent;
-      
-      // Add appropriate classes
-      if (isSelected) {
-        tab.classList.add('is-selected');
-      }
-      if (isCurrent) {
-        tab.classList.add('is-current');
-        // Show the pulsing dot only if NOT selected
-        const dot = tab.querySelector('.week-dot');
-        if (dot && !isSelected) {
-          (dot as HTMLElement).style.display = 'block';
-        }
-      }
-      if (isPast) {
-        tab.classList.add('is-past');
-      }
-    });
-    
-    // Also update the mobile dropdown
-    const select = document.getElementById('week-select') as HTMLSelectElement;
-    if (select && selectedWeek) {
-      const option = select.querySelector(`option[value="?week=${selectedWeek}"]`) as HTMLOptionElement;
-      if (option) option.selected = true;
-    }
-  });
-</script>

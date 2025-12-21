@@ -1,4 +1,7 @@
 ---
+// Enable server-side rendering for query parameter handling
+export const prerender = false;
+
 import Layout from '../layouts/Layout.astro';
 import WeekSelector from '../components/WeekSelector.astro';
 import VenueFilter from '../components/VenueFilter.astro';
@@ -15,8 +18,8 @@ const screenings = screeningsData as Screening[];
 const venues = venuesData as Venue[];
 
 // Get week from URL params or default to current week
-const url = new URL(Astro.request.url);
-const weekParam = url.searchParams.get('week');
+// Use Astro.url which properly includes query parameters
+const weekParam = Astro.url.searchParams.get('week');
 
 const now = new Date();
 const currentWeekStart = getWeekStart(now);
