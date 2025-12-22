@@ -92,7 +92,19 @@ const weekScreenings = screenings.filter(s => {
   return screeningDate >= selectedWeekStart && screeningDate <= selectedWeekEnd;
 });
 
-// Group screenings by date
+// Helper to parse time for sorting (returns minutes from midnight, or Infinity for special values)
+function parseTimeForSort(time: string): number {
+  if (!time || time.trim() === '' || time === 'Farklı Saatler' || time === 'Tüm Gün') {
+    return Infinity; // Put special times at the end
+  }
+  const match = time.match(/^(\d{1,2}):(\d{2})/);
+  if (match) {
+    return parseInt(match[1]) * 60 + parseInt(match[2]);
+  }
+  return Infinity;
+}
+
+// Group screenings by date and sort within each day
 const screeningsByDate = weekScreenings.reduce((acc, screening) => {
   const date = screening.date;
   if (!acc[date]) {
@@ -101,6 +113,17 @@ const screeningsByDate = weekScreenings.reduce((acc, screening) => {
   acc[date].push(screening);
   return acc;
 }, {} as Record<string, Screening[]>);
+
+// Sort screenings within each day: by time first, then by venue
+Object.keys(screeningsByDate).forEach(date => {
+  screeningsByDate[date].sort((a, b) => {
+    const timeA = parseTimeForSort(a.time);
+    const timeB = parseTimeForSort(b.time);
+    if (timeA !== timeB) return timeA - timeB;
+    // Same time: sort by venue name
+    return (a.venue || '').localeCompare(b.venue || '', 'tr');
+  });
+});
 
 // Get today's date in local timezone
 const today = new Date();
