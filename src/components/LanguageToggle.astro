@@ -11,18 +11,6 @@ interface Props {
 const { lang } = Astro.props;
 const currentPath = Astro.url.pathname;
 
-// Path mappings between languages (TR path -> EN path)
-const pathMappings: Record<string, string> = {
-  '/': '/',
-  '/mekanlar': '/venues',
-};
-
-// Create reverse mapping (EN path -> TR path)
-const reversePathMappings: Record<string, string> = {};
-for (const [tr, en] of Object.entries(pathMappings)) {
-  reversePathMappings[en] = tr;
-}
-
 // Normalize path by removing trailing slash (except for root)
 function normalizePath(path: string): string {
   if (path === '/' || path === '') return '/';
@@ -38,18 +26,38 @@ function getAlternatePath(targetLang: Language): string {
     // Remove /en prefix first
     let pathWithoutPrefix = normalizedPath.replace(/^\/en/, '');
     if (pathWithoutPrefix === '' || pathWithoutPrefix === '/') {
-      pathWithoutPrefix = '/';
+      return '/';
     }
-    // Check if there's a mapping
-    return reversePathMappings[pathWithoutPrefix] || pathWithoutPrefix;
+    
+    // Handle week paths: /week/X -> /hafta/X
+    if (pathWithoutPrefix.startsWith('/week/')) {
+      return pathWithoutPrefix.replace('/week/', '/hafta/');
+    }
+    
+    // Handle venues: /venues -> /mekanlar
+    if (pathWithoutPrefix === '/venues') {
+      return '/mekanlar';
+    }
+    
+    return pathWithoutPrefix;
   } else {
     // Going from TR to EN
     if (normalizedPath.startsWith('/en')) {
       return normalizedPath;
     }
-    // Check if there's a mapping for this path
-    const mappedPath = pathMappings[normalizedPath] || normalizedPath;
-    return `/en${mappedPath === '/' ? '' : mappedPath}`;
+    
+    // Handle week paths: /hafta/X -> /en/week/X
+    if (normalizedPath.startsWith('/hafta/')) {
+      return '/en' + normalizedPath.replace('/hafta/', '/week/');
+    }
+    
+    // Handle venues: /mekanlar -> /en/venues
+    if (normalizedPath === '/mekanlar') {
+      return '/en/venues';
+    }
+    
+    // Default: add /en prefix
+    return `/en${normalizedPath === '/' ? '' : normalizedPath}`;
   }
 }
 ---

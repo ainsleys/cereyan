@@ -18,6 +18,8 @@ export interface Screening {
   dateDisplay: string;
   /** Film title (in Turkish) */
   filmTitle: string;
+  /** Film title in English (optional - only if an official English title exists) */
+  filmTitleEn?: string;
   /** Screening time: "19:00" or "Farklı Saatler" for variable times */
   time: string;
   /** Venue display name */
@@ -28,6 +30,12 @@ export interface Screening {
   eventSeries?: string;
   /** External link to tickets or more info */
   link?: string;
+  /** Film director(s) */
+  director?: string;
+  /** Release year */
+  year?: number;
+  /** Runtime in minutes */
+  runtime?: number;
   /** Editorial note from the programmer (Turkish) */
   programmersNote?: string;
   /** Editorial note from the programmer (English) */

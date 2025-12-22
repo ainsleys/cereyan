@@ -52,11 +52,15 @@ cereyan/
 │   ├── layouts/
 │   │   └── Layout.astro         # Base HTML template
 │   ├── pages/              # File-based routing
-│   │   ├── index.astro          # Turkish homepage
+│   │   ├── index.astro          # Turkish homepage (current week)
 │   │   ├── mekanlar.astro       # Turkish venues page
+│   │   ├── hafta/
+│   │   │   └── [weekId].astro   # Turkish week pages (dynamic)
 │   │   └── en/
-│   │       ├── index.astro      # English homepage
-│   │       └── venues.astro     # English venues page
+│   │       ├── index.astro      # English homepage (current week)
+│   │       ├── venues.astro     # English venues page
+│   │       └── week/
+│   │           └── [weekId].astro # English week pages (dynamic)
 │   ├── styles/
 │   │   └── global.css           # Tailwind imports & custom styles
 │   ├── types/
@@ -88,6 +92,15 @@ Tarih,Gösterim,Saat,Mekan,Etkinlik,Link,Not,Özet
 17.12.2025,Film Title,19:00,Sinematek,Event Series,https://...,Programmer note,Synopsis
 ```
 
+**Film Metadata:**
+After importing from CSV, add metadata for well-known films:
+- `director` - Director name(s)
+- `year` - Release year (number)
+- `runtime` - Duration in minutes (number)
+- `filmTitleEn` - English title (only if official English title exists)
+
+Skip metadata for events, talks, short film programs, and VR experiences.
+
 ### 2. Internationalization (i18n)
 
 - **Default language:** Turkish (`tr`)
@@ -102,9 +115,10 @@ All UI strings are in `src/i18n/translations.ts`. Film titles and notes remain i
 Unlike day-by-day calendars, Cereyan uses a **week selector**:
 
 - Weeks run Monday → Sunday
-- Current week is highlighted with a dot indicator
-- Past weeks are accessible for archive browsing
-- URL parameter: `?week=2025-W51` (ISO week format)
+- Arrow navigation with custom Penrose triangle SVGs
+- "This Week" link appears when viewing past/future weeks
+- Path-based routing: `/hafta/2025-W51` (Turkish) or `/en/week/2025-W51` (English)
+- Past weeks accessible for archive browsing
 
 ### 4. Venue Filtering
 
@@ -119,8 +133,12 @@ The `VenueFilter` component allows multi-select filtering:
 
 Each screening can include:
 - **Required:** date, title, time, venue
-- **Optional:** event series, link, programmer's note, synopsis
+- **Optional:** event series, link, programmer's note, synopsis, director, year, runtime, English title
 - Expandable sections for notes/synopsis (client-side JavaScript)
+
+**Cereyan Selects:** Films with programmer's notes are highlighted with:
+- Goldenrod accent bar (instead of pink)
+- Filled gold star icon
 
 ---
 
@@ -128,15 +146,22 @@ Each screening can include:
 
 ### Colors (Tailwind classes)
 
+**Light Theme (current):**
+
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `cereyan-pink` | #E8A0D0 | Primary accent, links, highlights |
-| `cereyan-pink-light` | #F2C4E3 | Hover states |
-| `cinema-black` | #0A0A0A | Page background |
-| `cinema-darker` | #121212 | Card backgrounds |
-| `cinema-gray` | #2A2A2A | Borders |
-| `cinema-text` | #E8E8E8 | Primary text |
-| `cinema-text-muted` | #888888 | Secondary text |
+| `cereyan-pink` | #C74B9B | Primary accent, links, highlights |
+| `surface` | #FAFAFA | Page background |
+| `surface-card` | #F5F5F5 | Card backgrounds |
+| `text` | #171717 | Primary text |
+| `text-muted` | #737373 | Secondary text |
+| `border` | #E5E5E5 | Borders |
+
+**Cereyan Selects (featured films):**
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| Dark Goldenrod | #B8860B | Accent bar, star icon |
 
 ### Typography
 
@@ -236,14 +261,20 @@ interface Screening {
   id: string;           // Unique identifier
   date: string;         // "2025-12-17" (ISO format)
   dateDisplay: string;  // "17.12.2025" (Turkish format)
-  filmTitle: string;    // Film name
-  time: string;         // "19:00" or "Farklı Saatler"
+  filmTitle: string;    // Film name (Turkish)
+  filmTitleEn?: string; // English title (only if official)
+  time: string;         // "19:00", "Farklı Saatler", or "" (all day)
   venue: string;        // Display name
   venueId?: string;     // URL-safe slug for filtering
   eventSeries?: string; // Retrospective/series name
   link?: string;        // Ticket/info URL
-  programmersNote?: string;
+  programmersNote?: string;   // Turkish note (Cereyan's Take)
+  programmersNoteEn?: string; // English note
   synopsis?: string;
+  synopsisEn?: string;
+  director?: string;    // Director name(s)
+  year?: number;        // Release year
+  runtime?: number;     // Duration in minutes
   isDateRange?: boolean;  // For "13-17.12.2025"
   endDate?: string;       // End of date range
   isUntilDate?: boolean;  // For "'ye kadar" format
@@ -293,7 +324,7 @@ interface Venue {
 
 ---
 
-*Last updated: December 2024*
+*Last updated: December 22, 2025*
 
 
 

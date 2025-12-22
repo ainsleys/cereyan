@@ -9,6 +9,9 @@
     "venueId": "various",
     "eventSeries": "Başka Çarşamba",
     "link": "https://www.baskasinema.com/filmler/decision-to-leave/",
+    "director": "Park Chan-wook",
+    "year": 2022,
+    "runtime": 138,
     "programmersNote": "Park Chan-wook'un Cannes'da En İyi Yönetmen ödülü kazanan neo-noir başyapıtı. Bir dedektifin cinayet şüphelisine olan takıntılı aşkını anlatan film, yönetmenin en olgun ve duygusal çalışması olarak öne çıkıyor.",
     "programmersNoteEn": "Park Chan-wook's neo-noir masterpiece that won Best Director at Cannes. The film tells the story of a detective's obsessive love for a murder suspect, standing out as the director's most mature and emotional work."
   },
@@ -22,6 +25,9 @@
     "venueId": "sinematek",
     "eventSeries": "Rüya Çıkmazı",
     "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=zama-25-09-2025",
+    "director": "Lucrecia Martel",
+    "year": 2017,
+    "runtime": 115,
     "programmersNote": "Lucrecia Martel'in 9 yıllık sessizliğinin ardından çektiği başyapıt. 18. yüzyıl Güney Amerika'sında bir İspanyol yargıcın sömürgecilik eleştirisiyle örülmüş bekleyişini anlatan film, zamanın durduğu bir karabasan.",
     "programmersNoteEn": "A masterpiece from Lucrecia Martel after a 9-year silence. Set in 18th-century South America, the film tells the story of a Spanish magistrate's wait, interwoven with a critique of colonialism—a nightmare where time stands still."
   },
@@ -103,6 +109,9 @@
     "venueId": "sinematek",
     "eventSeries": "Alice Rohrwacher Retrospektifi",
     "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=gelecek-futura-25-09-2025",
+    "director": "Alice Rohrwacher",
+    "year": 2021,
+    "runtime": 105,
     "programmersNote": "Alice Rohrwacher'ın kısa belgeseli, pandemi döneminde İtalya'nın farklı bölgelerinden gençlerin gelecek hayallerini sorguluyor. Yönetmenin retrospektifinin önemli bir parçası.",
     "programmersNoteEn": "Alice Rohrwacher's short documentary questions the future dreams of young people from different regions of Italy during the pandemic. An important part of the director's retrospective."
   },
@@ -116,6 +125,9 @@
     "venueId": "beyoglu-sinemasi",
     "eventSeries": "SİNEKONSER",
     "link": "https://www.instagram.com/stories/highlights/17938093407073436/?hl=en",
+    "director": "René Clair",
+    "year": 1924,
+    "runtime": 61,
     "programmersNote": "René Clair'in 1924 yapımı sessiz filmi canlı müzik eşliğinde! Sinekonserlerin kaçırılmaması gereken bir gecesi.",
     "programmersNoteEn": "René Clair's 1924 silent film accompanied by live music! An unmissable night of cine-concert programming."
   },
@@ -128,6 +140,9 @@
     "venue": "Atlas 1948",
     "venueId": "atlas-1948",
     "link": "https://www.instagram.com/p/DSCiuzgjPyw/?img_index=1",
+    "director": "Asghar Farhadi",
+    "year": 2016,
+    "runtime": 124,
     "programmersNote": "Asghar Farhadi'nin Oscar kazanan başyapıtı. Tahran'da bir tiyatro oyuncusu çiftin hayatının karanlık bir olayla sarsılmasını anlatan gerilim dolu dram.",
     "programmersNoteEn": "Asghar Farhadi's Oscar-winning masterpiece. A tension-filled drama about a theatre actor couple in Tehran whose lives are shaken by a dark incident."
   },
@@ -139,7 +154,10 @@
     "time": "20:00",
     "venue": "Sinematek",
     "venueId": "sinematek",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=paris-uyuyor-paris-qui-dort-26-09-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=paris-uyuyor-paris-qui-dort-26-09-2025",
+    "director": "René Clair",
+    "year": 1924,
+    "runtime": 61
   },
   {
     "id": "18-12-2025-sanat-akademisi-1994-13",
@@ -151,6 +169,9 @@
     "venueId": "istanbul-modern",
     "eventSeries": "Hikaye Çin'de Geçiyor",
     "link": "https://www.istanbulmodern.org/film/sanat-akademisi-1994-yi-shu-xue-yuan-1994-2023",
+    "director": "Liu Xiaodong",
+    "year": 2023,
+    "runtime": 80,
     "programmersNote": "İstanbul Modern'in Çin sineması seçkisinden. 1994 yılında Pekin'deki bir sanat akademisinin öğrencilerinin gündelik hayatını takip eden belgesel.",
     "programmersNoteEn": "From Istanbul Modern's Chinese cinema selection. A documentary following the daily lives of students at an art academy in Beijing in 1994."
   },
@@ -163,7 +184,10 @@
     "venue": "İstanbul Modern",
     "venueId": "istanbul-modern",
     "eventSeries": "Hikaye Çin'de Geçiyor",
-    "link": "https://www.istanbulmodern.org/film/manti-kralicesi-shui-jiao-huang-hou-2025"
+    "link": "https://www.istanbulmodern.org/film/manti-kralicesi-shui-jiao-huang-hou-2025",
+    "director": "Zhang Zining",
+    "year": 2024,
+    "runtime": 90
   },
   {
     "id": "18-12-2025-golgesiz-kule-15",
@@ -174,7 +198,10 @@
     "venue": "İstanbul Modern",
     "venueId": "istanbul-modern",
     "eventSeries": "Hikaye Çin'de Geçiyor",
-    "link": "https://www.istanbulmodern.org/film/golgesiz-kule-bai-ta-zhi-guang-2023"
+    "link": "https://www.istanbulmodern.org/film/golgesiz-kule-bai-ta-zhi-guang-2023",
+    "director": "Zhang Lu",
+    "year": 2023,
+    "runtime": 144
   },
   {
     "id": "18-12-2025-oyle-sevdim-ki-seni-16",
@@ -196,6 +223,9 @@
     "venue": "Atlas 1948",
     "venueId": "atlas-1948",
     "link": "https://biletinial.com/tr-tr/sinema/indland-empire-2006#",
+    "director": "David Lynch",
+    "year": 2006,
+    "runtime": 180,
     "programmersNote": "David Lynch'in 3 saatlik deneysel başyapıtı. Dijital kamerayla çekilen film, Hollywood'un karanlık dehlizlerinde kaybolan bir aktrisin kabusvari yolculuğu. Lynch hayranları için kaçırılmaz.",
     "programmersNoteEn": "David Lynch's 3-hour experimental masterpiece. Shot on digital camera, the film follows an actress's nightmarish journey through Hollywood's dark corridors. Unmissable for Lynch fans."
   },
@@ -208,7 +238,10 @@
     "venue": "Farklı Mekanlar",
     "venueId": "various",
     "eventSeries": "Unutulmaz Perşembe",
-    "link": "https://www.instagram.com/p/DSFEslRjKN2/?img_index=1"
+    "link": "https://www.instagram.com/p/DSFEslRjKN2/?img_index=1",
+    "director": "Alejandro Amenábar",
+    "year": 2004,
+    "runtime": 126
   },
   {
     "id": "19-12-2025-dalloway-19",
@@ -219,7 +252,10 @@
     "venue": "Fransız Kültür",
     "venueId": "fransiz-kultur",
     "eventSeries": "Kasım-Aralık Sinema Programı",
-    "link": "https://www.ifturquie.org/etkinlik/sinema-dalloway/"
+    "link": "https://www.ifturquie.org/etkinlik/sinema-dalloway/",
+    "director": "Marleen Gorris",
+    "year": 1997,
+    "runtime": 97
   },
   {
     "id": "19-12-2025-olumsuz-kadin-20",
@@ -231,6 +267,9 @@
     "venueId": "sinematek",
     "eventSeries": "Rüya Çıkmazı",
     "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=olumsuz-kadin-l-immortelle-25-09-2025",
+    "director": "Alain Robbe-Grillet",
+    "year": 1963,
+    "runtime": 101,
     "programmersNote": "Alain Robbe-Grillet'nin yönetmenlik çıkışı. Nouveau roman akımının sinemadaki yansıması olan bu gizemli film, İstanbul sokaklarında geçen büyüleyici bir aşk hikayesi.",
     "programmersNoteEn": "Alain Robbe-Grillet's directorial debut. This mysterious film, a cinematic reflection of the nouveau roman movement, is a captivating love story set in the streets of Istanbul."
   },
@@ -256,7 +295,10 @@
     "venue": "Fransız Kültür",
     "venueId": "fransiz-kultur",
     "eventSeries": "Kasım-Aralık Sinema Programı",
-    "link": "https://www.ifturquie.org/etkinlik/sinema-leurs-enfants-apres-eux/"
+    "link": "https://www.ifturquie.org/etkinlik/sinema-leurs-enfants-apres-eux/",
+    "director": "Ludovic & Zoran Boukherma",
+    "year": 2024,
+    "runtime": 142
   },
   {
     "id": "20-12-2025-kucuk-ulke-23",
@@ -267,7 +309,10 @@
     "venue": "Fransız Kültür",
     "venueId": "fransiz-kultur",
     "eventSeries": "Kasım-Aralık Sinema Programı",
-    "link": "https://www.ifturquie.org/etkinlik/sinema-petit-pays/"
+    "link": "https://www.ifturquie.org/etkinlik/sinema-petit-pays/",
+    "director": "Eric Barbier",
+    "year": 2020,
+    "runtime": 111
   },
   {
     "id": "20-12-2025-gec-saatler-24",
@@ -279,6 +324,9 @@
     "venueId": "sinematek",
     "eventSeries": "Rüya Çıkmazı",
     "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=gec-saatler-after-hours-25-09-2025",
+    "director": "Martin Scorsese",
+    "year": 1985,
+    "runtime": 97,
     "programmersNote": "Martin Scorsese'nin kara komedi başyapıtı. Manhattan'ın gecesinde kaybolan bir adamın absürt macerası. Scorsese'nin en az bilinen ama en eğlenceli filmlerinden.",
     "programmersNoteEn": "Martin Scorsese's dark comedy masterpiece. The absurd adventure of a man lost in the Manhattan night. One of Scorsese's least known but most entertaining films."
   },
@@ -292,6 +340,9 @@
     "venueId": "sinematek",
     "eventSeries": "Il Cinema Ritrovato Seçkisi",
     "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=hirsiz-thief-25-09-2025",
+    "director": "Michael Mann",
+    "year": 1981,
+    "runtime": 123,
     "programmersNote": "Michael Mann'in ilk uzun metrajlı filmi. James Caan'ın unutulmaz performansıyla, profesyonel bir hırsızın son işini anlatan neo-noir şaheseri.",
     "programmersNoteEn": "Michael Mann's first feature film. A neo-noir masterpiece about a professional thief's last job, featuring James Caan's unforgettable performance."
   },
@@ -337,7 +388,10 @@
     "venue": "İstanbul Modern",
     "venueId": "istanbul-modern",
     "eventSeries": "Hikaye Çin'de Geçiyor",
-    "link": "https://www.istanbulmodern.org/film/manti-kralicesi-shui-jiao-huang-hou-2025"
+    "link": "https://www.istanbulmodern.org/film/manti-kralicesi-shui-jiao-huang-hou-2025",
+    "director": "Zhang Zining",
+    "year": 2024,
+    "runtime": 90
   },
   {
     "id": "20-12-2025-lisbon-maru-30",
@@ -348,7 +402,10 @@
     "venue": "İstanbul Modern",
     "venueId": "istanbul-modern",
     "eventSeries": "Hikaye Çin'de Geçiyor",
-    "link": "https://www.istanbulmodern.org/film/lisbon-maru-nun-batisi-li-si-ben-wan-chen-mo-2023"
+    "link": "https://www.istanbulmodern.org/film/lisbon-maru-nun-batisi-li-si-ben-wan-chen-mo-2023",
+    "director": "Fang Li",
+    "year": 2023,
+    "runtime": 122
   },
   {
     "id": "21-12-2025-barry-lyndon-31",
@@ -360,6 +417,9 @@
     "venueId": "sinematek",
     "eventSeries": "Il Cinema Ritrovato Seçkisi",
     "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=barry-lyndon-25-09-2025",
+    "director": "Stanley Kubrick",
+    "year": 1975,
+    "runtime": 185,
     "programmersNote": "Stanley Kubrick'in görsel şöleni. Doğal ışıkla çekilen 18. yüzyıl destanı, sinema tarihinin en güzel görüntülerine sahip filmlerden biri. Büyük perdede izleme fırsatını kaçırmayın.",
     "programmersNoteEn": "Stanley Kubrick's visual feast. Shot with natural light, this 18th-century epic features some of cinema history's most beautiful imagery. Don't miss the chance to see it on the big screen."
   },
@@ -373,6 +433,9 @@
     "venueId": "sinematek",
     "eventSeries": "Ulrike Ottinger Seçkisi",
     "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=kayip-otoban-lost-highway-25-09-2025",
+    "director": "Ulrike Ottinger",
+    "year": 1989,
+    "runtime": 265,
     "programmersNote": "Ulrike Ottinger'in Moğolistan'da çektiği destansı belgesel. Şamanizm, göçebe kültürü ve modern yaşamın kesişim noktalarını keşfeden görsel bir yolculuk.",
     "programmersNoteEn": "Ulrike Ottinger's epic documentary shot in Mongolia. A visual journey exploring the intersection of shamanism, nomadic culture, and modern life."
   },
@@ -385,7 +448,10 @@
     "venue": "İstanbul Modern",
     "venueId": "istanbul-modern",
     "eventSeries": "Hikaye Çin'de Geçiyor",
-    "link": "https://www.istanbulmodern.org/film/sanat-akademisi-1994-yi-shu-xue-yuan-1994-2023"
+    "link": "https://www.istanbulmodern.org/film/sanat-akademisi-1994-yi-shu-xue-yuan-1994-2023",
+    "director": "Liu Xiaodong",
+    "year": 2023,
+    "runtime": 80
   },
   {
     "id": "21-12-2025-golgesiz-kule-34",
@@ -396,7 +462,10 @@
     "venue": "İstanbul Modern",
     "venueId": "istanbul-modern",
     "eventSeries": "Hikaye Çin'de Geçiyor",
-    "link": "https://www.istanbulmodern.org/film/golgesiz-kule-bai-ta-zhi-guang-2023"
+    "link": "https://www.istanbulmodern.org/film/golgesiz-kule-bai-ta-zhi-guang-2023",
+    "director": "Zhang Lu",
+    "year": 2023,
+    "runtime": 144
   },
   {
     "id": "21-12-2025-grinc-35",
@@ -407,7 +476,10 @@
     "venue": "Beyoğlu Sineması",
     "venueId": "beyoglu-sinemasi",
     "eventSeries": "Çocuk Matinesi",
-    "link": "https://www.instagram.com/stories/highlights/17938093407073436/?hl=en"
+    "link": "https://www.instagram.com/stories/highlights/17938093407073436/?hl=en",
+    "director": "Ron Howard",
+    "year": 2000,
+    "runtime": 104
   },
   {
     "id": "21-12-2025-existenz-36",
@@ -419,6 +491,9 @@
     "venueId": "beyoglu-sinemasi",
     "eventSeries": "Sinema Seminerleri",
     "link": "https://www.instagram.com/stories/highlights/17938093407073436/?hl=en",
+    "director": "David Cronenberg",
+    "year": 1999,
+    "runtime": 97,
     "programmersNote": "David Cronenberg'in beden korkusu (body horror) estetiğini sanal gerçeklikle buluşturduğu kült film. Oyun mu gerçek mi? Sınırlar belirsizleşiyor.",
     "programmersNoteEn": "David Cronenberg's cult film that merges body horror aesthetics with virtual reality. Is it a game or reality? The boundaries blur."
   },
@@ -442,7 +517,10 @@
     "venue": "Sinematek",
     "venueId": "sinematek",
     "eventSeries": "Ulrike Ottinger Seçkisi",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=paris-calligrammes-10-10-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=paris-calligrammes-10-10-2025",
+    "director": "Ulrike Ottinger",
+    "year": 2020,
+    "runtime": 129
   },
   {
     "id": "23-12-2025-bir-sans-daha-39",
@@ -496,7 +574,10 @@
     "venue": "Farklı Mekanlar",
     "venueId": "various",
     "eventSeries": "Başka Çarşamba",
-    "link": "https://www.baskasinema.com/filmler/amour/"
+    "link": "https://www.baskasinema.com/filmler/amour/",
+    "director": "Michael Haneke",
+    "year": 2012,
+    "runtime": 127
   },
   {
     "id": "24-12-2025-kimera-44",
@@ -507,7 +588,10 @@
     "venue": "Sinematek",
     "venueId": "sinematek",
     "eventSeries": "Alice Rohrwacher Retrospektifi",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=kimera-la-chimera-25-09-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=kimera-la-chimera-25-09-2025",
+    "director": "Alice Rohrwacher",
+    "year": 2023,
+    "runtime": 130
   },
   {
     "id": "24-12-2025-maddenin-halleri-45",
@@ -539,7 +623,10 @@
     "venue": "Pera Müzesi",
     "venueId": "pera-muzesi",
     "eventSeries": "Bütün O Sanat",
-    "link": "https://www.peramuzesi.org.tr/film/amadeus-/5828/3558"
+    "link": "https://www.peramuzesi.org.tr/film/amadeus-/5828/3558",
+    "director": "Miloš Forman",
+    "year": 1984,
+    "runtime": 160
   },
   {
     "id": "24-12-2025-gunes-sonrasi-48",
@@ -549,7 +636,10 @@
     "time": "12:45",
     "venue": "Kadıköy Sineması",
     "venueId": "kadikoy-sinemasi",
-    "link": "https://biletinial.com/tr-tr/sinema/gunes-sonrasi#"
+    "link": "https://biletinial.com/tr-tr/sinema/gunes-sonrasi#",
+    "director": "Charlotte Wells",
+    "year": 2022,
+    "runtime": 102
   },
   {
     "id": "25-12-2025-drakula-istanbulda-49",
@@ -560,7 +650,10 @@
     "venue": "Sinematek",
     "venueId": "sinematek",
     "eventSeries": "Yeniden: Sinematek Restorasyon",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=drakula-istanbulda-12-11-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=drakula-istanbulda-12-11-2025",
+    "director": "Mehmet Muhtar",
+    "year": 1953,
+    "runtime": 109
   },
   {
     "id": "25-12-2025-bridget-jones-50",
@@ -571,7 +664,10 @@
     "venue": "Beyoğlu Sineması",
     "venueId": "beyoglu-sinemasi",
     "eventSeries": "Üzümden Önce Mısırını Ye!",
-    "link": "https://www.instagram.com/stories/highlights/17938093407073436/?hl=en"
+    "link": "https://www.instagram.com/stories/highlights/17938093407073436/?hl=en",
+    "director": "Sharon Maguire",
+    "year": 2001,
+    "runtime": 97
   },
   {
     "id": "25-12-2025-uzgunum-bebegim-51",
@@ -592,7 +688,10 @@
     "venue": "Atlas 1948",
     "venueId": "atlas-1948",
     "eventSeries": "Othon Cinema",
-    "link": "https://othoncinema.com/2025/12/05/sans-soleil-gosterimi/"
+    "link": "https://othoncinema.com/2025/12/05/sans-soleil-gosterimi/",
+    "director": "Chris Marker",
+    "year": 1983,
+    "runtime": 100
   },
   {
     "id": "26-12-2025-ucuncu-turden-yakinlasmalar-53",
@@ -603,7 +702,10 @@
     "venue": "Sinematek",
     "venueId": "sinematek",
     "eventSeries": "Il Cinema Ritrovato Seçkisi",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=ucuncu-turden-yakinlasmalar-close-encounters-of-the-third-kind-25-09-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=ucuncu-turden-yakinlasmalar-close-encounters-of-the-third-kind-25-09-2025",
+    "director": "Steven Spielberg",
+    "year": 1977,
+    "runtime": 135
   },
   {
     "id": "26-12-2025-hayatin-tum-acilari-54",
@@ -614,7 +716,10 @@
     "venue": "Pera Müzesi",
     "venueId": "pera-muzesi",
     "eventSeries": "Bütün O Sanat",
-    "link": "https://www.peramuzesi.org.tr/film/hayatin-tum-acilari-ve-guzellikleri-/5825/3558"
+    "link": "https://www.peramuzesi.org.tr/film/hayatin-tum-acilari-ve-guzellikleri-/5825/3558",
+    "director": "Laura Poitras",
+    "year": 2022,
+    "runtime": 117
   },
   {
     "id": "26-12-2025-dus-halleri-55",
@@ -657,7 +762,10 @@
     "venue": "Sinematek",
     "venueId": "sinematek",
     "eventSeries": "Rüya Çıkmazı",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=kiyamet-son-kurgu-apocalypse-now-final-cut-25-09-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=kiyamet-son-kurgu-apocalypse-now-final-cut-25-09-2025",
+    "director": "Francis Ford Coppola",
+    "year": 1979,
+    "runtime": 183
   },
   {
     "id": "27-12-2025-dehsetin-nefesi-59",
@@ -668,7 +776,10 @@
     "venue": "Sinematek",
     "venueId": "sinematek",
     "eventSeries": "Rüya Çıkmazı",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=dehsetin-nefesi-jacobs-ladder-25-09-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=dehsetin-nefesi-jacobs-ladder-25-09-2025",
+    "director": "Adrian Lyne",
+    "year": 1990,
+    "runtime": 113
   },
   {
     "id": "27-12-2025-beyaz-noel-60",
@@ -679,7 +790,10 @@
     "venue": "Beykoz Kundura",
     "venueId": "beykoz-kundura",
     "eventSeries": "Yılbaşı Restore Klasikleri",
-    "link": "https://beykozkundura.com/event/kundura-klasikleri-yilbasi-ozel/"
+    "link": "https://beykozkundura.com/event/kundura-klasikleri-yilbasi-ozel/",
+    "director": "Michael Curtiz",
+    "year": 1954,
+    "runtime": 120
   },
   {
     "id": "27-12-2025-sahane-hayat-61",
@@ -690,7 +804,10 @@
     "venue": "Beykoz Kundura",
     "venueId": "beykoz-kundura",
     "eventSeries": "Yılbaşı Restore Klasikleri",
-    "link": "https://beykozkundura.com/event/kundura-klasikleri-yilbasi-ozel/"
+    "link": "https://beykozkundura.com/event/kundura-klasikleri-yilbasi-ozel/",
+    "director": "Frank Capra",
+    "year": 1946,
+    "runtime": 130
   },
   {
     "id": "27-12-2025-nefret-62",
@@ -701,7 +818,10 @@
     "venue": "Pera Müzesi",
     "venueId": "pera-muzesi",
     "eventSeries": "Bütün O Sanat",
-    "link": "https://www.peramuzesi.org.tr/film/nefret-/5833/3558"
+    "link": "https://www.peramuzesi.org.tr/film/nefret-/5833/3558",
+    "director": "Mathieu Kassovitz",
+    "year": 1995,
+    "runtime": 98
   },
   {
     "id": "27-12-2025-uzgunum-bebegim-63",
@@ -721,7 +841,10 @@
     "time": "21:00",
     "venue": "Torun Center",
     "venueId": "torun-center",
-    "link": "https://biletinial.com/tr-tr/sinema/kaybedenler-kulubu-film-party#"
+    "link": "https://biletinial.com/tr-tr/sinema/kaybedenler-kulubu-film-party#",
+    "director": "Tolga Örnek",
+    "year": 2011,
+    "runtime": 115
   },
   {
     "id": "28-12-2025-mutlu-lazzaro-65",
@@ -732,7 +855,10 @@
     "venue": "Sinematek",
     "venueId": "sinematek",
     "eventSeries": "Alice Rohrwacher Retrospektifi",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=mutlu-lazzaro-lazzaro-felice-25-09-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=mutlu-lazzaro-lazzaro-felice-25-09-2025",
+    "director": "Alice Rohrwacher",
+    "year": 2018,
+    "runtime": 125
   },
   {
     "id": "28-12-2025-korkuyla-uyan-66",
@@ -743,7 +869,10 @@
     "venue": "Sinematek",
     "venueId": "sinematek",
     "eventSeries": "Rüya Çıkmazı",
-    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=korkuyla-uyan-wake-in-fright-25-09-2025"
+    "link": "https://sinematek.kadikoy.bel.tr/Program/Detay?slug=korkuyla-uyan-wake-in-fright-25-09-2025",
+    "director": "Ted Kotcheff",
+    "year": 1971,
+    "runtime": 109
   },
   {
     "id": "28-12-2025-close-up-67",
@@ -753,7 +882,10 @@
     "time": "19:30",
     "venue": "Atlas 1948",
     "venueId": "atlas-1948",
-    "link": "https://www.instagram.com/p/DSKuEAXjFSY/?img_index=1"
+    "link": "https://www.instagram.com/p/DSKuEAXjFSY/?img_index=1",
+    "director": "Abbas Kiarostami",
+    "year": 1990,
+    "runtime": 98
   },
   {
     "id": "22-28-12-2025-35-mayis-68",
