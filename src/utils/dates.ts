@@ -92,7 +92,7 @@ export function toISODateString(date: Date): string {
 }
 
 /**
- * Format week range for display (e.g., "16-22 Aralık" or "December 16-22")
+ * Format week range for display (e.g., "16-22 Aralık 2025" or "December 16-22, 2025")
  */
 export function formatWeekRange(startDate: Date, endDate: Date, lang: Language): string {
   const startDay = startDate.getDate();
@@ -100,14 +100,19 @@ export function formatWeekRange(startDate: Date, endDate: Date, lang: Language):
   const months = lang === 'tr' ? MONTHS_TR : MONTHS_EN;
   const startMonth = months[startDate.getMonth()];
   const endMonth = months[endDate.getMonth()];
+  const year = endDate.getFullYear();
 
-  // Same month: "16-22 Aralık"
+  // Same month: "16-22 Aralık 2025" or "December 16-22, 2025"
   if (startDate.getMonth() === endDate.getMonth()) {
-    return `${startDay}-${endDay} ${startMonth}`;
+    return lang === 'tr' 
+      ? `${startDay}-${endDay} ${startMonth} ${year}`
+      : `${startMonth} ${startDay}-${endDay}, ${year}`;
   }
 
-  // Different months: "30 Kasım - 6 Aralık"
-  return `${startDay} ${startMonth} - ${endDay} ${endMonth}`;
+  // Different months: "30 Kasım - 6 Aralık 2025" or "November 30 - December 6, 2025"
+  return lang === 'tr'
+    ? `${startDay} ${startMonth} - ${endDay} ${endMonth} ${year}`
+    : `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`;
 }
 
 // =============================================================================
