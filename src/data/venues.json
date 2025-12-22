@@ -77,8 +77,53 @@
     "neighborhood": "İstanbul",
     "description": "Birden fazla mekanda gösterim. Detaylar için etkinlik linkine bakınız.",
     "descriptionEn": "Screenings at multiple venues. See event link for details."
+  },
+  {
+    "id": "depo-istanbul",
+    "name": "Depo İstanbul",
+    "neighborhood": "Tophane",
+    "address": "Lüleci Hendek Caddesi No:12, Tophane, Beyoğlu",
+    "description": "Bağımsız sanat ve kültür mekanı. Gösterimler, sergiler ve söyleşiler.",
+    "descriptionEn": "Independent art and culture space. Screenings, exhibitions, and talks."
+  },
+  {
+    "id": "paribu-art",
+    "name": "Paribu Art",
+    "neighborhood": "Nişantaşı",
+    "address": "Abdi İpekçi Caddesi, Nişantaşı",
+    "description": "Dijital sanat ve VR deneyimleri sunan yeni nesil sanat mekanı.",
+    "descriptionEn": "New generation art space offering digital art and VR experiences."
+  },
+  {
+    "id": "beykoz-kundura",
+    "name": "Beykoz Kundura",
+    "neighborhood": "Beykoz",
+    "address": "Kundura Caddesi No:1, Beykoz",
+    "description": "Tarihi ayakkabı fabrikasında kültür ve sanat merkezi. Açık hava ve salon gösterimleri.",
+    "descriptionEn": "Culture and arts center in a historic shoe factory. Outdoor and indoor screenings."
+  },
+  {
+    "id": "pera-muzesi",
+    "name": "Pera Müzesi",
+    "neighborhood": "Tepebaşı",
+    "address": "Meşrutiyet Caddesi No:65, Tepebaşı, Beyoğlu",
+    "description": "Suna ve İnan Kıraç Vakfı müzesi. Sanat filmleri ve belgesel gösterimleri.",
+    "descriptionEn": "Suna and İnan Kıraç Foundation museum. Art films and documentary screenings."
+  },
+  {
+    "id": "kadikoy-sinemasi",
+    "name": "Kadıköy Sineması",
+    "neighborhood": "Kadıköy",
+    "address": "Caferağa Mahallesi, Moda Caddesi, Kadıköy",
+    "description": "Kadıköy'ün tarihi sinema salonu.",
+    "descriptionEn": "Kadıköy's historic cinema hall."
+  },
+  {
+    "id": "torun-center",
+    "name": "Torun Center",
+    "neighborhood": "Mecidiyeköy",
+    "address": "Torun Center, Mecidiyeköy",
+    "description": "Özel sinema etkinlikleri ve film partileri.",
+    "descriptionEn": "Special cinema events and film parties."
   }
 ]
-
-
-
