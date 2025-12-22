@@ -127,7 +127,7 @@ const uniqueVenues = uniqueVenueIds
 
     {weekScreenings.length > 0 ? (
       <>
-        <VenueFilter venues={uniqueVenues} lang={lang} />
+        <VenueFilter venues={venues} activeVenueIds={uniqueVenueIds} lang={lang} />
         
         <div class="screening-list space-y-8">
           {upcomingDates.map((date, index) => (

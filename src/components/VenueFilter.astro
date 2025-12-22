@@ -5,14 +5,15 @@ import type { Venue } from '../types';
 
 interface Props {
   venues: Venue[];
+  activeVenueIds: string[];  // Only show venues with screenings this week
   lang: Language;
 }
 
-const { venues, lang } = Astro.props;
+const { venues, activeVenueIds, lang } = Astro.props;
 
-// Filter out the "various" venue and sort alphabetically
+// Filter to only venues with screenings this week, exclude "various", and sort alphabetically
 const filterableVenues = venues
-  .filter(v => v && v.id !== 'various' && v.name)
+  .filter(v => v && v.id !== 'various' && v.name && activeVenueIds.includes(v.id))
   .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 ---
 

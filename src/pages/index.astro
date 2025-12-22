@@ -92,6 +92,9 @@ const pastDates = allDates.filter(date => date < todayISO).sort().reverse(); // 
 
 // Check if we're viewing the current week (for "view past screenings" link)
 const isCurrentWeek = selectedWeekId === currentWeekId;
+
+// Get unique venue IDs from this week's screenings
+const uniqueVenueIds = [...new Set(weekScreenings.map(s => s.venueId).filter(Boolean))];
 ---
 
 <Layout lang={lang}>
@@ -114,7 +117,7 @@ const isCurrentWeek = selectedWeekId === currentWeekId;
 
     <!-- Venue filter -->
     {allDates.length > 0 && (
-      <VenueFilter venues={venues} lang={lang} />
+      <VenueFilter venues={venues} activeVenueIds={uniqueVenueIds} lang={lang} />
     )}
 
     <!-- Screenings -->
