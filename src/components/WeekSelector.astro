@@ -14,9 +14,10 @@ interface Props {
   weeks: Week[];
   currentWeekId: string;  // The selected week (from URL or default)
   lang: Language;
+  basePath?: string;  // Base path for week URLs (e.g., "/hafta" or "/en/week")
 }
 
-const { weeks, currentWeekId, lang } = Astro.props;
+const { weeks, currentWeekId, lang, basePath } = Astro.props;
 
 // Find indices
 const selectedIndex = weeks.findIndex(w => w.id === currentWeekId);
@@ -27,6 +28,28 @@ const isOnCurrentWeek = selectedIndex === actualCurrentIndex;
 const prevWeek = selectedIndex > 0 ? weeks[selectedIndex - 1] : null;
 const nextWeek = selectedIndex < weeks.length - 1 ? weeks[selectedIndex + 1] : null;
 const selectedWeek = weeks[selectedIndex];
+const actualCurrentWeek = weeks[actualCurrentIndex];
+
+// Helper to generate week URL
+function getWeekUrl(week: Week | null): string {
+  if (!week) return '#';
+  
+  // If it's the current week, link to the home page
+  if (week.isCurrent) {
+    return lang === 'tr' ? '/' : '/en';
+  }
+  
+  // Use path-based URL if basePath is provided
+  if (basePath) {
+    return `${basePath}/${week.id}`;
+  }
+  
+  // Fallback to query params (for backwards compatibility)
+  return `?week=${week.id}`;
+}
+
+// URL for "current week" link
+const currentWeekUrl = lang === 'tr' ? '/' : '/en';
 ---
 
 <nav class="week-selector mb-8" aria-label={t(lang, 'calendar.selectWeek')}>
@@ -37,7 +60,7 @@ const selectedWeek = weeks[selectedIndex];
       <!-- Previous week arrow -->
       {prevWeek ? (
         <a 
-          href={prevWeek.isCurrent ? '?' : `?week=${prevWeek.id}`}
+          href={getWeekUrl(prevWeek)}
           class="week-arrow"
           aria-label={t(lang, 'calendar.previousWeek')}
         >
@@ -63,7 +86,7 @@ const selectedWeek = weeks[selectedIndex];
       <!-- Next week arrow -->
       {nextWeek ? (
         <a 
-          href={nextWeek.isCurrent ? '?' : `?week=${nextWeek.id}`}
+          href={getWeekUrl(nextWeek)}
           class="week-arrow"
           aria-label={t(lang, 'calendar.nextWeek')}
         >
@@ -83,7 +106,7 @@ const selectedWeek = weeks[selectedIndex];
     <!-- "Current week" return link (only shown when not on current week) -->
     {!isOnCurrentWeek && (
       <a 
-        href="?" 
+        href={currentWeekUrl}
         class="current-week-link text-sm text-cereyan-pink hover:text-cereyan-pink-dark transition-colors"
       >
         ← {t(lang, 'calendar.thisWeek')}

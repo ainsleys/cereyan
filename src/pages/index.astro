@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import Layout from '../layouts/Layout.astro';
 import WeekSelector from '../components/WeekSelector.astro';
 import VenueFilter from '../components/VenueFilter.astro';
@@ -107,6 +109,7 @@ const isCurrentWeek = selectedWeekId === currentWeekId;
       weeks={weeks} 
       currentWeekId={selectedWeekId} 
       lang={lang} 
+      basePath="/hafta"
     />
 
     <!-- Venue filter -->

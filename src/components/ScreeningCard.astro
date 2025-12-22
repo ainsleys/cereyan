@@ -33,121 +33,129 @@ const displayVenue = screening.venue === 'Farklı Mekanlar'
 ---
 
 <article 
-  class="screening-card animate-fade-in group"
+  class:list={[
+    "screening-card animate-fade-in group",
+    { "screening-card-featured": note }
+  ]}
   style={`animation-delay: ${index * 0.05}s`}
   data-expandable={hasExpandedContent ? 'true' : 'false'}
   data-venue-id={screening.venueId}
 >
-  <!-- Main content - always visible -->
-  <div class="flex items-start justify-between gap-4">
-    <div class="flex-1 min-w-0">
-      <!-- Film title -->
-      <h3 class="font-display font-semibold text-xl sm:text-2xl leading-tight">
-        {screening.link ? (
-          <a 
-            href={screening.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-text hover:text-cereyan-pink transition-colors"
-          >
-            {screening.filmTitle}
-          </a>
-        ) : (
-          <span class="text-text">{screening.filmTitle}</span>
+  <!-- Top gradient accent bar -->
+  <div class="screening-card-accent"></div>
+  
+  <!-- Card content -->
+  <div class="screening-card-content">
+    <!-- Time badge -->
+    <div class="flex justify-center mb-2">
+      <span class="time-badge">
+        {displayTime}
+      </span>
+    </div>
+    
+    <!-- Date range info (if applicable) -->
+    {(screening.isDateRange || screening.isUntilDate) && (
+      <div class="text-center mb-2">
+        {screening.isDateRange && (
+          <span class="text-xs text-text-muted">
+            {screening.dateDisplay}
+          </span>
         )}
-      </h3>
-      
-      <!-- Venue and Event Series -->
-      <div class="flex flex-wrap items-center gap-2 mt-2">
-        <span class="venue-tag">
-          {displayVenue}
-        </span>
-        {screening.eventSeries && (
-          <span class="event-tag">
-            {screening.eventSeries}
+        {screening.isUntilDate && (
+          <span class="text-xs text-text-muted">
+            {t(lang, 'screening.until')}
           </span>
         )}
       </div>
-    </div>
+    )}
 
-    <!-- Time -->
-    <div class="flex flex-col items-end shrink-0">
-      <span class="font-mono text-sm text-cereyan-pink font-medium">
-        {displayTime}
+    <!-- Film title -->
+    <h3 class="font-display font-semibold text-2xl sm:text-3xl leading-tight text-center mb-3">
+      {screening.link ? (
+        <a 
+          href={screening.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-text hover:text-cereyan-pink transition-colors"
+        >
+          {screening.filmTitle}
+        </a>
+      ) : (
+        <span class="text-text">{screening.filmTitle}</span>
+      )}
+    </h3>
+    
+    <!-- Venue and Event Series tags -->
+    <div class="flex flex-wrap items-center justify-center gap-2">
+      <span class="venue-tag">
+        {displayVenue}
       </span>
-      {screening.isDateRange && (
-        <span class="text-xs text-text-muted mt-1">
-          {screening.dateDisplay}
-        </span>
-      )}
-      {screening.isUntilDate && (
-        <span class="text-xs text-text-muted mt-1">
-          {t(lang, 'screening.until')}
+      {screening.eventSeries && (
+        <span class="event-tag">
+          {screening.eventSeries}
         </span>
       )}
     </div>
-  </div>
 
-  <!-- Expandable content -->
-  {hasExpandedContent && (
-    <div 
-      id={cardId}
-      class="expandable-content hidden mt-4 pt-4 border-t border-border"
-    >
-      {note && (
-        <div class="mb-3">
-          <h4 class="text-xs font-semibold uppercase tracking-wider text-cereyan-pink mb-2">
-            {t(lang, 'screening.cereyanTake')}
-          </h4>
-          <p class="text-sm text-text-muted leading-relaxed">
-            {note}
-          </p>
-        </div>
+    <!-- Expandable content -->
+    {hasExpandedContent && (
+      <div 
+        id={cardId}
+        class="expandable-content hidden mt-4 pt-4 border-t border-border text-center"
+      >
+        {note && (
+          <div class="mb-3">
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-cereyan-pink mb-2">
+              {t(lang, 'screening.cereyanTake')}
+            </h4>
+            <p class="text-sm text-text-muted leading-relaxed max-w-prose mx-auto">
+              {note}
+            </p>
+          </div>
+        )}
+        
+        {synopsis && (
+          <div>
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
+              {t(lang, 'screening.synopsis')}
+            </h4>
+            <p class="text-sm text-text-muted leading-relaxed max-w-prose mx-auto">
+              {synopsis}
+            </p>
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- Action row -->
+    <div class="flex items-center justify-center gap-6 mt-5 pt-4 border-t border-border-light">
+      {hasExpandedContent && (
+        <button 
+          class="expand-btn text-xs font-medium text-cereyan-pink hover:text-cereyan-pink-dark transition-colors flex items-center gap-1.5 px-2 py-1 rounded hover:bg-cereyan-pink/10"
+          data-target={cardId}
+          aria-expanded="false"
+        >
+          <svg class="w-4 h-4 expand-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+          <span class="expand-text">{t(lang, 'screening.cereyanTake')}</span>
+        </button>
       )}
       
-      {synopsis && (
-        <div>
-          <h4 class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-2">
-            {t(lang, 'screening.synopsis')}
-          </h4>
-          <p class="text-sm text-text-muted leading-relaxed">
-            {synopsis}
-          </p>
-        </div>
+      {screening.link && (
+        <a 
+          href={screening.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-xs font-medium text-cereyan-pink hover:text-cereyan-pink-light transition-colors flex items-center gap-1"
+        >
+          {t(lang, 'screening.moreInfo')}
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
       )}
     </div>
-  )}
-
-  <!-- Action row -->
-  <div class="flex items-center justify-between mt-4 pt-3 border-t border-border-light">
-    {hasExpandedContent ? (
-      <button 
-        class="expand-btn text-xs font-medium text-cereyan-pink hover:text-cereyan-pink-dark transition-colors flex items-center gap-1.5 px-2 py-1 -ml-2 rounded hover:bg-cereyan-pink/10"
-        data-target={cardId}
-        aria-expanded="false"
-      >
-        <svg class="w-4 h-4 expand-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
-        <span class="expand-text">{t(lang, 'screening.cereyanTake')}</span>
-      </button>
-    ) : (
-      <div></div>
-    )}
-    
-    {screening.link && (
-      <a 
-        href={screening.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-xs font-medium text-cereyan-pink hover:text-cereyan-pink-light transition-colors flex items-center gap-1"
-      >
-        {t(lang, 'screening.moreInfo')}
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-        </svg>
-      </a>
-    )}
   </div>
 </article>
 

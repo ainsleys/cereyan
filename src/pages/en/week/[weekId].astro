@@ -1,0 +1,175 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import WeekSelector from '../../../components/WeekSelector.astro';
+import VenueFilter from '../../../components/VenueFilter.astro';
+import DaySection from '../../../components/DaySection.astro';
+import { t } from '../../../i18n/translations';
+import { getWeekStart, getWeekEnd, getISOWeek, formatWeekRange } from '../../../utils/dates';
+import type { Screening, Venue } from '../../../types';
+
+import screeningsData from '../../../data/screenings.json';
+import venuesData from '../../../data/venues.json';
+
+// Generate static pages for each week
+export function getStaticPaths() {
+  const now = new Date();
+  const currentWeekStart = getWeekStart(now);
+  
+  // Generate weeks (4 past + 8 future = 12 weeks)
+  const weeks = [];
+  const archiveStart = new Date(currentWeekStart);
+  archiveStart.setDate(archiveStart.getDate() - 28); // 4 weeks back
+  
+  for (let i = 0; i < 12; i++) {
+    const weekStart = new Date(archiveStart);
+    weekStart.setDate(weekStart.getDate() + (i * 7));
+    const weekId = getISOWeek(weekStart);
+    weeks.push({ params: { weekId } });
+  }
+  
+  return weeks;
+}
+
+const { weekId } = Astro.params;
+const lang = 'en';
+const screenings = screeningsData as Screening[];
+const venues = venuesData as Venue[];
+
+const now = new Date();
+const currentWeekStart = getWeekStart(now);
+const currentWeekId = getISOWeek(currentWeekStart);
+
+// Parse selected week from URL param
+const match = weekId?.match(/^(\d{4})-W(\d{2})$/);
+let selectedWeekStart: Date;
+if (match) {
+  const [, year, week] = match;
+  const jan4 = new Date(parseInt(year), 0, 4);
+  const weekStart = new Date(jan4);
+  weekStart.setDate(jan4.getDate() - jan4.getDay() + 1 + (parseInt(week) - 1) * 7);
+  selectedWeekStart = weekStart;
+} else {
+  selectedWeekStart = currentWeekStart;
+}
+
+const selectedWeekEnd = getWeekEnd(selectedWeekStart);
+const selectedWeekId = getISOWeek(selectedWeekStart);
+
+// Generate weeks for navigation (4 past + 8 future)
+const weeks: { id: string; label: string; labelEn: string; isCurrent: boolean; isPast: boolean }[] = [];
+const archiveStart = new Date(currentWeekStart);
+archiveStart.setDate(archiveStart.getDate() - 28);
+
+for (let i = 0; i < 12; i++) {
+  const weekStart = new Date(archiveStart);
+  weekStart.setDate(weekStart.getDate() + (i * 7));
+  const weekEnd = getWeekEnd(weekStart);
+  const wId = getISOWeek(weekStart);
+  
+  weeks.push({
+    id: wId,
+    label: formatWeekRange(weekStart, weekEnd, 'tr'),
+    labelEn: formatWeekRange(weekStart, weekEnd, 'en'),
+    isCurrent: wId === currentWeekId,
+    isPast: weekStart < currentWeekStart,
+  });
+}
+
+// Filter screenings for selected week
+const weekScreenings = screenings.filter(s => {
+  const screeningDate = new Date(s.date);
+  return screeningDate >= selectedWeekStart && screeningDate <= selectedWeekEnd;
+});
+
+// Group screenings by date
+const screeningsByDate = weekScreenings.reduce((acc, screening) => {
+  const date = screening.date;
+  if (!acc[date]) {
+    acc[date] = [];
+  }
+  acc[date].push(screening);
+  return acc;
+}, {} as Record<string, Screening[]>);
+
+// Get today's date in local timezone
+const today = new Date();
+const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+// Split dates into upcoming and past
+const allDates = Object.keys(screeningsByDate).sort();
+const upcomingDates = allDates.filter(date => date >= todayISO);
+const pastDates = allDates.filter(date => date < todayISO).sort().reverse();
+
+const isCurrentWeek = selectedWeekId === currentWeekId;
+
+// Get unique venues for filter (map venue IDs to actual venue objects)
+const uniqueVenueIds = [...new Set(weekScreenings.map(s => s.venueId).filter(Boolean))];
+const uniqueVenues = uniqueVenueIds
+  .map(id => venues.find(v => v.id === id))
+  .filter((v): v is Venue => v !== undefined);
+---
+
+<Layout lang={lang}>
+  <div class="space-y-6">
+    <header class="text-center mb-8">
+      <h1 class="sr-only">{t(lang, 'site.subtitle')}</h1>
+      <p class="text-text-muted text-sm">
+        {t(lang, 'site.subtitle')}
+      </p>
+    </header>
+
+    <WeekSelector 
+      weeks={weeks} 
+      currentWeekId={selectedWeekId} 
+      lang={lang} 
+      basePath="/en/week"
+    />
+
+    {weekScreenings.length > 0 ? (
+      <>
+        <VenueFilter venues={uniqueVenues} lang={lang} />
+        
+        <div class="screening-list space-y-8">
+          {upcomingDates.map((date, index) => (
+            <DaySection 
+              date={date} 
+              screenings={screeningsByDate[date]} 
+              lang={lang}
+              scrollLinkTargetId={index === 0 && isCurrentWeek && pastDates.length > 0 ? "past-screenings" : undefined}
+            />
+          ))}
+          
+          {pastDates.length > 0 && (
+            <>
+              <div id="past-screenings" class="flex items-center gap-4 py-4">
+                <div class="flex-1 h-px bg-border"></div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-text-muted px-2">
+                  {t(lang, 'calendar.pastScreenings')}
+                </span>
+                <div class="flex-1 h-px bg-border"></div>
+              </div>
+              
+              {pastDates.map(date => (
+                <DaySection 
+                  date={date} 
+                  screenings={screeningsByDate[date]} 
+                  lang={lang}
+                />
+              ))}
+            </>
+          )}
+        </div>
+      </>
+    ) : (
+      <div class="text-center py-16">
+        <div class="w-16 h-16 mx-auto mb-4 bg-cinema-dark rounded-full flex items-center justify-center">
+          <svg class="w-8 h-8 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+          </svg>
+        </div>
+        <p class="text-text-muted">{t(lang, 'calendar.noScreenings')}</p>
+      </div>
+    )}
+  </div>
+</Layout>
+

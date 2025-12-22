@@ -12,7 +12,7 @@ const { venues, lang } = Astro.props;
 
 // Filter out the "various" venue and sort alphabetically
 const filterableVenues = venues
-  .filter(v => v.id !== 'various')
+  .filter(v => v && v.id !== 'various' && v.name)
   .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 ---
 
