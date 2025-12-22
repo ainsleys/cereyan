@@ -23,9 +23,11 @@ const hasExpandedContent = note || synopsis;
 const cardId = `screening-${screening.id}`;
 
 // Translate special values
-const displayTime = screening.time === 'Farklı Saatler' 
-  ? t(lang, 'screening.variousTimes')
-  : screening.time;
+const displayTime = !screening.time || screening.time.trim() === ''
+  ? t(lang, 'screening.allDay')
+  : screening.time === 'Farklı Saatler' 
+    ? t(lang, 'screening.variousTimes')
+    : screening.time;
 
 const displayVenue = screening.venue === 'Farklı Mekanlar'
   ? t(lang, 'screening.variousVenues')

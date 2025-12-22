@@ -76,6 +76,7 @@ export const translations = {
     'screening.buyTickets': 'Bilet Al',
     'screening.variousTimes': 'Farklı Saatler',
     'screening.variousVenues': 'Farklı Mekanlar',
+    'screening.allDay': 'Tüm Gün',
     'screening.until': "'ye kadar",
     'screening.withQA': 'Söyleşili',
 
@@ -157,6 +158,7 @@ export const translations = {
     'screening.buyTickets': 'Get Tickets',
     'screening.variousTimes': 'Various Times',
     'screening.variousVenues': 'Various Venues',
+    'screening.allDay': 'All Day',
     'screening.until': ' (until)',
     'screening.withQA': 'with Q&A',
 
