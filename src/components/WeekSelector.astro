@@ -50,6 +50,11 @@ function getWeekUrl(week: Week | null): string {
 
 // URL for "current week" link
 const currentWeekUrl = lang === 'tr' ? '/' : '/en';
+
+// Determine arrow direction for "current week" link
+// If viewing a past week (selectedIndex < actualCurrentIndex), arrow points right →
+// If viewing a future week (selectedIndex > actualCurrentIndex), arrow points left ←
+const currentWeekIsAhead = selectedIndex < actualCurrentIndex;
 ---
 
 <nav class="week-selector mb-8" aria-label={t(lang, 'calendar.selectWeek')}>
@@ -109,7 +114,11 @@ const currentWeekUrl = lang === 'tr' ? '/' : '/en';
         href={currentWeekUrl}
         class="current-week-link text-sm text-cereyan-pink hover:text-cereyan-pink-dark transition-colors"
       >
-        ← {t(lang, 'calendar.thisWeek')}
+        {currentWeekIsAhead ? (
+          <span>{t(lang, 'calendar.thisWeek')} →</span>
+        ) : (
+          <span>← {t(lang, 'calendar.thisWeek')}</span>
+        )}
       </a>
     )}
     
