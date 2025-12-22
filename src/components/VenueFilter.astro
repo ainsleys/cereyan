@@ -27,11 +27,11 @@ const filterableVenues = venues
     </span>
   </div>
   
-  <div class="flex flex-wrap gap-2" id="venue-filters">
+  <div class="flex flex-wrap gap-1.5" id="venue-filters">
     <!-- All button -->
     <button
       data-venue="all"
-      class="venue-filter-btn active px-3 py-1.5 text-xs font-medium rounded-full 
+      class="venue-filter-btn active px-2 py-0.5 text-[11px] font-medium
              bg-cereyan-pink/20 text-cereyan-pink border border-cereyan-pink/30
              hover:bg-cereyan-pink/30 transition-all"
     >
@@ -42,7 +42,7 @@ const filterableVenues = venues
     {filterableVenues.map((venue) => (
       <button
         data-venue={venue.id}
-        class="venue-filter-btn px-3 py-1.5 text-xs font-medium rounded-full 
+        class="venue-filter-btn px-2 py-0.5 text-[11px] font-medium
                bg-surface-muted text-text-muted border border-border
                hover:border-cereyan-pink/50 hover:text-text transition-all"
       >
