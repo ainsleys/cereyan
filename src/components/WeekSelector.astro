@@ -149,9 +149,18 @@ const currentWeekIsAhead = selectedIndex < actualCurrentIndex;
     border: 1px solid #E5E5E5;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    cursor: pointer;
   }
   
-  a.week-arrow:hover {
+  /* SVG should not intercept clicks */
+  .week-arrow svg {
+    pointer-events: none;
+  }
+  
+  a.week-arrow:hover,
+  a.week-arrow:active {
     color: #C74B9B;
     border-color: #C74B9B;
     background: rgba(199, 75, 155, 0.05);
@@ -169,5 +178,9 @@ const currentWeekIsAhead = selectedIndex < actualCurrentIndex;
   
   .current-week-link {
     font-weight: 500;
+  }
+  
+  .current-week-link svg {
+    pointer-events: none;
   }
 </style>
