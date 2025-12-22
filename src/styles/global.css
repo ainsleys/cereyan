@@ -59,17 +59,18 @@
 
   /* Screening card - centered design with top accent */
   .screening-card {
-    @apply bg-surface-card border-x border-b border-border
+    @apply bg-surface-card border border-border
            shadow-sm transition-all duration-300 ease-out
            hover:shadow-lg hover:-translate-y-1
-           overflow-hidden text-center
+           text-center
            max-w-2xl mx-auto;
   }
 
-  /* Top gradient accent bar - serves as the top edge of the card */
+  /* Top gradient accent bar - extends to outer edges, covering top border */
   .screening-card-accent {
     height: 4px;
     background: linear-gradient(90deg, #A33D80, #C74B9B, #D86AAF);
+    margin: -1px -1px 0 -1px;
   }
 
   /* Card content area */
