@@ -62,7 +62,8 @@
     @apply bg-surface-card border border-border rounded-xl
            shadow-sm transition-all duration-300 ease-out
            hover:shadow-lg hover:-translate-y-1
-           overflow-hidden text-center;
+           overflow-hidden text-center
+           max-w-2xl mx-auto;
   }
 
   /* Top gradient accent bar */
@@ -73,7 +74,7 @@
 
   /* Card content area */
   .screening-card-content {
-    @apply p-5 sm:p-6;
+    @apply p-6 sm:p-8;
   }
 
   /* Featured screening card - has Cereyan commentary */
