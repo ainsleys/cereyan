@@ -59,25 +59,22 @@
 
   /* Screening card - centered design with top accent */
   .screening-card {
-    @apply bg-surface-card border border-border
+    @apply bg-surface-card border-x border-b border-border
            shadow-sm transition-all duration-300 ease-out
            hover:shadow-lg hover:-translate-y-1
            overflow-hidden text-center
-           max-w-2xl mx-auto
-           relative;
+           max-w-2xl mx-auto;
   }
 
-  /* Top gradient accent bar - positioned at very top, over the border */
+  /* Top gradient accent bar - serves as the top edge of the card */
   .screening-card-accent {
-    @apply absolute top-0 left-0 right-0;
     height: 4px;
     background: linear-gradient(90deg, #A33D80, #C74B9B, #D86AAF);
-    margin: -1px -1px 0 -1px; /* Extend over the border */
   }
 
   /* Card content area */
   .screening-card-content {
-    @apply p-6 sm:p-8 pt-8 sm:pt-10;
+    @apply p-6 sm:p-8;
   }
 
   /* Featured screening card - has Cereyan commentary */
