@@ -117,47 +117,88 @@ function parseCSVLine(line: string): string[] {
 
 /**
  * Parse CSV content into an array of Screening objects
- * Expects CSV format: Tarih,Gösterim,Saat,Mekan,Etkinlik,Link,Not,Özet
+ * 
+ * Expected CSV format (14 columns):
+ * Tarih,Gösterim,Gösterim (EN),Saat,Mekan,Etkinlik,Link,Yönetmen,Yıl,Süre,Not,Not (EN),Özet,Özet (EN)
+ * 
+ * Also supports legacy 8-column format:
+ * Tarih,Gösterim,Saat,Mekan,Etkinlik,Link,Not,Özet
  */
 export function parseCSV(csvContent: string): Screening[] {
   const lines = csvContent.trim().split('\n');
   if (lines.length < 2) return [];
 
-  // Skip header row
+  // Detect format from header
+  const header = parseCSVLine(lines[0]);
+  const isNewFormat = header.length >= 14 || header.includes('Gösterim (EN)') || header.includes('Yönetmen');
+
   const screenings: Screening[] = [];
 
   for (let i = 1; i < lines.length; i++) {
     const values = parseCSVLine(lines[i]);
     if (values.length < 4) continue;
 
-    const row: CSVRow = {
-      Tarih: values[0]?.trim() ?? '',
-      Gösterim: values[1]?.trim() ?? '',
-      Saat: values[2]?.trim() ?? '',
-      Mekan: values[3]?.trim() ?? '',
-      Etkinlik: values[4]?.trim() || undefined,
-      Link: values[5]?.trim() || undefined,
-      Not: values[6]?.trim() || undefined,
-      Özet: values[7]?.trim() || undefined,
-    };
+    let row: CSVRow;
+
+    if (isNewFormat) {
+      // New 14-column format
+      row = {
+        Tarih: values[0]?.trim() ?? '',
+        Gösterim: values[1]?.trim() ?? '',
+        'Gösterim (EN)': values[2]?.trim() || undefined,
+        Saat: values[3]?.trim() ?? '',
+        Mekan: values[4]?.trim() ?? '',
+        Etkinlik: values[5]?.trim() || undefined,
+        Link: values[6]?.trim() || undefined,
+        Yönetmen: values[7]?.trim() || undefined,
+        Yıl: values[8]?.trim() || undefined,
+        Süre: values[9]?.trim() || undefined,
+        Not: values[10]?.trim() || undefined,
+        'Not (EN)': values[11]?.trim() || undefined,
+        Özet: values[12]?.trim() || undefined,
+        'Özet (EN)': values[13]?.trim() || undefined,
+      };
+    } else {
+      // Legacy 8-column format
+      row = {
+        Tarih: values[0]?.trim() ?? '',
+        Gösterim: values[1]?.trim() ?? '',
+        Saat: values[2]?.trim() ?? '',
+        Mekan: values[3]?.trim() ?? '',
+        Etkinlik: values[4]?.trim() || undefined,
+        Link: values[5]?.trim() || undefined,
+        Not: values[6]?.trim() || undefined,
+        Özet: values[7]?.trim() || undefined,
+      };
+    }
 
     // Skip rows without required fields
     if (!row.Tarih || !row.Gösterim) continue;
 
     const dateInfo = parseDateInfo(row.Tarih);
 
+    // Parse year and runtime as numbers if provided
+    const year = row.Yıl ? parseInt(row.Yıl, 10) : undefined;
+    const runtime = row.Süre ? parseInt(row.Süre, 10) : undefined;
+
     screenings.push({
       id: generateId(row, i),
       date: dateInfo.date,
       dateDisplay: dateInfo.dateDisplay,
       filmTitle: row.Gösterim,
+      filmTitleEn: row['Gösterim (EN)'],
       time: row.Saat,
       venue: row.Mekan,
       venueId: normalizeVenueId(row.Mekan),
       eventSeries: row.Etkinlik,
       link: row.Link,
+      director: row.Yönetmen,
+      year: year && !isNaN(year) ? year : undefined,
+      runtime: runtime && !isNaN(runtime) ? runtime : undefined,
       programmersNote: row.Not,
+      programmersNoteEn: row['Not (EN)'],
       synopsis: row.Özet,
+      synopsisEn: row['Özet (EN)'],
       isDateRange: dateInfo.isDateRange,
       endDate: dateInfo.endDate,
       isUntilDate: dateInfo.isUntilDate,
@@ -173,23 +214,32 @@ export function parseCSV(csvContent: string): Screening[] {
 }
 
 /**
- * Convert screenings array back to CSV format
+ * Convert screenings array back to CSV format (new 14-column format)
  * Useful for exporting/editing data
  */
 export function toCSV(screenings: Screening[]): string {
-  const headers = ['Tarih', 'Gösterim', 'Saat', 'Mekan', 'Etkinlik', 'Link', 'Not', 'Özet'];
+  const headers = [
+    'Tarih', 'Gösterim', 'Gösterim (EN)', 'Saat', 'Mekan', 'Etkinlik', 'Link',
+    'Yönetmen', 'Yıl', 'Süre', 'Not', 'Not (EN)', 'Özet', 'Özet (EN)'
+  ];
   const lines = [headers.join(',')];
 
   for (const s of screenings) {
     const values = [
       s.dateDisplay,
       s.filmTitle,
+      s.filmTitleEn ?? '',
       s.time,
       s.venue,
       s.eventSeries ?? '',
       s.link ?? '',
+      s.director ?? '',
+      s.year?.toString() ?? '',
+      s.runtime?.toString() ?? '',
       s.programmersNote ?? '',
+      s.programmersNoteEn ?? '',
       s.synopsis ?? '',
+      s.synopsisEn ?? '',
     ].map((v) =>
       v.includes(',') || v.includes('"') || v.includes('\n')
         ? `"${v.replace(/"/g, '""')}"`

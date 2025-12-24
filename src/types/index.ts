@@ -119,12 +119,17 @@ export interface DayGroup {
 /**
  * Raw CSV row structure matching the expected import format
  * Column names are in Turkish to match the source spreadsheet
+ * 
+ * CSV Header Order:
+ * Tarih,Gösterim,Gösterim (EN),Saat,Mekan,Etkinlik,Link,Yönetmen,Yıl,Süre,Not,Not (EN),Özet,Özet (EN)
  */
 export interface CSVRow {
   /** Date: DD.MM.YYYY format */
   Tarih: string;
-  /** Film title */
+  /** Film title (Turkish) */
   Gösterim: string;
+  /** Film title (English) - optional */
+  'Gösterim (EN)'?: string;
   /** Time */
   Saat: string;
   /** Venue */
@@ -133,8 +138,18 @@ export interface CSVRow {
   Etkinlik?: string;
   /** External link (optional) */
   Link?: string;
-  /** Programmer's note (optional) */
+  /** Director (optional) */
+  Yönetmen?: string;
+  /** Year (optional) */
+  Yıl?: string;
+  /** Runtime in minutes (optional) */
+  Süre?: string;
+  /** Programmer's note - Turkish (optional) */
   Not?: string;
-  /** Synopsis (optional) */
+  /** Programmer's note - English (optional) */
+  'Not (EN)'?: string;
+  /** Synopsis - Turkish (optional) */
   Özet?: string;
+  /** Synopsis - English (optional) */
+  'Özet (EN)'?: string;
 }
