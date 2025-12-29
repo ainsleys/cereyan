@@ -83,6 +83,7 @@ export const translations = {
     // Venues
     'venues.title': 'Mekanlar',
     'venues.subtitle': "İstanbul'da bağımsız ve alternatif film gösterimlerine ev sahipliği yapan mekanlar:",
+    'venues.allNeighborhoods': 'Tümü',
     'venues.address': 'Adres',
     'venues.description': 'Açıklama',
 
@@ -165,6 +166,7 @@ export const translations = {
     // Venues
     'venues.title': 'Venues',
     'venues.subtitle': 'Venues hosting independent and alternative film screenings in Istanbul:',
+    'venues.allNeighborhoods': 'All',
     'venues.address': 'Address',
     'venues.description': 'Description',
 

@@ -33,9 +33,27 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
       </p>
     </header>
 
+    <!-- Neighborhood filter -->
+    <div class="flex flex-wrap gap-2 max-w-2xl mb-6" id="neighborhood-filter">
+      <button 
+        class="neighborhood-btn active font-mono text-xs px-3 py-1.5 font-semibold transition-colors"
+        data-neighborhood="all"
+      >
+        {t(lang, 'venues.allNeighborhoods')}
+      </button>
+      {neighborhoods.map(neighborhood => (
+        <button 
+          class="neighborhood-btn font-mono text-xs px-3 py-1.5 font-semibold transition-colors"
+          data-neighborhood={neighborhood}
+        >
+          {neighborhood}
+        </button>
+      ))}
+    </div>
+
     <!-- Venues by neighborhood -->
     {neighborhoods.map(neighborhood => (
-      <section class="mb-10">
+      <section class="mb-10 neighborhood-section" data-neighborhood={neighborhood}>
         <h2 class="date-header mb-4">
           {neighborhood}
         </h2>
@@ -72,5 +90,49 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
     ))}
   </div>
 </Layout>
+
+<style>
+  .neighborhood-btn {
+    background: #F3F4F6;
+    color: #6B7280;
+  }
+  .neighborhood-btn:hover {
+    background: #FDF2F8;
+    color: #C74B9B;
+  }
+  .neighborhood-btn.active {
+    background: #C74B9B;
+    color: white;
+  }
+  .neighborhood-section.hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.neighborhood-btn');
+    const sections = document.querySelectorAll('.neighborhood-section');
+    
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const neighborhood = btn.getAttribute('data-neighborhood');
+        
+        // Update active button
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Show/hide sections
+        sections.forEach(section => {
+          if (neighborhood === 'all' || section.getAttribute('data-neighborhood') === neighborhood) {
+            section.classList.remove('hidden');
+          } else {
+            section.classList.add('hidden');
+          }
+        });
+      });
+    });
+  });
+</script>
 
 
