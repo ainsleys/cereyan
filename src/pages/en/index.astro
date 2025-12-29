@@ -125,9 +125,14 @@ const uniqueVenueIds = [...new Set(weekScreenings.map(s => s.venueId).filter(Boo
     <!-- Page header -->
     <header class="text-center mb-8">
       <h1 class="sr-only">{t(lang, 'site.subtitle')}</h1>
-      <p class="text-text-muted text-sm">
+      <a 
+        href="https://cereyan.substack.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="text-text-muted text-sm hover:text-cereyan-pink transition-colors"
+      >
         {t(lang, 'site.subtitle')}
-      </p>
+      </a>
     </header>
 
     <!-- Week selector -->

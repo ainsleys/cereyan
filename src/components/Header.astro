@@ -34,9 +34,14 @@ function getNavPath(item: typeof navItems[0]): string {
           <span class="font-display font-bold text-base sm:text-xl tracking-widest text-text group-hover:text-cereyan-pink transition-colors">
             CEREYAN
           </span>
-          <span class="hidden sm:block text-[10px] tracking-widest uppercase text-text-muted">
+          <a 
+            href="https://cereyan.substack.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="hidden sm:block text-[10px] tracking-widest uppercase text-text-muted hover:text-cereyan-pink transition-colors"
+          >
             {t(lang, 'site.subtitle')}
-          </span>
+          </a>
         </div>
       </a>
 
