@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FAFAFA"/>
+  
+  <!-- Logo sigil -->
+  <g transform="translate(540, 180)">
+    <circle cx="60" cy="60" r="55" fill="#C74B9B"/>
+    <g fill="none" stroke="#0A0A0A" stroke-width="4" stroke-linecap="round">
+      <circle cx="60" cy="60" r="10" fill="#0A0A0A"/>
+      <line x1="60" y1="20" x2="60" y2="40"/>
+      <line x1="60" y1="80" x2="60" y2="100"/>
+      <line x1="20" y1="60" x2="40" y2="60"/>
+      <line x1="80" y1="60" x2="100" y2="60"/>
+      <line x1="32" y1="32" x2="46" y2="46"/>
+      <line x1="74" y1="74" x2="88" y2="88"/>
+      <line x1="88" y1="32" x2="74" y2="46"/>
+      <line x1="46" y1="74" x2="32" y2="88"/>
+    </g>
+  </g>
+  
+  <!-- Text: CEREYAN -->
+  <text x="600" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="#0A0A0A" text-anchor="middle" letter-spacing="8">CEREYAN</text>
+  
+  <!-- Tagline -->
+  <text x="600" y="440" font-family="Georgia, serif" font-size="28" fill="#666666" text-anchor="middle" font-style="italic">İstanbul Film Takvimi</text>
+  
+  <!-- Accent line -->
+  <rect x="450" y="470" width="300" height="4" fill="#C74B9B" rx="2"/>
+</svg>
+
