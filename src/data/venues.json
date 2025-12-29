@@ -4,13 +4,13 @@
     "name": "Sinematek",
     "neighborhood": "Kadıköy",
     "address": "Caferağa Mahallesi, Moda Caddesi No:30, Kadıköy",
-    "description": "Kadıköy Belediyesi'nin sinema arşivi ve gösterim salonu. Klasik ve sanat sineması odaklı programlama.",
-    "descriptionEn": "Kadıköy Municipality's cinema archive and screening hall. Classic and art cinema focused programming."
+    "description": "Sinema arşivi ve gösterim salonu. Klasik ve sanat sineması odaklı programlama.",
+    "descriptionEn": "Cinema archive and screening hall. Classic and art cinema focused programming."
   },
   {
     "id": "fransiz-kultur",
     "name": "Fransız Kültür",
-    "neighborhood": "Taksim",
+    "neighborhood": "Beyoğlu",
     "address": "İstiklal Caddesi No:4, Beyoğlu",
     "description": "Institut Français de Turquie. Fransız ve dünya sinemasından seçkin gösterimler.",
     "descriptionEn": "Institut Français de Turquie. Select screenings from French and world cinema."
@@ -26,7 +26,7 @@
   {
     "id": "istanbul-modern",
     "name": "İstanbul Modern",
-    "neighborhood": "Karaköy",
+    "neighborhood": "Tophane",
     "address": "Kılıçali Paşa Mahallesi, Tophane İskelesi Caddesi No:1, Beyoğlu",
     "description": "Türkiye'nin ilk modern sanat müzesi. Sinema programı dünya festivallerinden seçkiler sunuyor.",
     "descriptionEn": "Turkey's first modern art museum. Cinema program features selections from world festivals."
@@ -50,10 +50,10 @@
   {
     "id": "cine-majestic",
     "name": "Cine Majestic",
-    "neighborhood": "Kadıköy",
-    "address": "Caferağa Mahallesi, Moda Caddesi No:20/A, Kadıköy",
-    "description": "Kadıköy'ün butik sinema salonu. Sanat filmleri ve klasikler.",
-    "descriptionEn": "Kadıköy's boutique cinema. Art films and classics."
+    "neighborhood": "Beyoğlu",
+    "address": "İstiklal Cad, Ayhan Işık Sk. No:10, 34433 Beyoğlu",
+    "description": "Butik sinema salonu. Sanat filmleri ve klasikler.",
+    "descriptionEn": "Boutique cinema. Art films and classics."
   },
   {
     "id": "ckm",
@@ -66,10 +66,10 @@
   {
     "id": "postane",
     "name": "Postane",
-    "neighborhood": "Sirkeci",
-    "address": "Hobyar Mahallesi, Büyük Postane Caddesi No:25, Fatih",
-    "description": "Tarihi postane binasında kültür merkezi. Bağımsız film gösterimleri ve söyleşiler.",
-    "descriptionEn": "Cultural center in the historic post office building. Independent film screenings and talks."
+    "neighborhood": "Beyoğlu",
+    "address": "Bereketzade, Camekan Sk. No.9, 34421 Beyoğlu",
+    "description": "Bağımsız film gösterimleri ve söyleşiler.",
+    "descriptionEn": "Independent film screenings and talks."
   },
   {
     "id": "various",
@@ -89,8 +89,8 @@
   {
     "id": "paribu-art",
     "name": "Paribu Art",
-    "neighborhood": "Nişantaşı",
-    "address": "Abdi İpekçi Caddesi, Nişantaşı",
+    "neighborhood": "Kadıköy",
+    "address": "Kadıköy",
     "description": "Dijital sanat ve VR deneyimleri sunan yeni nesil sanat mekanı.",
     "descriptionEn": "New generation art space offering digital art and VR experiences."
   },
@@ -105,7 +105,7 @@
   {
     "id": "pera-muzesi",
     "name": "Pera Müzesi",
-    "neighborhood": "Tepebaşı",
+    "neighborhood": "Beyoğlu",
     "address": "Meşrutiyet Caddesi No:65, Tepebaşı, Beyoğlu",
     "description": "Suna ve İnan Kıraç Vakfı müzesi. Sanat filmleri ve belgesel gösterimleri.",
     "descriptionEn": "Suna and İnan Kıraç Foundation museum. Art films and documentary screenings."
