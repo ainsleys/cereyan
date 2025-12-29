@@ -22,12 +22,17 @@ const synopsis = lang === 'en'
 const hasExpandedContent = note || synopsis;
 const cardId = `screening-${screening.id}`;
 
-// Translate special values
-const displayTime = !screening.time || screening.time.trim() === ''
+// Translate special values and split multiple times
+const rawTime = !screening.time || screening.time.trim() === ''
   ? t(lang, 'screening.allDay')
   : screening.time === 'Farklı Saatler' 
     ? t(lang, 'screening.variousTimes')
     : screening.time;
+
+// Split times if comma-separated (e.g., "11:30, 15:30, 19:15")
+const displayTimes = rawTime.includes(',') 
+  ? rawTime.split(',').map((t: string) => t.trim())
+  : [rawTime];
 
 const displayVenue = screening.venue === 'Farklı Mekanlar'
   ? t(lang, 'screening.variousVenues')
@@ -62,11 +67,13 @@ const displayTitle = (lang === 'en' && screening.filmTitleEn)
   
   <!-- Card content -->
   <div class="screening-card-content">
-    <!-- Time badge -->
-    <div class="flex justify-center mb-4">
-      <span class="time-badge">
-        {displayTime}
-      </span>
+    <!-- Time badge(s) -->
+    <div class="flex flex-wrap justify-center gap-2 mb-4">
+      {displayTimes.map((time: string) => (
+        <span class="time-badge">
+          {time}
+        </span>
+      ))}
     </div>
     
     <!-- Date range info (if applicable) -->
