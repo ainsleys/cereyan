@@ -40,10 +40,10 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
           {neighborhood}
         </h2>
         
-        <div class="grid gap-4">
+        <div class="grid gap-4 max-w-2xl">
           {venuesByNeighborhood[neighborhood].map((venue, index) => (
             <article 
-              class="screening-card animate-fade-in"
+              class="venue-card animate-fade-in"
               style={`animation-delay: ${index * 0.05}s`}
             >
               <h3 class="font-display font-semibold text-lg text-text mb-2">

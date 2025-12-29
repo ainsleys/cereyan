@@ -122,6 +122,13 @@
     background-color: #FDF2F8;
   }
 
+  /* Venue card - for mekanlar/venues page */
+  .venue-card {
+    @apply w-full bg-surface-card p-6 sm:p-8
+           shadow-sm transition-all duration-300 ease-out
+           hover:shadow-md;
+  }
+
   /* Primary button */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-4 py-2
