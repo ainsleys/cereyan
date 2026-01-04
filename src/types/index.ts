@@ -50,6 +50,8 @@ export interface Screening {
   endDate?: string;
   /** True if format is "until date" (e.g., "18.12.2025'ye kadar") */
   isUntilDate?: boolean;
+  /** True if this is a Cereyan Selects pick (shows star and gold accent) */
+  isCereyanSelect?: boolean;
 }
 
 // =============================================================================
@@ -152,4 +154,6 @@ export interface CSVRow {
   Özet?: string;
   /** Synopsis - English (optional) */
   'Özet (EN)'?: string;
+  /** Cereyan Select marker (X = selected) */
+  Star?: string;
 }

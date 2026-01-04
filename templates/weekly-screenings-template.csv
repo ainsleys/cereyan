@@ -1,7 +1,8 @@
-Tarih,Gösterim,Gösterim (EN),Saat,Mekan,Etkinlik,Link,Yönetmen,Yıl,Süre,Not,Not (EN),Özet,Özet (EN)
-22.12.2025,Film Adı,English Title (optional),19:00,Sinematek,Retrospektif Adı,https://tickets.example.com,Yönetmen Adı,2024,120,Cereyan'ın yorumu buraya,Cereyan's take here (optional),Film özeti,Synopsis (optional)
-23.12.2025,Türk Filmi,,20:30,Istanbul Modern,,https://istanbulmodern.org/film,Türk Yönetmen,2023,95,,,,
-24.12.2025,Tüm Gün Gösterim,All Day Screening,,Pera Müzesi,Sergi,https://example.com,,,,,,
+Tarih,Gösterim,Gösterim (EN),Saat,Mekan,Etkinlik,Link,Yönetmen,Yıl,Süre,Star,Not,Not (EN)
+22.12.2025,Film Adı,English Title (optional),19:00,Sinematek,Retrospektif Adı,https://tickets.example.com,Yönetmen Adı,2024,120,X,Cereyan'ın yorumu (optional),Cereyan's take (optional)
+23.12.2025,Türk Filmi,,20:30,Istanbul Modern,,https://istanbulmodern.org/film,Türk Yönetmen,2023,95,,,
+24.12.2025,Tüm Gün Gösterim,All Day Screening,,Pera Müzesi,Sergi,https://example.com,,,,,
+
 
 
 
