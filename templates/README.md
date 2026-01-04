@@ -55,3 +55,5 @@ Tarih,Gösterim,Gösterim (EN),Saat,Mekan,Etkinlik,Link,Yönetmen,Yıl,Süre,Not
 23.12.2025,Kaybedenler Kulübü,,20:30,Atlas 1948,,https://atlas.com,Tolga Karaçelik,2011,118,,,,
 ```
 
+
+

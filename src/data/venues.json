@@ -125,5 +125,29 @@
     "address": "Torun Center, Mecidiyeköy",
     "description": "Özel sinema etkinlikleri ve film partileri.",
     "descriptionEn": "Special cinema events and film parties."
+  },
+  {
+    "id": "akm-salonu",
+    "name": "AKM Salonu",
+    "neighborhood": "Beyoğlu",
+    "address": "Atatürk Kültür Merkezi, Taksim Meydanı, Beyoğlu",
+    "description": "Atatürk Kültür Merkezi bünyesindeki sinema salonu. Yeni açılan AKM'nin modern gösterim alanı.",
+    "descriptionEn": "Cinema hall within the Atatürk Cultural Center. Modern screening venue in the newly reopened AKM."
+  },
+  {
+    "id": "nisantasi-citys",
+    "name": "Nişantaşı City's AVM Cinewam",
+    "neighborhood": "Şişli",
+    "address": "Nişantaşı City's AVM, Şişli",
+    "description": "Nişantaşı'nın alışveriş merkezinde yer alan sinema salonu.",
+    "descriptionEn": "Cinema located in Nişantaşı City's shopping center."
+  },
+  {
+    "id": "istanbul-barosu",
+    "name": "İstanbul Barosu Merkez Binası",
+    "neighborhood": "Beyoğlu",
+    "address": "İstanbul Barosu Merkez Binası, Beyoğlu",
+    "description": "İstanbul Barosu'nun ev sahipliği yaptığı özel gösterimler ve söyleşiler.",
+    "descriptionEn": "Special screenings and talks hosted by the Istanbul Bar Association."
   }
 ]
