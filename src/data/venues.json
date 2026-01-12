@@ -157,5 +157,21 @@
     "address": "Büyükada, Adalar",
     "description": "Büyükada'da bağımsız sinema gösterimleri.",
     "descriptionEn": "Independent cinema screenings in Büyükada."
+  },
+  {
+    "id": "robinson-crusoe-389",
+    "name": "Robinson Crusoe 389",
+    "neighborhood": "Beyoğlu",
+    "address": "İstiklal Caddesi No:389, Beyoğlu",
+    "description": "İstiklal Caddesi'nde bağımsız kültür mekanı. Film gösterimleri ve söyleşiler.",
+    "descriptionEn": "Independent cultural venue on İstiklal Avenue. Film screenings and talks."
+  },
+  {
+    "id": "hrant-dink-hafiza",
+    "name": "23,5 Hrant Dink Hafıza Mekânı",
+    "neighborhood": "Şişli",
+    "address": "Halaskargazi Caddesi No:104, Osmanbey, Şişli",
+    "description": "Hrant Dink Vakfı'nın hafıza mekânı. Belgesel gösterimleri ve hakikat arayışı etkinlikleri.",
+    "descriptionEn": "Hrant Dink Foundation's memory space. Documentary screenings and truth-seeking events."
   }
 ]

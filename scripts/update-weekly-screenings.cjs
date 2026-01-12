@@ -48,7 +48,10 @@ const venueMap = {
   'Cine Majestic': 'cine-majestic',
   'Depo': 'depo',
   'Paribu Art': 'paribu-art',
-  'Farklı Mekanlar': 'various'
+  'Farklı Mekanlar': 'various',
+  'Beyoğlu Sineması': 'beyoglu-sinemasi',
+  'Robinson Crusoe 389': 'robinson-crusoe-389',
+  "23,5 Hrant Dink Hafıza Mekânı": 'hrant-dink-hafiza'
 };
 
 // Parse CSV line handling quoted fields
