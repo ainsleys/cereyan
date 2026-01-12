@@ -3057,8 +3057,7 @@
     "filmTitleEn": "I'm Here I'm Fine",
     "director": "Emine Emel Balcı",
     "year": 2025,
-    "runtime": 100,
-    "isCereyanSelect": true
+    "runtime": 100
   },
   {
     "id": "158",
@@ -3243,8 +3242,7 @@
     "filmTitleEn": "Phases of Matter",
     "director": "Deniz Tortum",
     "year": 2020,
-    "runtime": 71,
-    "isCereyanSelect": true
+    "runtime": 71
   },
   {
     "id": "171",
