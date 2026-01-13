@@ -2,21 +2,24 @@ import type { APIRoute } from 'astro';
 
 export const prerender = false;
 
-// Add authorized emails here
 const AUTHORIZED_EMAILS = (import.meta.env.ADMIN_EMAILS || '').split(',').map((e: string) => e.trim().toLowerCase());
+const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { email } = await request.json();
+    const { email, password } = await request.json();
     
-    if (!email) {
+    if (!email || !password) {
       return new Response(JSON.stringify({ authorized: false }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
     
-    const authorized = AUTHORIZED_EMAILS.includes(email.toLowerCase());
+    // Check both email and password
+    const emailAuthorized = AUTHORIZED_EMAILS.includes(email.toLowerCase());
+    const passwordCorrect = password === ADMIN_PASSWORD;
+    const authorized = emailAuthorized && passwordCorrect;
     
     return new Response(JSON.stringify({ authorized }), {
       status: 200,

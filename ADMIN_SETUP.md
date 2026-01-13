@@ -13,11 +13,20 @@ Visit: **https://cereyan.xyz/admin**
 Add these to your Vercel project:
 
 #### `ADMIN_EMAILS`
-Comma-separated list of authorized email addresses.
+Comma-separated list of authorized email addresses (no spaces after commas).
 
 ```
 ADMIN_EMAILS=ainsley@example.com,colleague@example.com
 ```
+
+#### `ADMIN_PASSWORD`
+Shared password for all admin users.
+
+```
+ADMIN_PASSWORD=your-secure-password-here
+```
+
+**Important:** Use a strong password and share it securely with your team (e.g., via 1Password, LastPass, or in-person).
 
 #### `GITHUB_TOKEN`
 Personal Access Token with repo write access.
@@ -50,6 +59,7 @@ ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxxx
 ```bash
 # Using Vercel CLI
 vercel env add ADMIN_EMAILS
+vercel env add ADMIN_PASSWORD
 vercel env add GITHUB_TOKEN
 vercel env add ANTHROPIC_API_KEY
 ```
@@ -57,6 +67,7 @@ vercel env add ANTHROPIC_API_KEY
 Or add via Vercel Dashboard:
 1. Go to Project Settings → Environment Variables
 2. Add each variable for Production, Preview, and Development
+3. Make sure to enable "Sensitive" for ADMIN_PASSWORD and GITHUB_TOKEN
 
 ### 3. Redeploy
 
@@ -73,6 +84,7 @@ Or in Vercel Dashboard → Deployments → Redeploy
 ### 1. Login
 - Visit `/admin`
 - Enter your authorized email
+- Enter the shared admin password
 - Click Login
 
 ### 2. Upload CSV
@@ -119,8 +131,11 @@ Use the template: `templates/weekly-screenings-template.csv`
 
 ## Troubleshooting
 
-### "Email not authorized"
-→ Contact site admin to add your email to `ADMIN_EMAILS`
+### "Invalid email or password"
+→ Check that:
+- Your email is in the `ADMIN_EMAILS` list
+- You're using the correct shared password
+- Contact site admin if issues persist
 
 ### "Unknown venues" warning
 Claude will help you:
@@ -135,11 +150,14 @@ Claude will help you:
 
 ## Security
 
-- No passwords stored
-- Email-based authorization only
+- Shared password protects access (not just email)
+- Password verified on every API call
 - GitHub token encrypted in Vercel
-- All changes logged with commit history
+- Auth stored in session only (cleared on logout)
+- All changes logged with commit history in GitHub
 - Can roll back via GitHub if needed
+
+**Note:** This uses a shared password (all admins use the same password). For higher security, consider implementing magic links or OAuth in the future.
 
 ## Support
 

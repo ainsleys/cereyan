@@ -245,6 +245,10 @@ export const prerender = false; // This page needs server-side rendering
         <label for="email">Email</label>
         <input type="email" id="email" placeholder="your@email.com" required />
       </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter admin password" required />
+      </div>
       <button class="btn" onclick="login()">Login</button>
       <div id="loginError"></div>
     </div>
@@ -278,10 +282,11 @@ export const prerender = false; // This page needs server-side rendering
 
     async function login() {
       const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
       const errorDiv = document.getElementById('loginError');
       
-      if (!email) {
-        errorDiv.innerHTML = '<div class="error">Please enter an email</div>';
+      if (!email || !password) {
+        errorDiv.innerHTML = '<div class="error">Please enter both email and password</div>';
         return;
       }
       
@@ -289,16 +294,17 @@ export const prerender = false; // This page needs server-side rendering
         const response = await fetch('/api/admin/auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({ email, password })
         });
         
         const data = await response.json();
         
         if (data.authorized) {
           sessionStorage.setItem('adminEmail', email);
+          sessionStorage.setItem('adminAuth', btoa(email + ':' + password)); // Store for API calls
           showUploadSection(email);
         } else {
-          errorDiv.innerHTML = '<div class="error">Email not authorized. Contact the site admin.</div>';
+          errorDiv.innerHTML = '<div class="error">Invalid email or password</div>';
         }
       } catch (error) {
         errorDiv.innerHTML = '<div class="error">Login failed. Please try again.</div>';
@@ -313,8 +319,11 @@ export const prerender = false; // This page needs server-side rendering
 
     function logout() {
       sessionStorage.removeItem('adminEmail');
+      sessionStorage.removeItem('adminAuth');
       document.getElementById('loginSection').classList.add('active');
       document.getElementById('uploadSection').classList.remove('active');
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
       document.getElementById('preview').innerHTML = '';
       document.getElementById('chatSection').innerHTML = '';
       document.getElementById('deploySection').innerHTML = '';
@@ -338,6 +347,7 @@ export const prerender = false; // This page needs server-side rendering
       const formData = new FormData();
       formData.append('csv', fileInput.files[0]);
       formData.append('email', sessionStorage.getItem('adminEmail'));
+      formData.append('auth', sessionStorage.getItem('adminAuth'));
       
       try {
         const response = await fetch('/api/admin/upload', {
@@ -411,6 +421,7 @@ export const prerender = false; // This page needs server-side rendering
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: sessionStorage.getItem('adminEmail'),
+            auth: sessionStorage.getItem('adminAuth'),
             csvData: window.pendingCSV
           })
         });

@@ -4,6 +4,7 @@ import { Octokit } from '@octokit/rest';
 export const prerender = false;
 
 const AUTHORIZED_EMAILS = (import.meta.env.ADMIN_EMAILS || '').split(',').map((e: string) => e.trim().toLowerCase());
+const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 
 // Venue mapping (same as in the script)
 const VENUE_MAP: Record<string, string> = {
@@ -57,10 +58,23 @@ function parseDate(dateStr: string): string {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { email, csvData } = await request.json();
+    const { email, auth, csvData } = await request.json();
     
-    // Check authorization
-    if (!email || !AUTHORIZED_EMAILS.includes(email.toLowerCase())) {
+    // Verify auth (base64 encoded email:password)
+    let authValid = false;
+    if (auth) {
+      try {
+        const decoded = atob(auth);
+        const [authEmail, authPassword] = decoded.split(':');
+        authValid = authEmail === email && 
+                   AUTHORIZED_EMAILS.includes(email.toLowerCase()) && 
+                   authPassword === ADMIN_PASSWORD;
+      } catch (e) {
+        authValid = false;
+      }
+    }
+    
+    if (!authValid) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 403,
         headers: { 'Content-Type': 'application/json' }
