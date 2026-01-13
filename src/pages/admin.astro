@@ -277,7 +277,7 @@ export const prerender = false; // This page needs server-side rendering
     // Check if already logged in
     const currentUser = sessionStorage.getItem('adminEmail');
     if (currentUser) {
-      showUploadSection(currentUser);
+      window.showUploadSection(currentUser);
     }
 
     window.login = async function() {
@@ -302,7 +302,7 @@ export const prerender = false; // This page needs server-side rendering
         if (data.authorized) {
           sessionStorage.setItem('adminEmail', email);
           sessionStorage.setItem('adminAuth', btoa(email + ':' + password)); // Store for API calls
-          showUploadSection(email);
+          window.showUploadSection(email);
         } else {
           errorDiv.innerHTML = '<div class="error">Invalid email or password</div>';
         }
