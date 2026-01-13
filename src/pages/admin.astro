@@ -249,7 +249,7 @@ export const prerender = false; // This page needs server-side rendering
         <label for="password">Password</label>
         <input type="password" id="password" placeholder="Enter admin password" required />
       </div>
-      <button class="btn" onclick="login()">Login</button>
+      <button class="btn" id="loginBtn">Login</button>
       <div id="loginError"></div>
     </div>
     
@@ -257,7 +257,7 @@ export const prerender = false; // This page needs server-side rendering
     <div id="uploadSection">
       <div class="user-info">
         <span id="userEmail"></span>
-        <button class="btn logout-btn" onclick="logout()">Logout</button>
+        <button class="btn logout-btn" id="logoutBtn">Logout</button>
       </div>
       
       <div class="form-group">
@@ -265,7 +265,7 @@ export const prerender = false; // This page needs server-side rendering
         <input type="file" id="csvFile" accept=".csv" />
       </div>
       
-      <button class="btn" onclick="uploadCSV()">Preview Changes</button>
+      <button class="btn" id="uploadBtn">Preview Changes</button>
       
       <div id="preview"></div>
       <div id="chatSection"></div>
@@ -274,13 +274,14 @@ export const prerender = false; // This page needs server-side rendering
   </div>
 
   <script is:inline>
-    // Check if already logged in
-    const currentUser = sessionStorage.getItem('adminEmail');
-    if (currentUser) {
-      window.showUploadSection(currentUser);
+    // All functions
+    function showUploadSection(email) {
+      document.getElementById('loginSection').classList.remove('active');
+      document.getElementById('uploadSection').classList.add('active');
+      document.getElementById('userEmail').textContent = email;
     }
 
-    window.login = async function() {
+    async function login() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const errorDiv = document.getElementById('loginError');
@@ -302,7 +303,7 @@ export const prerender = false; // This page needs server-side rendering
         if (data.authorized) {
           sessionStorage.setItem('adminEmail', email);
           sessionStorage.setItem('adminAuth', btoa(email + ':' + password)); // Store for API calls
-          window.showUploadSection(email);
+          showUploadSection(email);
         } else {
           errorDiv.innerHTML = '<div class="error">Invalid email or password</div>';
         }
@@ -311,13 +312,7 @@ export const prerender = false; // This page needs server-side rendering
       }
     }
 
-    window.showUploadSection = function(email) {
-      document.getElementById('loginSection').classList.remove('active');
-      document.getElementById('uploadSection').classList.add('active');
-      document.getElementById('userEmail').textContent = email;
-    }
-
-    window.logout = function() {
+    function logout() {
       sessionStorage.removeItem('adminEmail');
       sessionStorage.removeItem('adminAuth');
       document.getElementById('loginSection').classList.add('active');
@@ -329,7 +324,7 @@ export const prerender = false; // This page needs server-side rendering
       document.getElementById('deploySection').innerHTML = '';
     }
 
-    window.uploadCSV = async function() {
+    async function uploadCSV() {
       const fileInput = document.getElementById('csvFile');
       const previewDiv = document.getElementById('preview');
       const chatDiv = document.getElementById('chatSection');
@@ -411,7 +406,7 @@ export const prerender = false; // This page needs server-side rendering
       }
     }
 
-    window.deploy = async function() {
+    async function deploy() {
       const deployDiv = document.getElementById('deploySection');
       deployDiv.innerHTML = '<div class="loading"><div class="spinner"></div><br>Deploying...</div>';
       
@@ -443,6 +438,20 @@ export const prerender = false; // This page needs server-side rendering
       } catch (error) {
         deployDiv.innerHTML = '<div class="error">Deployment failed. Please contact support.</div>';
       }
+    }
+
+    // Attach event listeners
+    document.getElementById('loginBtn').addEventListener('click', login);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    document.getElementById('uploadBtn').addEventListener('click', uploadCSV);
+    
+    // Make deploy available globally for dynamic buttons
+    window.deploy = deploy;
+    
+    // Check if already logged in
+    const currentUser = sessionStorage.getItem('adminEmail');
+    if (currentUser) {
+      showUploadSection(currentUser);
     }
   </script>
 </body>
