@@ -227,10 +227,13 @@ export const POST: APIRoute = async ({ request }) => {
     
     // Get Claude's help - actually analyze the data
     let claudeAssistance = '';
-    if (import.meta.env.ANTHROPIC_API_KEY) {
+    let claudeError = '';
+    const apiKey = import.meta.env.ANTHROPIC_API_KEY;
+    
+    if (apiKey) {
       try {
         const anthropic = new Anthropic({
-          apiKey: import.meta.env.ANTHROPIC_API_KEY
+          apiKey: apiKey
         });
         
         const prompt = `You are a helpful assistant for Cereyan, an Istanbul film calendar website. A team member is uploading this week's film screenings. Please review the data and provide helpful feedback.
@@ -269,9 +272,12 @@ Please provide a brief review (3-5 sentences):
         if (message.content[0].type === 'text') {
           claudeAssistance = message.content[0].text;
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Claude API error:', error);
+        claudeError = error.message || 'Unknown error calling Claude API';
       }
+    } else {
+      claudeError = 'ANTHROPIC_API_KEY not configured';
     }
     
     // Add detected issues to warnings
@@ -285,6 +291,7 @@ Please provide a brief review (3-5 sentences):
       cereyanSelects: cereyanSelectCount,
       warnings,
       claudeAssistance,
+      claudeError,
       blockingIssues: false,
       csvData: csvText // Store for deployment
     }), {

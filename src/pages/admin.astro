@@ -543,7 +543,15 @@ export const prerender = false;
           `;
           
           // Claude
-          const claudeMessage = data.claudeAssistance || 'Looking good! All venues are recognized and data is valid. Ready to deploy when you are.';
+          let claudeContent = '';
+          if (data.claudeAssistance) {
+            claudeContent = data.claudeAssistance;
+          } else if (data.claudeError) {
+            claudeContent = '⚠️ Could not get Claude analysis: ' + data.claudeError;
+          } else {
+            claudeContent = 'Looking good! All venues are recognized and data is valid. Ready to deploy when you are.';
+          }
+          
           claudeDiv.innerHTML = `
             <div class="card">
               <div style="background:linear-gradient(135deg,#f5f0ff,#ede4ff);border:1px solid #e9d5ff;border-radius:10px;padding:16px;">
@@ -551,7 +559,7 @@ export const prerender = false;
                   <div style="width:32px;height:32px;background:linear-gradient(135deg,#9333ea,#7c3aed);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;">🤖</div>
                   <div style="font-weight:600;color:#7c3aed;font-size:14px;">Claude</div>
                 </div>
-                <div style="color:#333;line-height:1.6;font-size:14px;white-space:pre-wrap;">${claudeMessage}</div>
+                <div style="color:#333;line-height:1.6;font-size:14px;white-space:pre-wrap;">${claudeContent}</div>
               </div>
             </div>
           `;
