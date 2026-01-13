@@ -204,7 +204,28 @@ export const POST: APIRoute = async ({ request }) => {
       warnings.push(`Unknown venues: ${Array.from(unknownVenues).join(', ')}`);
     }
     
-    // Get Claude's help - always show a summary
+    // Build a summary of the data for Claude to review
+    const screeningSummary = screenings.map(s => 
+      `- ${s.date} ${s.time}: "${s.filmTitle}" at ${s.venue}${s.director ? ` (${s.director}${s.year ? ', ' + s.year : ''})` : ''}${s.isCereyanSelect ? ' ⭐' : ''}`
+    ).join('\n');
+    
+    // Check for potential issues Claude should review
+    const filmsWithoutDirector = screenings.filter(s => !s.director && !s.filmTitle.includes('Sanatçı Filmleri')).map(s => s.filmTitle);
+    const filmsWithoutYear = screenings.filter(s => !s.year && s.director).map(s => s.filmTitle);
+    const filmsWithoutLink = screenings.filter(s => !s.link).map(s => s.filmTitle);
+    
+    // Find potential duplicates (same film, same venue, same date)
+    const seen = new Map();
+    const potentialDuplicates: string[] = [];
+    for (const s of screenings) {
+      const key = `${s.filmTitle}-${s.venue}-${s.date}`;
+      if (seen.has(key)) {
+        potentialDuplicates.push(`${s.filmTitle} at ${s.venue} on ${s.date}`);
+      }
+      seen.set(key, true);
+    }
+    
+    // Get Claude's help - actually analyze the data
     let claudeAssistance = '';
     if (import.meta.env.ANTHROPIC_API_KEY) {
       try {
@@ -212,16 +233,33 @@ export const POST: APIRoute = async ({ request }) => {
           apiKey: import.meta.env.ANTHROPIC_API_KEY
         });
         
-        let prompt = '';
-        if (warnings.length > 0) {
-          prompt = `I'm uploading a CSV of film screenings for ${minDate} to ${maxDate}.\n\nFound ${screenings.length} screenings with ${cereyanSelectCount} Cereyan Selects.\n\nIssues:\n${warnings.join('\n')}\n\nKnown venues: ${Object.keys(VENUE_MAP).join(', ')}\n\nCan you briefly help me understand what to do? Should I add these venues, or did I misspell something? Keep response to 2-3 sentences.`;
-        } else {
-          prompt = `I'm uploading a CSV of film screenings for ${minDate} to ${maxDate}.\n\nFound ${screenings.length} screenings with ${cereyanSelectCount} Cereyan Selects.\n\nEverything looks good - all venues recognized, no issues detected.\n\nGive a brief, friendly confirmation (1-2 sentences) that it's ready to deploy.`;
-        }
-        
+        const prompt = `You are a helpful assistant for Cereyan, an Istanbul film calendar website. A team member is uploading this week's film screenings. Please review the data and provide helpful feedback.
+
+**Date Range:** ${minDate} to ${maxDate}
+**Total Screenings:** ${screenings.length}
+**Cereyan Selects (⭐):** ${cereyanSelectCount}
+
+**All Screenings:**
+${screeningSummary}
+
+**Known venues:** ${Object.keys(VENUE_MAP).join(', ')}
+
+**Potential Issues Found:**
+${unknownVenues.size > 0 ? `- Unknown venues: ${Array.from(unknownVenues).join(', ')}` : ''}
+${filmsWithoutDirector.length > 0 ? `- Films without director: ${filmsWithoutDirector.slice(0, 5).join(', ')}${filmsWithoutDirector.length > 5 ? '...' : ''}` : ''}
+${filmsWithoutYear.length > 0 ? `- Films without year: ${filmsWithoutYear.slice(0, 5).join(', ')}${filmsWithoutYear.length > 5 ? '...' : ''}` : ''}
+${potentialDuplicates.length > 0 ? `- Potential duplicates: ${potentialDuplicates.join(', ')}` : ''}
+${filmsWithoutLink.length > 0 ? `- Films without ticket link (${filmsWithoutLink.length} total)` : ''}
+
+Please provide a brief review (3-5 sentences):
+1. Confirm what looks good
+2. Point out any issues that need attention (unknown venues, missing data, etc.)
+3. Note anything that looks unusual (wrong years, typos in film names if obvious)
+4. End with whether it's ready to deploy or needs fixes first`;
+
         const message = await anthropic.messages.create({
           model: 'claude-3-5-sonnet-20241022',
-          max_tokens: 300,
+          max_tokens: 500,
           messages: [{
             role: 'user',
             content: prompt
@@ -234,6 +272,11 @@ export const POST: APIRoute = async ({ request }) => {
       } catch (error) {
         console.error('Claude API error:', error);
       }
+    }
+    
+    // Add detected issues to warnings
+    if (potentialDuplicates.length > 0) {
+      warnings.push(`Potential duplicates: ${potentialDuplicates.join(', ')}`);
     }
     
     return new Response(JSON.stringify({
