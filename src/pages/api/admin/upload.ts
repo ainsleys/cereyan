@@ -91,9 +91,45 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
     
+    // Validate file type
+    const fileName = csvFile.name.toLowerCase();
+    if (!fileName.endsWith('.csv')) {
+      return new Response(JSON.stringify({ 
+        error: `Invalid file type: "${csvFile.name}". Please upload a .csv file.` 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
     // Parse CSV
     const csvText = await csvFile.text();
     const lines = csvText.trim().split('\n');
+    
+    // Check if file has content
+    if (lines.length < 2) {
+      return new Response(JSON.stringify({ 
+        error: 'CSV file is empty or has no data rows.' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Validate header row has required columns
+    const header = lines[0].toLowerCase();
+    const requiredColumns = ['tarih', 'gösterim', 'saat', 'mekan'];
+    const missingColumns = requiredColumns.filter(col => !header.includes(col));
+    
+    if (missingColumns.length > 0) {
+      return new Response(JSON.stringify({ 
+        error: `CSV is missing required columns: ${missingColumns.join(', ')}. Make sure your CSV has: Tarih, Gösterim, Saat, Mekan` 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
     const dataLines = lines.slice(1).filter(line => line.trim());
     
     // Extract dates for range
@@ -138,9 +174,29 @@ export const POST: APIRoute = async ({ request }) => {
       screenings.push(screening);
     }
     
+    // Check if we got any valid screenings
+    if (screenings.length === 0) {
+      return new Response(JSON.stringify({ 
+        error: 'No valid screenings found in CSV. Make sure each row has at least a date (Tarih) and film title (Gösterim).' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
     dates.sort();
     const minDate = dates[0];
     const maxDate = dates[dates.length - 1];
+    
+    // Validate dates are reasonable
+    if (!minDate || !maxDate || minDate === 'undefined' || maxDate === 'undefined') {
+      return new Response(JSON.stringify({ 
+        error: 'Could not parse dates from CSV. Make sure dates are in DD.MM.YYYY format (e.g., 15.01.2026).' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
     
     // Build warnings
     const warnings: string[] = [];
@@ -158,9 +214,9 @@ export const POST: APIRoute = async ({ request }) => {
         
         let prompt = '';
         if (warnings.length > 0) {
-          prompt = `I'm uploading a CSV of film screenings for ${minDate} to ${maxDate}.\n\nFound ${screenings.length} screenings with ${cereyanSelectCount} Cereyan Selects.\n\nIssues:\n${warnings.join('\n')}\n\nKnown venues: ${Object.keys(VENUE_MAP).join(', ')}\n\nCan you briefly help me understand what to do? Should I add these venues, or did I misspell something?`;
+          prompt = `I'm uploading a CSV of film screenings for ${minDate} to ${maxDate}.\n\nFound ${screenings.length} screenings with ${cereyanSelectCount} Cereyan Selects.\n\nIssues:\n${warnings.join('\n')}\n\nKnown venues: ${Object.keys(VENUE_MAP).join(', ')}\n\nCan you briefly help me understand what to do? Should I add these venues, or did I misspell something? Keep response to 2-3 sentences.`;
         } else {
-          prompt = `I'm uploading a CSV of film screenings for ${minDate} to ${maxDate}.\n\nFound ${screenings.length} screenings with ${cereyanSelectCount} Cereyan Selects.\n\nEverything looks good - all venues recognized, no issues detected.\n\nCan you give me a brief, friendly confirmation that it's ready to deploy? Keep it short and encouraging.`;
+          prompt = `I'm uploading a CSV of film screenings for ${minDate} to ${maxDate}.\n\nFound ${screenings.length} screenings with ${cereyanSelectCount} Cereyan Selects.\n\nEverything looks good - all venues recognized, no issues detected.\n\nGive a brief, friendly confirmation (1-2 sentences) that it's ready to deploy.`;
         }
         
         const message = await anthropic.messages.create({
