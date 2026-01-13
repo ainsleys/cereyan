@@ -280,7 +280,7 @@ export const prerender = false; // This page needs server-side rendering
       showUploadSection(currentUser);
     }
 
-    async function login() {
+    window.login = async function() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const errorDiv = document.getElementById('loginError');
@@ -311,13 +311,13 @@ export const prerender = false; // This page needs server-side rendering
       }
     }
 
-    function showUploadSection(email) {
+    window.showUploadSection = function(email) {
       document.getElementById('loginSection').classList.remove('active');
       document.getElementById('uploadSection').classList.add('active');
       document.getElementById('userEmail').textContent = email;
     }
 
-    function logout() {
+    window.logout = function() {
       sessionStorage.removeItem('adminEmail');
       sessionStorage.removeItem('adminAuth');
       document.getElementById('loginSection').classList.add('active');
@@ -329,7 +329,7 @@ export const prerender = false; // This page needs server-side rendering
       document.getElementById('deploySection').innerHTML = '';
     }
 
-    async function uploadCSV() {
+    window.uploadCSV = async function() {
       const fileInput = document.getElementById('csvFile');
       const previewDiv = document.getElementById('preview');
       const chatDiv = document.getElementById('chatSection');
@@ -411,7 +411,7 @@ export const prerender = false; // This page needs server-side rendering
       }
     }
 
-    async function deploy() {
+    window.deploy = async function() {
       const deployDiv = document.getElementById('deploySection');
       deployDiv.innerHTML = '<div class="loading"><div class="spinner"></div><br>Deploying...</div>';
       
