@@ -1,5 +1,5 @@
 ---
-export const prerender = false; // This page needs server-side rendering
+export const prerender = false;
 ---
 
 <!DOCTYPE html>
@@ -8,6 +8,9 @@ export const prerender = false; // This page needs server-side rendering
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cereyan Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -16,8 +19,8 @@ export const prerender = false; // This page needs server-side rendering
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f5f5f5;
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -26,23 +29,37 @@ export const prerender = false; // This page needs server-side rendering
     }
     
     .container {
-      max-width: 800px;
+      max-width: 700px;
       width: 100%;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(218, 165, 32, 0.2);
+      border-radius: 16px;
       padding: 40px;
     }
     
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    
+    .logo-icon {
+      font-size: 32px;
+      color: #daa520;
+    }
+    
     h1 {
-      color: #333;
-      margin-bottom: 10px;
+      color: #fff;
       font-size: 28px;
+      font-weight: 600;
     }
     
     .subtitle {
-      color: #666;
+      color: rgba(255, 255, 255, 0.6);
       margin-bottom: 30px;
+      font-size: 15px;
     }
     
     #loginSection, #uploadSection {
@@ -61,398 +78,631 @@ export const prerender = false; // This page needs server-side rendering
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
-      color: #333;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
     }
     
-    input[type="email"], input[type="password"], input[type="file"] {
+    input[type="email"], 
+    input[type="password"], 
+    input[type="text"] {
       width: 100%;
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
       font-size: 16px;
-      transition: border-color 0.2s;
+      color: #fff;
+      font-family: inherit;
+      transition: all 0.2s;
     }
     
-    input[type="email"]:focus, input[type="password"]:focus, input[type="file"]:focus {
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+    
+    input:focus {
       outline: none;
       border-color: #daa520;
+      background: rgba(218, 165, 32, 0.05);
+    }
+    
+    .file-input-wrapper {
+      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .file-input-wrapper:hover {
+      border-color: #daa520;
+      background: rgba(218, 165, 32, 0.05);
+    }
+    
+    .file-input-wrapper.has-file {
+      border-color: #4ade80;
+      background: rgba(74, 222, 128, 0.05);
+    }
+    
+    .file-input-wrapper input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .file-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    
+    .file-text {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+    }
+    
+    .file-name {
+      color: #4ade80;
+      font-weight: 500;
+      margin-top: 8px;
     }
     
     .btn {
-      background: #daa520;
-      color: white;
+      background: linear-gradient(135deg, #daa520 0%, #b8860b 100%);
+      color: #000;
       border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
+      padding: 14px 28px;
+      border-radius: 10px;
       font-size: 16px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
       width: 100%;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
     
     .btn:hover {
-      background: #c99411;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(218, 165, 32, 0.4);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
     }
     
     .btn:disabled {
-      background: #ccc;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.3);
       cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
     
     .btn-secondary {
-      background: #666;
-      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
     }
     
     .btn-secondary:hover {
-      background: #555;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: none;
     }
     
-    .error {
-      background: #fee;
-      border: 1px solid #fcc;
-      padding: 12px;
-      border-radius: 8px;
-      color: #c33;
-      margin-bottom: 20px;
+    .btn-deploy {
+      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      margin-top: 20px;
     }
     
-    .success {
-      background: #efe;
-      border: 1px solid #cfc;
-      padding: 12px;
-      border-radius: 8px;
-      color: #3c3;
-      margin-bottom: 20px;
+    .message {
+      padding: 16px;
+      border-radius: 10px;
+      margin: 16px 0;
+      font-size: 14px;
     }
     
-    .preview {
-      background: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+    .message.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+    
+    .message.success {
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      color: #4ade80;
+    }
+    
+    .message.warning {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+    }
+    
+    .user-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+    
+    .user-email {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .user-email::before {
+      content: "👤";
+    }
+    
+    .btn-logout {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.5);
+      padding: 8px 16px;
+      font-size: 13px;
+      width: auto;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      box-shadow: none;
+      transform: none;
+    }
+    
+    /* Preview Card */
+    .preview-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
       padding: 20px;
       margin: 20px 0;
-      max-height: 400px;
-      overflow-y: auto;
     }
     
-    .preview h3 {
-      margin-bottom: 10px;
-      color: #333;
+    .preview-card h3 {
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
-    .preview-item {
-      padding: 8px 0;
-      border-bottom: 1px solid #eee;
+    .preview-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
     
-    .preview-item:last-child {
-      border-bottom: none;
+    .stat {
+      text-align: center;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
     }
     
+    .stat-value {
+      font-size: 28px;
+      font-weight: 600;
+      color: #daa520;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Claude Chat */
+    .claude-card {
+      background: rgba(147, 51, 234, 0.05);
+      border: 1px solid rgba(147, 51, 234, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .claude-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .claude-avatar {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .claude-name {
+      color: #c084fc;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .claude-message {
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    
+    .claude-input {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    
+    .claude-input input {
+      flex: 1;
+      background: rgba(147, 51, 234, 0.1);
+      border-color: rgba(147, 51, 234, 0.3);
+    }
+    
+    .claude-input input:focus {
+      border-color: #9333ea;
+      background: rgba(147, 51, 234, 0.15);
+    }
+    
+    .btn-claude {
+      background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+      width: auto;
+      padding: 14px 20px;
+    }
+    
+    /* Loading */
     .loading {
       text-align: center;
-      padding: 20px;
-      color: #666;
+      padding: 40px;
     }
     
     .spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid #ddd;
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
       border-top-color: #daa520;
       border-radius: 50%;
       animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    .loading-text {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
     }
     
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
     
-    .user-info {
-      background: #f0f0f0;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .logout-btn {
-      background: transparent;
-      color: #666;
-      border: 1px solid #999;
-      padding: 6px 12px;
-      font-size: 14px;
-      width: auto;
-    }
-    
-    .logout-btn:hover {
-      background: #666;
-      color: white;
-    }
-
-    .chat-container {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin: 20px 0;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-
-    .chat-message {
-      padding: 12px;
-      margin: 8px;
-      border-radius: 8px;
-    }
-
-    .chat-message.assistant {
-      background: #f0f0f0;
-    }
-
-    .chat-message.user {
-      background: #e3f2fd;
-      margin-left: 40px;
-    }
-
-    .chat-input {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .chat-input input {
-      flex: 1;
-    }
-
-    .chat-input button {
-      width: auto;
-      padding: 12px 20px;
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 24px;
+      }
+      
+      .preview-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>⬡ Cereyan Admin</h1>
-    <p class="subtitle">Upload weekly screenings CSV</p>
+    <div class="logo">
+      <span class="logo-icon">⬡</span>
+      <h1>Cereyan Admin</h1>
+    </div>
+    <p class="subtitle">Upload weekly screenings</p>
     
     <!-- Login Section -->
     <div id="loginSection" class="active">
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="your@email.com" required />
+        <label>Email</label>
+        <input type="email" id="email" placeholder="your@email.com" />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter admin password" required />
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter admin password" />
       </div>
-      <button class="btn" id="loginBtn">Login</button>
+      <button class="btn" id="loginBtn">
+        <span>Login</span>
+        <span>→</span>
+      </button>
       <div id="loginError"></div>
     </div>
     
     <!-- Upload Section -->
     <div id="uploadSection">
-      <div class="user-info">
-        <span id="userEmail"></span>
-        <button class="btn logout-btn" id="logoutBtn">Logout</button>
+      <div class="user-bar">
+        <span class="user-email" id="userEmail"></span>
+        <button class="btn btn-logout" id="logoutBtn">Logout</button>
       </div>
       
       <div class="form-group">
-        <label for="csvFile">Upload CSV File</label>
-        <input type="file" id="csvFile" accept=".csv" />
+        <label>CSV File</label>
+        <div class="file-input-wrapper" id="fileWrapper">
+          <input type="file" id="csvFile" accept=".csv" />
+          <div class="file-icon">📄</div>
+          <div class="file-text">Drop your CSV here or click to browse</div>
+          <div class="file-name" id="fileName"></div>
+        </div>
       </div>
       
-      <button class="btn" id="uploadBtn">Preview Changes</button>
+      <button class="btn" id="uploadBtn">
+        <span>📊</span>
+        <span>Preview Changes</span>
+      </button>
       
       <div id="preview"></div>
-      <div id="chatSection"></div>
+      <div id="claudeSection"></div>
       <div id="deploySection"></div>
     </div>
   </div>
 
   <script is:inline>
-    // All functions
-    function showUploadSection(email) {
-      document.getElementById('loginSection').classList.remove('active');
-      document.getElementById('uploadSection').classList.add('active');
-      document.getElementById('userEmail').textContent = email;
-    }
-
-    async function login() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorDiv = document.getElementById('loginError');
+    // DOM ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elements
+      const loginBtn = document.getElementById('loginBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const csvFile = document.getElementById('csvFile');
+      const fileWrapper = document.getElementById('fileWrapper');
+      const fileName = document.getElementById('fileName');
       
-      if (!email || !password) {
-        errorDiv.innerHTML = '<div class="error">Please enter both email and password</div>';
-        return;
-      }
-      
-      try {
-        const response = await fetch('/api/admin/auth', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        
-        const data = await response.json();
-        
-        if (data.authorized) {
-          sessionStorage.setItem('adminEmail', email);
-          sessionStorage.setItem('adminAuth', btoa(email + ':' + password)); // Store for API calls
-          showUploadSection(email);
+      // File input visual feedback
+      csvFile.addEventListener('change', function() {
+        if (this.files[0]) {
+          fileWrapper.classList.add('has-file');
+          fileName.textContent = '✓ ' + this.files[0].name;
         } else {
-          errorDiv.innerHTML = '<div class="error">Invalid email or password</div>';
+          fileWrapper.classList.remove('has-file');
+          fileName.textContent = '';
         }
-      } catch (error) {
-        errorDiv.innerHTML = '<div class="error">Login failed. Please try again.</div>';
-      }
-    }
-
-    function logout() {
-      sessionStorage.removeItem('adminEmail');
-      sessionStorage.removeItem('adminAuth');
-      document.getElementById('loginSection').classList.add('active');
-      document.getElementById('uploadSection').classList.remove('active');
-      document.getElementById('email').value = '';
-      document.getElementById('password').value = '';
-      document.getElementById('preview').innerHTML = '';
-      document.getElementById('chatSection').innerHTML = '';
-      document.getElementById('deploySection').innerHTML = '';
-    }
-
-    async function uploadCSV() {
-      const fileInput = document.getElementById('csvFile');
-      const previewDiv = document.getElementById('preview');
-      const chatDiv = document.getElementById('chatSection');
-      const deployDiv = document.getElementById('deploySection');
+      });
       
-      if (!fileInput.files[0]) {
-        previewDiv.innerHTML = '<div class="error">Please select a CSV file</div>';
-        return;
-      }
-      
-      previewDiv.innerHTML = '<div class="loading"><div class="spinner"></div><br>Analyzing CSV...</div>';
-      chatDiv.innerHTML = '';
-      deployDiv.innerHTML = '';
-      
-      const formData = new FormData();
-      formData.append('csv', fileInput.files[0]);
-      formData.append('email', sessionStorage.getItem('adminEmail'));
-      formData.append('auth', sessionStorage.getItem('adminAuth'));
-      
-      try {
-        const response = await fetch('/api/admin/upload', {
-          method: 'POST',
-          body: formData
-        });
+      // Login
+      loginBtn.addEventListener('click', async function() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('loginError');
         
-        const data = await response.json();
-        
-        if (data.error) {
-          previewDiv.innerHTML = `<div class="error">${data.error}</div>`;
+        if (!email || !password) {
+          errorDiv.innerHTML = '<div class="message error">Please enter both email and password</div>';
           return;
         }
         
-        // Show preview
-        let html = '<div class="preview">';
-        html += `<h3>📊 Preview</h3>`;
-        html += `<p><strong>Date Range:</strong> ${data.dateRange}</p>`;
-        html += `<p><strong>Total Screenings:</strong> ${data.totalScreenings}</p>`;
-        html += `<p><strong>Cereyan Selects:</strong> ${data.cereyanSelects}</p>`;
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<div class="spinner" style="width:20px;height:20px;margin:0;border-width:2px;"></div>';
         
-        if (data.warnings && data.warnings.length > 0) {
-          html += '<h4 style="margin-top: 15px; color: #c93;">⚠️ Warnings</h4>';
-          data.warnings.forEach(w => {
-            html += `<div class="preview-item">${w}</div>`;
+        try {
+          const response = await fetch('/api/admin/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
           });
+          
+          const data = await response.json();
+          
+          if (data.authorized) {
+            sessionStorage.setItem('adminEmail', email);
+            sessionStorage.setItem('adminAuth', btoa(email + ':' + password));
+            showUploadSection(email);
+          } else {
+            errorDiv.innerHTML = '<div class="message error">Invalid email or password</div>';
+          }
+        } catch (error) {
+          errorDiv.innerHTML = '<div class="message error">Login failed. Please try again.</div>';
         }
         
-        html += '</div>';
-        previewDiv.innerHTML = html;
-        
-        // Show Claude's assistance if there are issues
-        if (data.claudeAssistance) {
-          chatDiv.innerHTML = `
-            <div class="preview">
-              <h3>🤖 Claude's Suggestions</h3>
-              <div class="chat-message assistant">${data.claudeAssistance}</div>
-              <div class="chat-input">
-                <input type="text" id="userResponse" placeholder="Type your response..." />
-                <button class="btn" onclick="sendChatResponse()">Reply</button>
-              </div>
-            </div>
-          `;
-        }
-        
-        // Show deploy button if no critical issues
-        if (!data.blockingIssues) {
-          deployDiv.innerHTML = `
-            <button class="btn" onclick="deploy()">✓ Deploy to Production</button>
-            <p style="text-align: center; margin-top: 10px; color: #666; font-size: 14px;">
-              This will commit to GitHub and deploy via Vercel
-            </p>
-          `;
-        }
-        
-        // Store the CSV data for deployment
-        window.pendingCSV = data.csvData;
-        
-      } catch (error) {
-        previewDiv.innerHTML = '<div class="error">Upload failed. Please try again.</div>';
-      }
-    }
-
-    async function deploy() {
-      const deployDiv = document.getElementById('deploySection');
-      deployDiv.innerHTML = '<div class="loading"><div class="spinner"></div><br>Deploying...</div>';
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span>Login</span><span>→</span>';
+      });
       
-      try {
-        const response = await fetch('/api/admin/deploy', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: sessionStorage.getItem('adminEmail'),
-            auth: sessionStorage.getItem('adminAuth'),
-            csvData: window.pendingCSV
-          })
-        });
+      // Logout
+      logoutBtn.addEventListener('click', function() {
+        sessionStorage.removeItem('adminEmail');
+        sessionStorage.removeItem('adminAuth');
+        document.getElementById('loginSection').classList.add('active');
+        document.getElementById('uploadSection').classList.remove('active');
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('preview').innerHTML = '';
+        document.getElementById('claudeSection').innerHTML = '';
+        document.getElementById('deploySection').innerHTML = '';
+        fileWrapper.classList.remove('has-file');
+        fileName.textContent = '';
+        csvFile.value = '';
+      });
+      
+      // Upload
+      uploadBtn.addEventListener('click', async function() {
+        const previewDiv = document.getElementById('preview');
+        const claudeDiv = document.getElementById('claudeSection');
+        const deployDiv = document.getElementById('deploySection');
         
-        const data = await response.json();
-        
-        if (data.success) {
-          deployDiv.innerHTML = `
-            <div class="success">
-              ✓ Successfully deployed!<br>
-              <small>Commit: ${data.commitSha}</small><br>
-              <small>Site will update in ~1 minute</small>
-            </div>
-            <button class="btn btn-secondary" onclick="location.reload()">Upload Another CSV</button>
-          `;
-        } else {
-          deployDiv.innerHTML = `<div class="error">Deployment failed: ${data.error}</div>`;
+        if (!csvFile.files[0]) {
+          previewDiv.innerHTML = '<div class="message error">Please select a CSV file</div>';
+          return;
         }
-      } catch (error) {
-        deployDiv.innerHTML = '<div class="error">Deployment failed. Please contact support.</div>';
+        
+        uploadBtn.disabled = true;
+        previewDiv.innerHTML = '<div class="loading"><div class="spinner"></div><div class="loading-text">Analyzing CSV with Claude...</div></div>';
+        claudeDiv.innerHTML = '';
+        deployDiv.innerHTML = '';
+        
+        const formData = new FormData();
+        formData.append('csv', csvFile.files[0]);
+        formData.append('email', sessionStorage.getItem('adminEmail'));
+        formData.append('auth', sessionStorage.getItem('adminAuth'));
+        
+        try {
+          const response = await fetch('/api/admin/upload', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const data = await response.json();
+          
+          if (data.error) {
+            previewDiv.innerHTML = `<div class="message error">${data.error}</div>`;
+            uploadBtn.disabled = false;
+            return;
+          }
+          
+          // Show preview stats
+          previewDiv.innerHTML = `
+            <div class="preview-card">
+              <h3>📊 Preview</h3>
+              <div class="preview-stats">
+                <div class="stat">
+                  <div class="stat-value">${data.totalScreenings}</div>
+                  <div class="stat-label">Screenings</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-value">${data.cereyanSelects}</div>
+                  <div class="stat-label">Selects</div>
+                </div>
+                <div class="stat">
+                  <div class="stat-value">${data.dateRange.split(' to ')[0].split('-')[2]}-${data.dateRange.split(' to ')[1].split('-')[2]}</div>
+                  <div class="stat-label">Jan Days</div>
+                </div>
+              </div>
+              ${data.warnings && data.warnings.length > 0 ? `
+                <div class="message warning" style="margin-top: 16px;">
+                  <strong>⚠️ Warnings:</strong><br>
+                  ${data.warnings.join('<br>')}
+                </div>
+              ` : ''}
+            </div>
+          `;
+          
+          // Show Claude
+          if (data.claudeAssistance) {
+            claudeDiv.innerHTML = `
+              <div class="claude-card">
+                <div class="claude-header">
+                  <div class="claude-avatar">🤖</div>
+                  <div class="claude-name">Claude</div>
+                </div>
+                <div class="claude-message">${data.claudeAssistance}</div>
+              </div>
+            `;
+          }
+          
+          // Show deploy button
+          if (!data.blockingIssues) {
+            deployDiv.innerHTML = `
+              <button class="btn btn-deploy" id="deployBtn">
+                <span>🚀</span>
+                <span>Deploy to Production</span>
+              </button>
+            `;
+            
+            document.getElementById('deployBtn').addEventListener('click', deploy);
+          }
+          
+          window.pendingCSV = data.csvData;
+          
+        } catch (error) {
+          previewDiv.innerHTML = '<div class="message error">Upload failed. Please try again.</div>';
+        }
+        
+        uploadBtn.disabled = false;
+      });
+      
+      // Deploy function
+      async function deploy() {
+        const deployDiv = document.getElementById('deploySection');
+        const deployBtn = document.getElementById('deployBtn');
+        
+        deployBtn.disabled = true;
+        deployBtn.innerHTML = '<div class="spinner" style="width:20px;height:20px;margin:0;border-width:2px;"></div><span>Deploying...</span>';
+        
+        try {
+          const response = await fetch('/api/admin/deploy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: sessionStorage.getItem('adminEmail'),
+              auth: sessionStorage.getItem('adminAuth'),
+              csvData: window.pendingCSV
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            deployDiv.innerHTML = `
+              <div class="message success">
+                <strong>✓ Successfully deployed!</strong><br>
+                <small>Commit: ${data.commitSha.substring(0, 7)}</small><br>
+                <small>Site will update in ~1 minute</small>
+              </div>
+              <button class="btn btn-secondary" style="margin-top: 12px;" onclick="location.reload()">
+                Upload Another CSV
+              </button>
+            `;
+          } else {
+            deployDiv.innerHTML = `
+              <div class="message error">Deployment failed: ${data.error}</div>
+              <button class="btn btn-deploy" id="deployBtn">
+                <span>🔄</span>
+                <span>Retry Deploy</span>
+              </button>
+            `;
+            document.getElementById('deployBtn').addEventListener('click', deploy);
+          }
+        } catch (error) {
+          deployDiv.innerHTML = '<div class="message error">Deployment failed. Please contact support.</div>';
+        }
       }
-    }
-
-    // Attach event listeners
-    document.getElementById('loginBtn').addEventListener('click', login);
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-    document.getElementById('uploadBtn').addEventListener('click', uploadCSV);
-    
-    // Make deploy available globally for dynamic buttons
-    window.deploy = deploy;
-    
-    // Check if already logged in
-    const currentUser = sessionStorage.getItem('adminEmail');
-    if (currentUser) {
-      showUploadSection(currentUser);
-    }
+      
+      // Show upload section
+      function showUploadSection(email) {
+        document.getElementById('loginSection').classList.remove('active');
+        document.getElementById('uploadSection').classList.add('active');
+        document.getElementById('userEmail').textContent = email;
+      }
+      
+      // Check if already logged in
+      const currentUser = sessionStorage.getItem('adminEmail');
+      if (currentUser) {
+        showUploadSection(currentUser);
+      }
+      
+      // Allow Enter key to submit login
+      document.getElementById('password').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          loginBtn.click();
+        }
+      });
+    });
   </script>
 </body>
 </html>
