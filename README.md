@@ -14,7 +14,19 @@ npm run build    # Build for production
 
 ## Updating the Calendar
 
-### From CSV (Recommended)
+### Admin Panel (Easiest)
+
+Non-technical users can upload CSVs via the admin panel: **[cereyan.xyz/admin](https://cereyan.xyz/admin)**
+
+Features:
+- 🔐 Email-based authorization
+- 📊 Preview changes before deployment
+- 🤖 AI assistance for venue mapping and validation
+- 🚀 One-click deploy to production
+
+**Setup:** See [ADMIN_SETUP.md](./ADMIN_SETUP.md)
+
+### From CSV (Script)
 
 Prepare a CSV with these columns:
 

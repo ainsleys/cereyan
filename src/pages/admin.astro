@@ -1,0 +1,438 @@
+---
+export const prerender = false; // This page needs server-side rendering
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cereyan Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      padding: 40px;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    
+    #loginSection, #uploadSection {
+      display: none;
+    }
+    
+    #loginSection.active, #uploadSection.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    input[type="email"], input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    
+    input[type="email"]:focus, input[type="file"]:focus {
+      outline: none;
+      border-color: #daa520;
+    }
+    
+    .btn {
+      background: #daa520;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    
+    .btn:hover {
+      background: #c99411;
+    }
+    
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: #666;
+      margin-top: 10px;
+    }
+    
+    .btn-secondary:hover {
+      background: #555;
+    }
+    
+    .error {
+      background: #fee;
+      border: 1px solid #fcc;
+      padding: 12px;
+      border-radius: 8px;
+      color: #c33;
+      margin-bottom: 20px;
+    }
+    
+    .success {
+      background: #efe;
+      border: 1px solid #cfc;
+      padding: 12px;
+      border-radius: 8px;
+      color: #3c3;
+      margin-bottom: 20px;
+    }
+    
+    .preview {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .preview h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .preview-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .preview-item:last-child {
+      border-bottom: none;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #ddd;
+      border-top-color: #daa520;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .user-info {
+      background: #f0f0f0;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logout-btn {
+      background: transparent;
+      color: #666;
+      border: 1px solid #999;
+      padding: 6px 12px;
+      font-size: 14px;
+      width: auto;
+    }
+    
+    .logout-btn:hover {
+      background: #666;
+      color: white;
+    }
+
+    .chat-container {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin: 20px 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .chat-message {
+      padding: 12px;
+      margin: 8px;
+      border-radius: 8px;
+    }
+
+    .chat-message.assistant {
+      background: #f0f0f0;
+    }
+
+    .chat-message.user {
+      background: #e3f2fd;
+      margin-left: 40px;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chat-input input {
+      flex: 1;
+    }
+
+    .chat-input button {
+      width: auto;
+      padding: 12px 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⬡ Cereyan Admin</h1>
+    <p class="subtitle">Upload weekly screenings CSV</p>
+    
+    <!-- Login Section -->
+    <div id="loginSection" class="active">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="your@email.com" required />
+      </div>
+      <button class="btn" onclick="login()">Login</button>
+      <div id="loginError"></div>
+    </div>
+    
+    <!-- Upload Section -->
+    <div id="uploadSection">
+      <div class="user-info">
+        <span id="userEmail"></span>
+        <button class="btn logout-btn" onclick="logout()">Logout</button>
+      </div>
+      
+      <div class="form-group">
+        <label for="csvFile">Upload CSV File</label>
+        <input type="file" id="csvFile" accept=".csv" />
+      </div>
+      
+      <button class="btn" onclick="uploadCSV()">Preview Changes</button>
+      
+      <div id="preview"></div>
+      <div id="chatSection"></div>
+      <div id="deploySection"></div>
+    </div>
+  </div>
+
+  <script>
+    // Check if already logged in
+    const currentUser = sessionStorage.getItem('adminEmail');
+    if (currentUser) {
+      showUploadSection(currentUser);
+    }
+
+    async function login() {
+      const email = document.getElementById('email').value;
+      const errorDiv = document.getElementById('loginError');
+      
+      if (!email) {
+        errorDiv.innerHTML = '<div class="error">Please enter an email</div>';
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/admin/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        
+        const data = await response.json();
+        
+        if (data.authorized) {
+          sessionStorage.setItem('adminEmail', email);
+          showUploadSection(email);
+        } else {
+          errorDiv.innerHTML = '<div class="error">Email not authorized. Contact the site admin.</div>';
+        }
+      } catch (error) {
+        errorDiv.innerHTML = '<div class="error">Login failed. Please try again.</div>';
+      }
+    }
+
+    function showUploadSection(email) {
+      document.getElementById('loginSection').classList.remove('active');
+      document.getElementById('uploadSection').classList.add('active');
+      document.getElementById('userEmail').textContent = email;
+    }
+
+    function logout() {
+      sessionStorage.removeItem('adminEmail');
+      document.getElementById('loginSection').classList.add('active');
+      document.getElementById('uploadSection').classList.remove('active');
+      document.getElementById('preview').innerHTML = '';
+      document.getElementById('chatSection').innerHTML = '';
+      document.getElementById('deploySection').innerHTML = '';
+    }
+
+    async function uploadCSV() {
+      const fileInput = document.getElementById('csvFile');
+      const previewDiv = document.getElementById('preview');
+      const chatDiv = document.getElementById('chatSection');
+      const deployDiv = document.getElementById('deploySection');
+      
+      if (!fileInput.files[0]) {
+        previewDiv.innerHTML = '<div class="error">Please select a CSV file</div>';
+        return;
+      }
+      
+      previewDiv.innerHTML = '<div class="loading"><div class="spinner"></div><br>Analyzing CSV...</div>';
+      chatDiv.innerHTML = '';
+      deployDiv.innerHTML = '';
+      
+      const formData = new FormData();
+      formData.append('csv', fileInput.files[0]);
+      formData.append('email', sessionStorage.getItem('adminEmail'));
+      
+      try {
+        const response = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          previewDiv.innerHTML = `<div class="error">${data.error}</div>`;
+          return;
+        }
+        
+        // Show preview
+        let html = '<div class="preview">';
+        html += `<h3>📊 Preview</h3>`;
+        html += `<p><strong>Date Range:</strong> ${data.dateRange}</p>`;
+        html += `<p><strong>Total Screenings:</strong> ${data.totalScreenings}</p>`;
+        html += `<p><strong>Cereyan Selects:</strong> ${data.cereyanSelects}</p>`;
+        
+        if (data.warnings && data.warnings.length > 0) {
+          html += '<h4 style="margin-top: 15px; color: #c93;">⚠️ Warnings</h4>';
+          data.warnings.forEach(w => {
+            html += `<div class="preview-item">${w}</div>`;
+          });
+        }
+        
+        html += '</div>';
+        previewDiv.innerHTML = html;
+        
+        // Show Claude's assistance if there are issues
+        if (data.claudeAssistance) {
+          chatDiv.innerHTML = `
+            <div class="preview">
+              <h3>🤖 Claude's Suggestions</h3>
+              <div class="chat-message assistant">${data.claudeAssistance}</div>
+              <div class="chat-input">
+                <input type="text" id="userResponse" placeholder="Type your response..." />
+                <button class="btn" onclick="sendChatResponse()">Reply</button>
+              </div>
+            </div>
+          `;
+        }
+        
+        // Show deploy button if no critical issues
+        if (!data.blockingIssues) {
+          deployDiv.innerHTML = `
+            <button class="btn" onclick="deploy()">✓ Deploy to Production</button>
+            <p style="text-align: center; margin-top: 10px; color: #666; font-size: 14px;">
+              This will commit to GitHub and deploy via Vercel
+            </p>
+          `;
+        }
+        
+        // Store the CSV data for deployment
+        window.pendingCSV = data.csvData;
+        
+      } catch (error) {
+        previewDiv.innerHTML = '<div class="error">Upload failed. Please try again.</div>';
+      }
+    }
+
+    async function deploy() {
+      const deployDiv = document.getElementById('deploySection');
+      deployDiv.innerHTML = '<div class="loading"><div class="spinner"></div><br>Deploying...</div>';
+      
+      try {
+        const response = await fetch('/api/admin/deploy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: sessionStorage.getItem('adminEmail'),
+            csvData: window.pendingCSV
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          deployDiv.innerHTML = `
+            <div class="success">
+              ✓ Successfully deployed!<br>
+              <small>Commit: ${data.commitSha}</small><br>
+              <small>Site will update in ~1 minute</small>
+            </div>
+            <button class="btn btn-secondary" onclick="location.reload()">Upload Another CSV</button>
+          `;
+        } else {
+          deployDiv.innerHTML = `<div class="error">Deployment failed: ${data.error}</div>`;
+        }
+      } catch (error) {
+        deployDiv.innerHTML = '<div class="error">Deployment failed. Please contact support.</div>';
+      }
+    }
+  </script>
+</body>
+</html>
