@@ -401,6 +401,24 @@ export const prerender = false;
       <div id="previewSection"></div>
       <div id="claudeSection"></div>
       <div id="deploySection"></div>
+      
+      <!-- Divider -->
+      <div style="border-top:1px solid #eee;margin:32px 0;"></div>
+      
+      <!-- Chat Section -->
+      <div class="card">
+        <div class="section-title">💬 Ask Claude to Make Changes</div>
+        <p style="color:#666;font-size:13px;margin-bottom:16px;">
+          Edit screenings, add new films, toggle Cereyan Selects, or ask questions about the data.
+        </p>
+        <div style="display:flex;gap:10px;">
+          <input type="text" id="chatInput" placeholder="e.g. Change the year of Mulholland Drive to 2001" style="flex:1;" />
+          <button class="btn" id="chatBtn" style="width:auto;padding:12px 20px;">Send</button>
+        </div>
+      </div>
+      
+      <div id="chatResponse"></div>
+      <div id="chatApply"></div>
     </div>
   </div>
 
@@ -645,6 +663,160 @@ export const prerender = false;
       document.getElementById('password').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') loginBtn.click();
       });
+      
+      // Chat functionality
+      const chatBtn = document.getElementById('chatBtn');
+      const chatInput = document.getElementById('chatInput');
+      
+      chatBtn.addEventListener('click', sendChat);
+      chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendChat();
+      });
+      
+      async function sendChat() {
+        const message = chatInput.value.trim();
+        const responseDiv = document.getElementById('chatResponse');
+        const applyDiv = document.getElementById('chatApply');
+        
+        if (!message) return;
+        
+        chatBtn.disabled = true;
+        chatBtn.textContent = '...';
+        responseDiv.innerHTML = '<div class="card"><div class="loading"><div class="spinner"></div><div class="loading-text">Claude is thinking...</div></div></div>';
+        applyDiv.innerHTML = '';
+        
+        try {
+          const response = await fetch('/api/admin/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: sessionStorage.getItem('adminEmail'),
+              auth: sessionStorage.getItem('adminAuth'),
+              message
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.error) {
+            responseDiv.innerHTML = '<div class="card"><div class="msg msg-error">' + data.error + '</div></div>';
+            chatBtn.disabled = false;
+            chatBtn.textContent = 'Send';
+            return;
+          }
+          
+          // Show Claude's response
+          const parsed = data.parsed;
+          let responseHtml = `
+            <div class="card">
+              <div style="background:linear-gradient(135deg,#f5f0ff,#ede4ff);border:1px solid #e9d5ff;border-radius:10px;padding:16px;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#9333ea,#7c3aed);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;">🤖</div>
+                  <div style="font-weight:600;color:#7c3aed;font-size:14px;">Claude</div>
+                </div>
+                <div style="color:#333;line-height:1.6;font-size:14px;">
+                  ${parsed ? parsed.explanation : data.response}
+                </div>
+              </div>
+            </div>
+          `;
+          responseDiv.innerHTML = responseHtml;
+          
+          // Show apply button if there are changes
+          if (parsed && parsed.action && parsed.action !== 'query' && (parsed.changes?.length > 0 || parsed.newScreening)) {
+            window.pendingChatAction = parsed;
+            
+            let changesHtml = '';
+            if (parsed.changes && parsed.changes.length > 0) {
+              changesHtml = parsed.changes.map(c => 
+                '<div style="padding:8px;background:#f8f8f8;border-radius:6px;margin:4px 0;font-size:13px;">' +
+                  '<strong>' + (c.field || 'ID') + ':</strong> ' + 
+                  (c.oldValue ? '<span style="color:#dc2626;text-decoration:line-through;">' + c.oldValue + '</span> → ' : '') +
+                  '<span style="color:#16a34a;">' + (c.newValue || c.id) + '</span>' +
+                '</div>'
+              ).join('');
+            }
+            
+            if (parsed.newScreening) {
+              changesHtml = '<div style="padding:8px;background:#f8f8f8;border-radius:6px;margin:4px 0;font-size:13px;">' +
+                '<strong>New:</strong> ' + parsed.newScreening.filmTitle + ' on ' + parsed.newScreening.date +
+                '</div>';
+            }
+            
+            applyDiv.innerHTML = `
+              <div class="card">
+                <div class="section-title">📝 Proposed Changes</div>
+                ${changesHtml}
+                <div style="display:flex;gap:10px;margin-top:16px;">
+                  <button class="btn btn-deploy" id="applyChangesBtn" style="flex:1;">✓ Apply Changes</button>
+                  <button class="btn btn-secondary" id="cancelChangesBtn" style="flex:1;">Cancel</button>
+                </div>
+              </div>
+            `;
+            
+            document.getElementById('applyChangesBtn').addEventListener('click', applyChanges);
+            document.getElementById('cancelChangesBtn').addEventListener('click', function() {
+              applyDiv.innerHTML = '';
+              window.pendingChatAction = null;
+            });
+          }
+          
+        } catch (error) {
+          responseDiv.innerHTML = '<div class="card"><div class="msg msg-error">Chat failed. Please try again.</div></div>';
+        }
+        
+        chatBtn.disabled = false;
+        chatBtn.textContent = 'Send';
+      }
+      
+      async function applyChanges() {
+        const applyDiv = document.getElementById('chatApply');
+        const parsed = window.pendingChatAction;
+        
+        if (!parsed) return;
+        
+        const applyBtn = document.getElementById('applyChangesBtn');
+        applyBtn.disabled = true;
+        applyBtn.textContent = 'Applying...';
+        
+        try {
+          const response = await fetch('/api/admin/apply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: sessionStorage.getItem('adminEmail'),
+              auth: sessionStorage.getItem('adminAuth'),
+              action: parsed.action,
+              changes: parsed.changes,
+              newScreening: parsed.newScreening
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            applyDiv.innerHTML = `
+              <div class="card">
+                <div class="msg msg-success">
+                  <strong>✓ Changes applied!</strong><br>
+                  Commit: ${data.commitSha.substring(0, 7)}<br>
+                  Site will update in ~1 minute
+                </div>
+              </div>
+            `;
+            window.pendingChatAction = null;
+            document.getElementById('chatInput').value = '';
+          } else {
+            applyDiv.innerHTML = `
+              <div class="card">
+                <div class="msg msg-error">Failed to apply: ${data.error}</div>
+              </div>
+            `;
+          }
+        } catch (error) {
+          applyDiv.innerHTML = '<div class="card"><div class="msg msg-error">Apply failed. Please try again.</div></div>';
+        }
+      }
     });
   </script>
 </body>
