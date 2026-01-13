@@ -515,52 +515,55 @@ export const prerender = false;
           // Preview card
           let warningsHtml = '';
           if (data.warnings && data.warnings.length > 0) {
-            warningsHtml = '<div class="msg msg-warning"><strong>⚠️ Warnings:</strong><br>' + data.warnings.join('<br>') + '</div>';
+            warningsHtml = `<div class="msg msg-warning"><strong>⚠️ Warnings:</strong><br>${data.warnings.join('<br>')}</div>`;
           }
           
-          previewDiv.innerHTML = 
-            '<div class="card">' +
-              '<div class="section-title">📊 Preview</div>' +
-              '<div class="stats-grid">' +
-                '<div class="stat-box"><div class="stat-number">' + data.totalScreenings + '</div><div class="stat-label">Screenings</div></div>' +
-                '<div class="stat-box"><div class="stat-number">' + data.cereyanSelects + '</div><div class="stat-label">Selects</div></div>' +
-                '<div class="stat-box"><div class="stat-number">' + data.dateRange.split(' to ')[0].slice(-2) + '-' + data.dateRange.split(' to ')[1].slice(-2) + '</div><div class="stat-label">Jan Days</div></div>' +
-              '</div>' +
-              warningsHtml +
-            '</div>';
+          const startDay = data.dateRange.split(' to ')[0].slice(-2);
+          const endDay = data.dateRange.split(' to ')[1].slice(-2);
+          
+          previewDiv.innerHTML = `
+            <div class="card">
+              <div class="section-title">📊 Preview</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;">
+                <div style="background:#f8f8f8;border-radius:8px;padding:16px;text-align:center;">
+                  <div style="font-size:28px;font-weight:700;color:#C74B9B;">${data.totalScreenings}</div>
+                  <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Screenings</div>
+                </div>
+                <div style="background:#f8f8f8;border-radius:8px;padding:16px;text-align:center;">
+                  <div style="font-size:28px;font-weight:700;color:#C74B9B;">${data.cereyanSelects}</div>
+                  <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Selects</div>
+                </div>
+                <div style="background:#f8f8f8;border-radius:8px;padding:16px;text-align:center;">
+                  <div style="font-size:28px;font-weight:700;color:#C74B9B;">${startDay}-${endDay}</div>
+                  <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Jan Days</div>
+                </div>
+              </div>
+              ${warningsHtml}
+            </div>
+          `;
           
           // Claude
-          if (data.claudeAssistance) {
-            claudeDiv.innerHTML = 
-              '<div class="card">' +
-                '<div class="claude-box">' +
-                  '<div class="claude-header">' +
-                    '<div class="claude-avatar">🤖</div>' +
-                    '<div class="claude-name">Claude</div>' +
-                  '</div>' +
-                  '<div class="claude-message">' + data.claudeAssistance + '</div>' +
-                '</div>' +
-              '</div>';
-          } else {
-            claudeDiv.innerHTML = 
-              '<div class="card">' +
-                '<div class="claude-box">' +
-                  '<div class="claude-header">' +
-                    '<div class="claude-avatar">🤖</div>' +
-                    '<div class="claude-name">Claude</div>' +
-                  '</div>' +
-                  '<div class="claude-message">Looking good! All venues are recognized and data is valid. Ready to deploy when you are.</div>' +
-                '</div>' +
-              '</div>';
-          }
+          const claudeMessage = data.claudeAssistance || 'Looking good! All venues are recognized and data is valid. Ready to deploy when you are.';
+          claudeDiv.innerHTML = `
+            <div class="card">
+              <div style="background:linear-gradient(135deg,#f5f0ff,#ede4ff);border:1px solid #e9d5ff;border-radius:10px;padding:16px;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#9333ea,#7c3aed);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;">🤖</div>
+                  <div style="font-weight:600;color:#7c3aed;font-size:14px;">Claude</div>
+                </div>
+                <div style="color:#333;line-height:1.6;font-size:14px;white-space:pre-wrap;">${claudeMessage}</div>
+              </div>
+            </div>
+          `;
           
           // Deploy button
           if (!data.blockingIssues) {
-            deployDiv.innerHTML = 
-              '<div class="card">' +
-                '<button class="btn btn-deploy" id="deployBtn">🚀 Deploy to Production</button>' +
-                '<p style="text-align:center;margin-top:10px;color:#666;font-size:13px;">This will update cereyan.xyz</p>' +
-              '</div>';
+            deployDiv.innerHTML = `
+              <div class="card">
+                <button class="btn btn-deploy" id="deployBtn">🚀 Deploy to Production</button>
+                <p style="text-align:center;margin-top:10px;color:#666;font-size:13px;">This will update cereyan.xyz</p>
+              </div>
+            `;
             
             document.getElementById('deployBtn').addEventListener('click', deploy);
           }
