@@ -273,7 +273,7 @@ export const prerender = false; // This page needs server-side rendering
     </div>
   </div>
 
-  <script>
+  <script is:inline>
     // Check if already logged in
     const currentUser = sessionStorage.getItem('adminEmail');
     if (currentUser) {
