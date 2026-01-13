@@ -148,20 +148,27 @@ export const POST: APIRoute = async ({ request }) => {
       warnings.push(`Unknown venues: ${Array.from(unknownVenues).join(', ')}`);
     }
     
-    // Get Claude's help if there are warnings
+    // Get Claude's help - always show a summary
     let claudeAssistance = '';
-    if (warnings.length > 0 && import.meta.env.ANTHROPIC_API_KEY) {
+    if (import.meta.env.ANTHROPIC_API_KEY) {
       try {
         const anthropic = new Anthropic({
           apiKey: import.meta.env.ANTHROPIC_API_KEY
         });
         
+        let prompt = '';
+        if (warnings.length > 0) {
+          prompt = `I'm uploading a CSV of film screenings for ${minDate} to ${maxDate}.\n\nFound ${screenings.length} screenings with ${cereyanSelectCount} Cereyan Selects.\n\nIssues:\n${warnings.join('\n')}\n\nKnown venues: ${Object.keys(VENUE_MAP).join(', ')}\n\nCan you briefly help me understand what to do? Should I add these venues, or did I misspell something?`;
+        } else {
+          prompt = `I'm uploading a CSV of film screenings for ${minDate} to ${maxDate}.\n\nFound ${screenings.length} screenings with ${cereyanSelectCount} Cereyan Selects.\n\nEverything looks good - all venues recognized, no issues detected.\n\nCan you give me a brief, friendly confirmation that it's ready to deploy? Keep it short and encouraging.`;
+        }
+        
         const message = await anthropic.messages.create({
           model: 'claude-3-5-sonnet-20241022',
-          max_tokens: 1024,
+          max_tokens: 300,
           messages: [{
             role: 'user',
-            content: `I'm uploading a CSV of film screenings and found these issues:\n\n${warnings.join('\n')}\n\nKnown venues: ${Object.keys(VENUE_MAP).join(', ')}\n\nCan you help me understand what to do? Should I add these venues, or did I misspell something?`
+            content: prompt
           }]
         });
         
