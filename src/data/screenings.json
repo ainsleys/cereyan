@@ -3967,7 +3967,7 @@
     "id": "223",
     "date": "2026-01-31",
     "filmTitle": "Cep Harçlığı",
-    "time": "19:00",
+    "time": "15:00",
     "venue": "Beyoğlu Sineması",
     "venueId": "beyoglu-sinemasi",
     "eventSeries": "Ülke Sineması: Fransa",
@@ -3975,7 +3975,8 @@
     "filmTitleEn": "Small Change",
     "director": "François Truffaut",
     "year": 1976,
-    "runtime": 105
+    "runtime": 105,
+    "isCereyanSelect": true
   },
   {
     "id": "224",
@@ -4061,7 +4062,8 @@
     "filmTitleEn": "The Paradine Case",
     "director": "Alfred Hitchcock",
     "year": 1947,
-    "runtime": 125
+    "runtime": 125,
+    "isCereyanSelect": true
   },
   {
     "id": "231",
@@ -4131,7 +4133,8 @@
     "filmTitleEn": "National Gallery",
     "director": "Frederick Wiseman",
     "year": 2014,
-    "runtime": 180
+    "runtime": 180,
+    "isCereyanSelect": true
   },
   {
     "id": "236",
@@ -4214,7 +4217,8 @@
     "link": "https://biletinial.com/tr-tr/sinema/kaybedenler-kulubu-film-party#",
     "director": "Tolga Örnek",
     "year": 2011,
-    "runtime": 110
+    "runtime": 110,
+    "isCereyanSelect": true
   },
   {
     "id": "242",
@@ -4299,5 +4303,18 @@
     "director": "Park Chan-wook",
     "year": 2003,
     "runtime": 132
+  },
+  {
+    "id": "248",
+    "date": "2026-02-01",
+    "filmTitle": "Hatay: 12-24 Eylül 2025",
+    "time": "14:00",
+    "venue": "Robinson Crusoe 389",
+    "venueId": "robinson-crusoe-389",
+    "eventSeries": "ArchiveIST - Yönetmenin Katılımıyla",
+    "link": "https://www.instagram.com/p/DT49FPZjNi1/?img_index=1",
+    "director": "İmre Azem",
+    "year": 2025,
+    "runtime": 80
   }
 ]
