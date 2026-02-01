@@ -4404,13 +4404,13 @@
   {
     "id": "255",
     "date": "2026-02-08",
-    "filmTitle": "Sibel",
+    "filmTitle": "Sibel & Sırdaş",
     "time": "18:30",
     "venue": "Kadıköy Sineması",
     "venueId": "kadikoy-sinemasi",
     "eventSeries": "Film gösterimi ve söyleşi",
-    "link": "",
-    "filmTitleEn": "Confidente",
+    "link": "https://www.instagram.com/p/DUDQCfADaU3/?hl=en",
+    "filmTitleEn": "Sibel & Sırdaş",
     "director": "Çağla Zencirci, Guillaume Giovanetti",
     "year": 2018,
     "runtime": 95
@@ -4418,16 +4418,16 @@
   {
     "id": "256",
     "date": "2026-02-05",
-    "filmTitle": "Sibel",
+    "filmTitle": "Sırdaş",
     "time": "19:00",
     "venue": "Fransız Kültür",
     "venueId": "fransiz-kultur",
     "eventSeries": "Film gösterimi ve söyleşi",
-    "link": "https://www.ifturquie.org/etkinlik/gosterimsoylesi-sibel/",
+    "link": "https://www.ifturquie.org/etkinlik/gosterimsoylesi-sirdas/",
     "filmTitleEn": "Confidente",
     "director": "Çağla Zencirci, Guillaume Giovanetti",
-    "year": 2018,
-    "runtime": 95
+    "year": 2025,
+    "runtime": 76
   },
   {
     "id": "257",
@@ -4438,7 +4438,7 @@
     "venueId": "fransiz-kultur",
     "eventSeries": "Film gösterimi ve söyleşi",
     "link": "https://www.ifturquie.org/etkinlik/gosterimsoylesi-sibel/",
-    "filmTitleEn": "Confidente",
+    "filmTitleEn": "Sibel",
     "director": "Çağla Zencirci, Guillaume Giovanetti",
     "year": 2018,
     "runtime": 95
