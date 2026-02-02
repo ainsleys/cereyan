@@ -4451,7 +4451,8 @@
     "venueId": "various",
     "eventSeries": "Hasan Cem Çal Eşliğinde Sergi Turu",
     "link": "https://www.arter.org.tr/EN/learning-detail/hah-exhibition-tour-led-by-hasan-cem-cal/11486",
-    "director": "Küratör: Delfin Öğütoğulları"
+    "director": "Küratör: Delfin Öğütoğulları",
+    "isCereyanSelect": true
   },
   {
     "id": "282",
