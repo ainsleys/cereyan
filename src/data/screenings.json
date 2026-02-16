@@ -5282,5 +5282,19 @@
     "director": "Billy Wilder",
     "year": 1944,
     "runtime": 107
+  },
+  {
+    "id": "342",
+    "date": "2026-02-15",
+    "filmTitle": "Postbellek",
+    "time": "14:00",
+    "venue": "Robinson Crusoe 389",
+    "venueId": "robinson-crusoe-389",
+    "eventSeries": "",
+    "link": "",
+    "director": "Serdar Kökçeoğlu",
+    "year": null,
+    "runtime": null,
+    "isCereyanSelect": false
   }
 ]
