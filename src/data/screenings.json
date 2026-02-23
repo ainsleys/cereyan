@@ -6324,5 +6324,19 @@
     "director": "Sergey Malkin",
     "year": 2025,
     "runtime": 96
+  },
+  {
+    "id": "417",
+    "date": "2026-02-28",
+    "filmTitle": "Rejeito",
+    "time": "19:00",
+    "venue": "Depo İstanbul",
+    "venueId": "various",
+    "eventSeries": "",
+    "link": "",
+    "director": "Pedro de Filippis",
+    "year": 2023,
+    "runtime": null,
+    "isCereyanSelect": false
   }
 ]
