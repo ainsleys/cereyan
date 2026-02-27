@@ -6338,5 +6338,19 @@
     "year": 2023,
     "runtime": null,
     "isCereyanSelect": false
+  },
+  {
+    "id": "418",
+    "date": "2026-03-01",
+    "filmTitle": "Bu Kalabalığı Hatırla",
+    "time": "14:00",
+    "venue": "Robinson Crusoe 389",
+    "venueId": "robinson-crusoe-389",
+    "eventSeries": "",
+    "link": "",
+    "director": "Vuslat Karan ve Burcu Melekoğlu",
+    "year": 2024,
+    "runtime": null,
+    "isCereyanSelect": false
   }
 ]
