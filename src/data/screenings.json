@@ -6402,5 +6402,19 @@
     "venueId": "sinematek",
     "eventSeries": "Peter Watkins: Kestirme Yol Yok",
     "link": "https://www.gorultu.org/watkins/#forum-2"
+  },
+  {
+    "id": "439",
+    "date": "2026-03-31",
+    "filmTitle": "İris Yürüyüşü",
+    "time": "19:00",
+    "venue": "Postane",
+    "venueId": "various",
+    "eventSeries": "",
+    "link": "",
+    "director": "Burcu Güler",
+    "year": 2024,
+    "runtime": null,
+    "isCereyanSelect": false
   }
 ]
