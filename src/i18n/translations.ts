@@ -92,6 +92,9 @@ export const translations = {
     'filter.all': 'Tümü',
     'filter.byVenue': 'Mekana Göre',
     'filter.byEvent': 'Etkinliğe Göre',
+    'filter.byCereyanSelects': 'Cereyan Seçkisi',
+    'filter.noResults': 'Seçilen filtrelere uygun gösterim bulunamadı.',
+    'filter.clearAll': 'Filtreleri Temizle',
 
     // Archive
     'archive.title': 'Arşiv',
@@ -176,6 +179,9 @@ export const translations = {
     'filter.all': 'All',
     'filter.byVenue': 'By Venue',
     'filter.byEvent': 'By Event',
+    'filter.byCereyanSelects': 'Cereyan Selects',
+    'filter.noResults': 'No screenings match the selected filters.',
+    'filter.clearAll': 'Clear Filters',
 
     // Archive
     'archive.title': 'Archive',

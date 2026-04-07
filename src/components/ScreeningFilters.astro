@@ -1,0 +1,321 @@
+---
+import type { Language } from '../i18n/translations';
+import { t } from '../i18n/translations';
+import type { Venue } from '../types';
+
+interface Props {
+  venues: Venue[];
+  activeVenueIds: string[];
+  activeSeriesNames: string[];
+  hasCereyanSelects: boolean;
+  lang: Language;
+}
+
+const { venues, activeVenueIds, activeSeriesNames, hasCereyanSelects, lang } = Astro.props;
+
+const filterableVenues = venues
+  .filter(v => v && v.id !== 'various' && v.name && activeVenueIds.includes(v.id))
+  .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+
+const showSeriesFilter = activeSeriesNames.length > 0;
+const showSelectsFilter = hasCereyanSelects;
+---
+
+<div class="screening-filters mb-6 max-w-2xl mx-auto space-y-3">
+  <!-- Venue filter -->
+  <div class="filter-group" data-filter-group="venue">
+    <div class="flex items-center gap-2 mb-2">
+      <svg class="w-4 h-4 text-cereyan-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+      </svg>
+      <span class="text-xs font-medium uppercase tracking-wider text-text-muted">
+        {t(lang, 'filter.byVenue')}
+      </span>
+    </div>
+    <div class="flex flex-wrap gap-1.5">
+      <button
+        type="button"
+        data-filter-type="venue"
+        data-filter-value="all"
+        aria-pressed="true"
+        class="filter-btn filter-btn-active px-2 py-0.5 text-[11px] font-medium transition-all"
+      >
+        {t(lang, 'filter.all')}
+      </button>
+      {filterableVenues.map((venue) => (
+        <button
+          type="button"
+          data-filter-type="venue"
+          data-filter-value={venue.id}
+          aria-pressed="false"
+          class="filter-btn px-2 py-0.5 text-[11px] font-medium transition-all"
+        >
+          {venue.name}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Series filter -->
+  {showSeriesFilter && (
+    <div class="filter-group" data-filter-group="series">
+      <div class="flex items-center gap-2 mb-2">
+        <svg class="w-4 h-4 text-cereyan-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        <span class="text-xs font-medium uppercase tracking-wider text-text-muted">
+          {t(lang, 'filter.byEvent')}
+        </span>
+      </div>
+      <div class="flex flex-wrap gap-1.5">
+        <button
+          type="button"
+          data-filter-type="series"
+          data-filter-value="all"
+          aria-pressed="true"
+          class="filter-btn filter-btn-active px-2 py-0.5 text-[11px] font-medium transition-all"
+        >
+          {t(lang, 'filter.all')}
+        </button>
+        {activeSeriesNames.map((series) => (
+          <button
+            type="button"
+            data-filter-type="series"
+            data-filter-value={series}
+            aria-pressed="false"
+            class="filter-btn px-2 py-0.5 text-[11px] font-medium transition-all"
+          >
+            {series}
+          </button>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- Cereyan Selects toggle -->
+  {showSelectsFilter && (
+    <div class="filter-group" data-filter-group="selects">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4" fill="#B8860B" stroke="#B8860B" stroke-width="1" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+        </svg>
+        <button
+          type="button"
+          data-filter-type="selects"
+          data-filter-value="toggle"
+          aria-pressed="false"
+          class="filter-btn-selects px-2.5 py-0.5 text-[11px] font-medium transition-all
+                 border text-text-muted border-border bg-surface-muted
+                 hover:border-[#B8860B]/50 hover:text-text"
+        >
+          {t(lang, 'filter.byCereyanSelects')}
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+<!-- Empty state (hidden by default, shown by JS when filters match zero results) -->
+<div
+  id="filter-empty-state"
+  class="hidden text-center py-12 max-w-2xl mx-auto"
+  aria-live="polite"
+>
+  <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-surface-muted flex items-center justify-center">
+    <svg class="w-6 h-6 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+  </div>
+  <p class="text-text-muted text-sm mb-3">
+    {t(lang, 'filter.noResults')}
+  </p>
+  <button
+    type="button"
+    id="filter-clear-all"
+    class="text-xs font-medium text-cereyan-pink hover:text-cereyan-pink-dark transition-colors px-3 py-1.5 rounded hover:bg-cereyan-pink/10"
+  >
+    {t(lang, 'filter.clearAll')}
+  </button>
+</div>
+
+<script>
+  // Unified filter state
+  const state = {
+    venues: new Set<string>(['all']),
+    series: new Set<string>(['all']),
+    selectsOn: false,
+  };
+
+  const allFilterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn, .filter-btn-selects');
+  const screeningCards = document.querySelectorAll<HTMLElement>('[data-venue-id]');
+  const daySections = document.querySelectorAll<HTMLElement>('[data-day-section]');
+  const pastDivider = document.getElementById('past-screenings');
+  const emptyState = document.getElementById('filter-empty-state');
+  const clearAllBtn = document.getElementById('filter-clear-all');
+
+  function applyFilters() {
+    const venueAll = state.venues.has('all');
+    const seriesAll = state.series.has('all');
+    let totalVisible = 0;
+
+    screeningCards.forEach(card => {
+      const cardVenue = card.getAttribute('data-venue-id') || '';
+      const cardSeries = card.getAttribute('data-event-series') || '';
+      const cardIsSelect = card.getAttribute('data-cereyan-select') === 'true';
+
+      const venueMatch = venueAll || state.venues.has(cardVenue);
+      const seriesMatch = seriesAll || (cardSeries !== '' && state.series.has(cardSeries));
+      const selectsMatch = !state.selectsOn || cardIsSelect;
+
+      const shouldShow = venueMatch && seriesMatch && selectsMatch;
+
+      if (shouldShow) {
+        card.style.display = '';
+        card.classList.add('animate-fade-in');
+        totalVisible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Collapse empty day sections
+    let hasVisiblePastSection = false;
+    daySections.forEach(section => {
+      const visibleCards = section.querySelectorAll('[data-venue-id]:not([style*="display: none"])');
+      if (visibleCards.length === 0) {
+        section.style.display = 'none';
+      } else {
+        section.style.display = '';
+      }
+    });
+
+    // Check if any past-day sections have visible cards
+    if (pastDivider) {
+      // Past sections are siblings after the divider
+      let sibling = pastDivider.nextElementSibling;
+      while (sibling) {
+        if (sibling.matches('[data-day-section]') && (sibling as HTMLElement).style.display !== 'none') {
+          hasVisiblePastSection = true;
+          break;
+        }
+        sibling = sibling.nextElementSibling;
+      }
+      pastDivider.style.display = hasVisiblePastSection ? '' : 'none';
+    }
+
+    // Show/hide empty state
+    if (emptyState) {
+      emptyState.style.display = totalVisible === 0 ? '' : 'none';
+      if (totalVisible === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+    }
+  }
+
+  function updateButtonStates() {
+    allFilterBtns.forEach(btn => {
+      const type = btn.getAttribute('data-filter-type');
+      const value = btn.getAttribute('data-filter-value');
+      let isActive = false;
+
+      if (type === 'venue') {
+        isActive = state.venues.has(value!);
+      } else if (type === 'series') {
+        isActive = state.series.has(value!);
+      } else if (type === 'selects') {
+        isActive = state.selectsOn;
+      }
+
+      btn.setAttribute('aria-pressed', isActive.toString());
+
+      if (type === 'selects') {
+        if (isActive) {
+          btn.classList.add('bg-[#B8860B]/20', 'text-[#B8860B]', 'border-[#B8860B]/30');
+          btn.classList.remove('bg-surface-muted', 'text-text-muted', 'border-border');
+        } else {
+          btn.classList.remove('bg-[#B8860B]/20', 'text-[#B8860B]', 'border-[#B8860B]/30');
+          btn.classList.add('bg-surface-muted', 'text-text-muted', 'border-border');
+        }
+      } else {
+        if (isActive) {
+          btn.classList.add('filter-btn-active');
+          btn.classList.remove('filter-btn-inactive');
+        } else {
+          btn.classList.remove('filter-btn-active');
+          btn.classList.add('filter-btn-inactive');
+        }
+      }
+    });
+  }
+
+  function handleMultiSelect(group: Set<string>, value: string) {
+    if (value === 'all') {
+      group.clear();
+      group.add('all');
+    } else {
+      group.delete('all');
+      if (group.has(value)) {
+        group.delete(value);
+        if (group.size === 0) {
+          group.add('all');
+        }
+      } else {
+        group.add(value);
+      }
+    }
+  }
+
+  function resetAll() {
+    state.venues.clear();
+    state.venues.add('all');
+    state.series.clear();
+    state.series.add('all');
+    state.selectsOn = false;
+    updateButtonStates();
+    applyFilters();
+  }
+
+  // Attach click handlers
+  allFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.getAttribute('data-filter-type');
+      const value = btn.getAttribute('data-filter-value');
+      if (!type || !value) return;
+
+      if (type === 'venue') {
+        handleMultiSelect(state.venues, value);
+      } else if (type === 'series') {
+        handleMultiSelect(state.series, value);
+      } else if (type === 'selects') {
+        state.selectsOn = !state.selectsOn;
+      }
+
+      updateButtonStates();
+      applyFilters();
+    });
+  });
+
+  // Clear all button
+  clearAllBtn?.addEventListener('click', resetAll);
+</script>
+
+<style>
+  .filter-btn {
+    @apply border;
+  }
+
+  .filter-btn-active {
+    @apply bg-cereyan-pink/20 text-cereyan-pink border-cereyan-pink/30;
+  }
+
+  .filter-btn-inactive,
+  .filter-btn:not(.filter-btn-active) {
+    @apply bg-surface-muted text-text-muted border-border;
+  }
+
+  .filter-btn:hover {
+    @apply border-cereyan-pink/50 text-text;
+  }
+</style>
