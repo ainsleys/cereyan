@@ -3,7 +3,7 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import WeekSelector from '../../components/WeekSelector.astro';
-import VenueFilter from '../../components/VenueFilter.astro';
+import ScreeningFilters from '../../components/ScreeningFilters.astro';
 import DaySection from '../../components/DaySection.astro';
 import { t } from '../../i18n/translations';
 import { getWeekStart, getWeekEnd, getISOWeek, formatWeekRange } from '../../utils/dates';
@@ -118,6 +118,18 @@ const isCurrentWeek = selectedWeekId === currentWeekId;
 
 // Get unique venue IDs from this week's screenings
 const uniqueVenueIds = [...new Set(weekScreenings.map(s => s.venueId).filter(Boolean))];
+
+// Get unique series names (trimmed, non-empty) for filter
+const activeSeriesNames = [...new Set(
+  weekScreenings
+    .map(s => (s.eventSeries || '').trim())
+    .filter(s => s !== '')
+)].sort((a, b) => a.localeCompare(b, 'tr'));
+
+// Check if any Cereyan Selects exist this week (language-independent canonical boolean)
+const hasCereyanSelects = weekScreenings.some(s =>
+  s.isCereyanSelect || !!s.programmersNote || !!s.programmersNoteEn
+);
 ---
 
 <Layout lang={lang}>
@@ -145,7 +157,13 @@ const uniqueVenueIds = [...new Set(weekScreenings.map(s => s.venueId).filter(Boo
 
     <!-- Venue filter -->
     {allDates.length > 0 && (
-      <VenueFilter venues={venues} activeVenueIds={uniqueVenueIds} lang={lang} />
+      <ScreeningFilters
+        venues={venues}
+        activeVenueIds={uniqueVenueIds}
+        activeSeriesNames={activeSeriesNames}
+        hasCereyanSelects={hasCereyanSelects}
+        lang={lang}
+      />
     )}
 
     <!-- Screenings -->

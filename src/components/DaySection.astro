@@ -31,8 +31,9 @@ const formattedDate = formatDate(date, lang);
         </span>
       </div>
       {showPastScreeningsLink && (
-        <a 
-          href="#past-screenings" 
+        <a
+          href="#past-screenings"
+          data-past-link
           class="text-xs text-text-muted hover:text-cereyan-pink transition-colors flex items-center gap-1"
         >
           {t(lang, 'calendar.viewPastScreenings')}

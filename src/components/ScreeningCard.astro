@@ -11,10 +11,10 @@ interface Props {
 
 const { screening, lang, index = 0 } = Astro.props;
 
-// Get localized content (fall back to Turkish if English not available)
-const note = lang === 'en' 
-  ? (screening.programmersNoteEn || screening.programmersNote) 
-  : screening.programmersNote;
+// Get localized content (fall back across languages if one side is missing)
+const note = lang === 'en'
+  ? (screening.programmersNoteEn || screening.programmersNote)
+  : (screening.programmersNote || screening.programmersNoteEn);
 const synopsis = lang === 'en' 
   ? (screening.synopsisEn || screening.synopsis) 
   : screening.synopsis;
@@ -22,8 +22,8 @@ const synopsis = lang === 'en'
 const hasExpandedContent = note || synopsis;
 const cardId = `screening-${screening.id}`;
 
-// Cereyan Selects: either explicitly marked OR has a programmer's note
-const isCereyanSelect = screening.isCereyanSelect || !!note;
+// Cereyan Selects: language-independent canonical boolean
+const isCereyanSelect = screening.isCereyanSelect || !!screening.programmersNote || !!screening.programmersNoteEn;
 
 // Translate special values and split multiple times
 const rawTime = !screening.time || screening.time.trim() === ''
@@ -55,6 +55,8 @@ const displayTitle = (lang === 'en' && screening.filmTitleEn)
   style={`animation-delay: ${index * 0.05}s`}
   data-expandable={hasExpandedContent ? 'true' : 'false'}
   data-venue-id={screening.venueId}
+  data-event-series={(screening.eventSeries || '').trim()}
+  data-cereyan-select={isCereyanSelect ? 'true' : 'false'}
 >
   <!-- Cereyan Selects star indicator -->
   {isCereyanSelect && (
