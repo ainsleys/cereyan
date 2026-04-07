@@ -11,10 +11,10 @@ interface Props {
 
 const { screening, lang, index = 0 } = Astro.props;
 
-// Get localized content (fall back to Turkish if English not available)
-const note = lang === 'en' 
-  ? (screening.programmersNoteEn || screening.programmersNote) 
-  : screening.programmersNote;
+// Get localized content (fall back across languages if one side is missing)
+const note = lang === 'en'
+  ? (screening.programmersNoteEn || screening.programmersNote)
+  : (screening.programmersNote || screening.programmersNoteEn);
 const synopsis = lang === 'en' 
   ? (screening.synopsisEn || screening.synopsis) 
   : screening.synopsis;

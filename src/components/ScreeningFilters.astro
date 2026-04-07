@@ -150,6 +150,7 @@ const showSelectsFilter = hasCereyanSelects;
   const screeningCards = document.querySelectorAll<HTMLElement>('[data-venue-id]');
   const daySections = document.querySelectorAll<HTMLElement>('[data-day-section]');
   const pastDivider = document.getElementById('past-screenings');
+  const pastLink = document.querySelector<HTMLElement>('[data-past-link]');
   const emptyState = document.getElementById('filter-empty-state');
   const clearAllBtn = document.getElementById('filter-clear-all');
 
@@ -201,6 +202,11 @@ const showSelectsFilter = hasCereyanSelects;
         sibling = sibling.nextElementSibling;
       }
       pastDivider.style.display = hasVisiblePastSection ? '' : 'none';
+    }
+
+    // Hide the "view past screenings" jump link when its target is hidden
+    if (pastLink) {
+      pastLink.style.display = hasVisiblePastSection ? '' : 'none';
     }
 
     // Show/hide empty state
