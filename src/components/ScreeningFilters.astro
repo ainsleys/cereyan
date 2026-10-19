@@ -25,7 +25,7 @@ const showSelectsFilter = hasCereyanSelects;
   <!-- Venue filter -->
   <div class="filter-group" data-filter-group="venue">
     <div class="flex items-center gap-2 mb-2">
-      <svg class="w-4 h-4 text-cereyan-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4 text-cereyan-red-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
       </svg>
       <span class="text-xs font-medium uppercase tracking-wider text-text-muted">
@@ -60,7 +60,7 @@ const showSelectsFilter = hasCereyanSelects;
   {showSeriesFilter && (
     <div class="filter-group" data-filter-group="series">
       <div class="flex items-center gap-2 mb-2">
-        <svg class="w-4 h-4 text-cereyan-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-cereyan-red-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
         <span class="text-xs font-medium uppercase tracking-wider text-text-muted">
@@ -132,7 +132,7 @@ const showSelectsFilter = hasCereyanSelects;
   <button
     type="button"
     id="filter-clear-all"
-    class="text-xs font-medium text-cereyan-pink hover:text-cereyan-pink-dark transition-colors px-3 py-1.5 rounded hover:bg-cereyan-pink/10"
+    class="text-xs font-medium text-cereyan-red-dark hover:text-cereyan-red-dark transition-colors px-3 py-1.5 rounded hover:bg-cereyan-red/10"
   >
     {t(lang, 'filter.clearAll')}
   </button>
@@ -313,7 +313,7 @@ const showSelectsFilter = hasCereyanSelects;
   }
 
   .filter-btn-active {
-    @apply bg-cereyan-pink/20 text-cereyan-pink border-cereyan-pink/30;
+    @apply bg-cereyan-red/20 text-cereyan-red-dark border-cereyan-red/30;
   }
 
   .filter-btn-inactive,
@@ -322,6 +322,6 @@ const showSelectsFilter = hasCereyanSelects;
   }
 
   .filter-btn:hover {
-    @apply border-cereyan-pink/50 text-text;
+    @apply border-cereyan-red/50 text-text;
   }
 </style>

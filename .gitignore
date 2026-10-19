@@ -33,3 +33,6 @@ npm-debug.log*
 
 
 
+
+# Stray debug dump
+vercel-debug.txt

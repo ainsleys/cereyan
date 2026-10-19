@@ -104,7 +104,7 @@ const displayTitle = (lang === 'en' && screening.filmTitleEn)
           href={screening.link}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-text hover:text-cereyan-pink transition-colors underline decoration-cereyan-pink/40 underline-offset-2 hover:decoration-cereyan-pink"
+          class="text-text hover:text-cereyan-red-dark transition-colors underline decoration-cereyan-red/40 underline-offset-2 hover:decoration-cereyan-red"
         >
           {displayTitle}
         </a>
@@ -144,7 +144,7 @@ const displayTitle = (lang === 'en' && screening.filmTitleEn)
       >
         {note && (
           <div class="mb-3">
-            <h4 class="text-xs font-semibold uppercase tracking-wider text-cereyan-pink mb-2">
+            <h4 class="text-xs font-semibold uppercase tracking-wider text-cereyan-red-dark mb-2">
               {t(lang, 'screening.cereyanTake')}
             </h4>
             <p class="text-sm text-text-muted leading-relaxed max-w-prose mx-auto">
@@ -170,7 +170,7 @@ const displayTitle = (lang === 'en' && screening.filmTitleEn)
     {hasExpandedContent && (
       <div class="flex items-center justify-center mt-5 pt-4 border-t border-border-light">
         <button 
-          class="expand-btn text-xs font-medium text-cereyan-pink hover:text-cereyan-pink-dark transition-colors flex items-center gap-1.5 px-2 py-1 rounded hover:bg-cereyan-pink/10"
+          class="expand-btn text-xs font-medium text-cereyan-red-dark hover:text-cereyan-red-dark transition-colors flex items-center gap-1.5 px-2 py-1 rounded hover:bg-cereyan-red/10"
           data-target={cardId}
           aria-expanded="false"
         >

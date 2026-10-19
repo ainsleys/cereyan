@@ -19,7 +19,7 @@ const filterableVenues = venues
 
 <div class="venue-filter mb-6 max-w-2xl mx-auto">
   <div class="flex items-center gap-2 mb-3">
-    <svg class="w-4 h-4 text-cereyan-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg class="w-4 h-4 text-cereyan-red-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
     </svg>
     <span class="text-xs font-medium uppercase tracking-wider text-text-muted">
@@ -32,8 +32,8 @@ const filterableVenues = venues
     <button
       data-venue="all"
       class="venue-filter-btn active px-2 py-0.5 text-[11px] font-medium
-             bg-cereyan-pink/20 text-cereyan-pink border border-cereyan-pink/30
-             hover:bg-cereyan-pink/30 transition-all"
+             bg-cereyan-red/20 text-cereyan-red-dark border border-cereyan-red/30
+             hover:bg-cereyan-red/30 transition-all"
     >
       {t(lang, 'filter.all')}
     </button>
@@ -44,7 +44,7 @@ const filterableVenues = venues
         data-venue={venue.id}
         class="venue-filter-btn px-2 py-0.5 text-[11px] font-medium
                bg-surface-muted text-text-muted border border-border
-               hover:border-cereyan-pink/50 hover:text-text transition-all"
+               hover:border-cereyan-red/50 hover:text-text transition-all"
       >
         {venue.name}
       </button>
@@ -90,10 +90,10 @@ const filterableVenues = venues
       filterButtons.forEach(b => {
         const id = b.getAttribute('data-venue');
         if (selectedVenues.has(id!)) {
-          b.classList.add('active', 'bg-cereyan-pink/20', 'text-cereyan-pink', 'border-cereyan-pink/30');
+          b.classList.add('active', 'bg-cereyan-red/20', 'text-cereyan-red-dark', 'border-cereyan-red/30');
           b.classList.remove('bg-surface-muted', 'text-text-muted', 'border-border');
         } else {
-          b.classList.remove('active', 'bg-cereyan-pink/20', 'text-cereyan-pink', 'border-cereyan-pink/30');
+          b.classList.remove('active', 'bg-cereyan-red/20', 'text-cereyan-red-dark', 'border-cereyan-red/30');
           b.classList.add('bg-surface-muted', 'text-text-muted', 'border-border');
         }
       });

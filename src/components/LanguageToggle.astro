@@ -1,6 +1,12 @@
 ---
 /**
- * Language toggle component for switching between Turkish and English
+ * Language toggle component for switching between Turkish and English.
+ *
+ * Route map:
+ *   /                     <-> /en/
+ *   /takvim               <-> /en/calendar
+ *   /takvim/hafta/:id     <-> /en/calendar/week/:id
+ *   /takvim/mekanlar      <-> /en/calendar/venues
  */
 import type { Language } from '../i18n/translations';
 
@@ -17,70 +23,60 @@ function normalizePath(path: string): string {
   return path.replace(/\/$/, '');
 }
 
+const trToEn: Array<[RegExp, string]> = [
+  [/^\/takvim\/hafta\/([^/]+)$/, '/en/calendar/week/$1'],
+  [/^\/takvim\/mekanlar$/, '/en/calendar/venues'],
+  [/^\/takvim$/, '/en/calendar'],
+];
+
+const enToTr: Array<[RegExp, string]> = [
+  [/^\/calendar\/week\/([^/]+)$/, '/takvim/hafta/$1'],
+  [/^\/calendar\/venues$/, '/takvim/mekanlar'],
+  [/^\/calendar$/, '/takvim'],
+];
+
 // Calculate paths for language switch
 function getAlternatePath(targetLang: Language): string {
   const normalizedPath = normalizePath(currentPath);
-  
+
   if (targetLang === 'tr') {
-    // Going from EN to TR
-    // Remove /en prefix first
-    let pathWithoutPrefix = normalizedPath.replace(/^\/en/, '');
-    if (pathWithoutPrefix === '' || pathWithoutPrefix === '/') {
-      return '/';
+    if (!normalizedPath.startsWith('/en')) return normalizedPath;
+    const pathWithoutPrefix = normalizedPath.replace(/^\/en/, '');
+    if (pathWithoutPrefix === '' || pathWithoutPrefix === '/') return '/';
+    for (const [pattern, replacement] of enToTr) {
+      if (pattern.test(pathWithoutPrefix)) return pathWithoutPrefix.replace(pattern, replacement);
     }
-    
-    // Handle week paths: /week/X -> /hafta/X
-    if (pathWithoutPrefix.startsWith('/week/')) {
-      return pathWithoutPrefix.replace('/week/', '/hafta/');
-    }
-    
-    // Handle venues: /venues -> /mekanlar
-    if (pathWithoutPrefix === '/venues') {
-      return '/mekanlar';
-    }
-    
     return pathWithoutPrefix;
-  } else {
-    // Going from TR to EN
-    if (normalizedPath.startsWith('/en')) {
-      return normalizedPath;
-    }
-    
-    // Handle week paths: /hafta/X -> /en/week/X
-    if (normalizedPath.startsWith('/hafta/')) {
-      return '/en' + normalizedPath.replace('/hafta/', '/week/');
-    }
-    
-    // Handle venues: /mekanlar -> /en/venues
-    if (normalizedPath === '/mekanlar') {
-      return '/en/venues';
-    }
-    
-    // Default: add /en prefix
-    return `/en${normalizedPath === '/' ? '' : normalizedPath}`;
   }
+
+  if (normalizedPath.startsWith('/en')) return normalizedPath;
+  if (normalizedPath === '/') return '/en/';
+  for (const [pattern, replacement] of trToEn) {
+    if (pattern.test(normalizedPath)) return normalizedPath.replace(pattern, replacement);
+  }
+  return `/en${normalizedPath}`;
 }
 ---
 
 <div class="flex items-center gap-1 text-sm">
-  <a 
+  <a
     href={getAlternatePath('tr')}
     class:list={[
-      "px-2 py-1 rounded transition-colors",
-      lang === 'tr' 
-        ? "bg-cereyan-pink/20 text-cereyan-pink font-medium" 
+      "px-2 py-1 transition-colors",
+      lang === 'tr'
+        ? "bg-cereyan-red/15 text-cereyan-red-dark font-medium"
         : "text-text-muted hover:text-text"
     ]}
   >
     TR
   </a>
   <span class="text-border">/</span>
-  <a 
+  <a
     href={getAlternatePath('en')}
     class:list={[
-      "px-2 py-1 rounded transition-colors",
-      lang === 'en' 
-        ? "bg-cereyan-pink/20 text-cereyan-pink font-medium" 
+      "px-2 py-1 transition-colors",
+      lang === 'en'
+        ? "bg-cereyan-red/15 text-cereyan-red-dark font-medium"
         : "text-text-muted hover:text-text"
     ]}
   >

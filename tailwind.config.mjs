@@ -1,5 +1,6 @@
 /**
  * Tailwind CSS configuration for Cereyan
+ * Palette (Oct 2026 rebrand): black, evergreen, alabaster, terracotta, dark cyan.
  * @see https://tailwindcss.com/docs/configuration
  */
 
@@ -9,25 +10,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Brand accent color
+        // Brand colours
         cereyan: {
-          pink: '#C74B9B',
-          'pink-light': '#D86AAF',
-          'pink-dark': '#A33D80',
+          red: '#F2542D',         // terracotta: grounds, large type, rules
+          'red-light': '#F5765A',
+          'red-dark': '#C9411F',  // terracotta for small text (4.9:1 on white)
+          black: '#030303',
+          green: '#0D3E2D',       // evergreen
+          alabaster: '#EAE1DF',
+          cyan: '#0E9594',
         },
-        // Light theme palette
+        // Light theme surfaces, warmed toward alabaster
         surface: {
           DEFAULT: '#FFFFFF',     // Page background
-          card: '#F9FAFB',        // Card background (subtle gray)
-          muted: '#F3F4F6',       // Secondary surfaces
+          card: '#F7F2F0',        // Card background
+          muted: '#EAE1DF',       // Secondary surfaces (alabaster)
         },
         border: {
-          DEFAULT: '#E5E7EB',
-          light: '#F3F4F6',
+          DEFAULT: '#D9CFCC',
+          light: '#EAE1DF',
         },
         text: {
-          DEFAULT: '#171717',     // Primary text
-          muted: '#737373',       // Secondary text
+          DEFAULT: '#030303',     // Primary text
+          muted: '#5C5452',       // Secondary text
         },
       },
       fontFamily: {
@@ -37,6 +42,7 @@ export default {
       },
       letterSpacing: {
         'widest-xl': '0.25em',
+        brand: '0.22em',
       },
     },
   },

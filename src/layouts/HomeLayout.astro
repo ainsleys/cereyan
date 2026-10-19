@@ -1,0 +1,66 @@
+---
+/**
+ * Layout for the Cereyan company pages (/ and /en/).
+ * One column of type on a white ground. Terracotta carries the wordmark and nothing else.
+ */
+import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
+
+interface Props {
+  lang: 'tr' | 'en';
+  /** Path of this page in the other language, for the toggle */
+  altPath: string;
+}
+
+const { lang, altPath } = Astro.props;
+const description =
+  lang === 'tr'
+    ? 'Sinema kültürü üzerine bağımsız bir oluşum: yapım, restorasyon, etkinlik, danışmanlık. İstanbul film takvimi.'
+    : 'An independent organization for film culture: production, restoration, events, consulting. The Istanbul film calendar.';
+const canonicalURL = new URL(Astro.url.pathname, 'https://cereyan.xyz');
+const calendarPath = lang === 'tr' ? '/takvim' : '/en/calendar';
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Cereyan</title>
+    <link rel="canonical" href={canonicalURL.href} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:title" content="Cereyan" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://cereyan.xyz/api/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={lang === 'tr' ? 'tr_TR' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cereyan" />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://cereyan.xyz/api/og.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="border-b border-border">
+      <div class="max-w-xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href={lang === 'tr' ? '/' : '/en/'} class="wordmark text-lg text-cereyan-red-dark hover:text-cereyan-red transition-colors">Cereyan</a>
+        <nav class="flex items-center gap-5 text-xs tracking-widest uppercase">
+          <a href={calendarPath} class="text-text-muted hover:text-cereyan-red-dark transition-colors">{lang === 'tr' ? 'Takvim' : 'Calendar'}</a>
+          <a href={altPath} class="text-text-muted hover:text-cereyan-red-dark transition-colors">{lang === 'tr' ? 'EN' : 'TR'}</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1 flex items-center">
+      <div class="w-full max-w-xl mx-auto px-6 py-20">
+        <slot />
+      </div>
+    </main>
+    <Analytics />
+  </body>
+</html>

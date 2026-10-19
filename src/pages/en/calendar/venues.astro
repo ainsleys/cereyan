@@ -1,11 +1,11 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { t } from '../i18n/translations';
-import type { Venue } from '../types';
+import Layout from '../../../layouts/Layout.astro';
+import { t } from '../../../i18n/translations';
+import type { Venue } from '../../../types';
 
-import venuesData from '../data/venues.json';
+import venuesData from '../../../data/venues.json';
 
-const lang = 'tr';
+const lang = 'en';
 const venues = (venuesData as Venue[]).filter(v => v.id !== 'various');
 
 // Group venues by neighborhood
@@ -36,7 +36,7 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
     <!-- Neighborhood filter -->
     <div class="venue-filter mb-6 max-w-2xl">
       <div class="flex items-center gap-2 mb-3">
-        <svg class="w-4 h-4 text-cereyan-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-cereyan-red-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
@@ -48,8 +48,8 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
       <div class="flex flex-wrap gap-1.5" id="neighborhood-filter">
         <button 
           class="neighborhood-btn active px-2 py-0.5 text-[11px] font-medium
-                 bg-cereyan-pink/20 text-cereyan-pink border border-cereyan-pink/30
-                 hover:bg-cereyan-pink/30 transition-all"
+                 bg-cereyan-red/20 text-cereyan-red-dark border border-cereyan-red/30
+                 hover:bg-cereyan-red/30 transition-all"
           data-neighborhood="all"
         >
           {t(lang, 'venues.allNeighborhoods')}
@@ -58,7 +58,7 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
           <button 
             class="neighborhood-btn px-2 py-0.5 text-[11px] font-medium
                    bg-surface-muted text-text-muted border border-border
-                   hover:border-cereyan-pink/50 hover:text-text transition-all"
+                   hover:border-cereyan-red/50 hover:text-text transition-all"
             data-neighborhood={neighborhood}
           >
             {neighborhood}
@@ -86,7 +86,7 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
               
               {venue.address && (
                 <div class="flex items-start gap-2 text-sm text-text-muted mb-3">
-                  <svg class="w-4 h-4 mt-0.5 shrink-0 text-cereyan-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 mt-0.5 shrink-0 text-cereyan-red-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
@@ -94,9 +94,9 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
                 </div>
               )}
               
-              {venue.description && (
+              {venue.descriptionEn && (
                 <p class="text-sm text-text-muted leading-relaxed">
-                  {venue.description}
+                  {venue.descriptionEn}
                 </p>
               )}
             </article>
@@ -125,10 +125,10 @@ const neighborhoods = Object.keys(venuesByNeighborhood).sort();
         // Update button states
         buttons.forEach(b => {
           if (b === btn) {
-            b.classList.add('active', 'bg-cereyan-pink/20', 'text-cereyan-pink', 'border-cereyan-pink/30');
+            b.classList.add('active', 'bg-cereyan-red/20', 'text-cereyan-red-dark', 'border-cereyan-red/30');
             b.classList.remove('bg-surface-muted', 'text-text-muted', 'border-border');
           } else {
-            b.classList.remove('active', 'bg-cereyan-pink/20', 'text-cereyan-pink', 'border-cereyan-pink/30');
+            b.classList.remove('active', 'bg-cereyan-red/20', 'text-cereyan-red-dark', 'border-cereyan-red/30');
             b.classList.add('bg-surface-muted', 'text-text-muted', 'border-border');
           }
         });
