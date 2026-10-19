@@ -1,0 +1,141 @@
+---
+/**
+ * Password gate for the Denize İnen Sokak project page.
+ *
+ * The page itself is static HTML in src/data/denize-inen-sokak.html; this
+ * route serves it only after the right password has been entered once. A
+ * signed cookie remembers the visitor for 30 days.
+ *
+ * The password comes from the DIS_PASSWORD environment variable on Vercel.
+ * Until that is set, the salted SHA-256 hash below is used instead.
+ */
+import pageHtml from '../../data/denize-inen-sokak.html?raw';
+
+export const prerender = false;
+
+const SALT = 'cereyan-dis:';
+const COOKIE_SALT = 'cereyan-dis-cookie:';
+const COOKIE = 'dis_access';
+const FALLBACK_HASH = 'db442a8edab4d0a65e9f8a39e8d1ddb44de0154218e19149507e9cc6eddee9c0';
+
+async function sha256(text: string): Promise<string> {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function passwordHash(): Promise<string> {
+  const configured = import.meta.env.DIS_PASSWORD;
+  return configured ? sha256(SALT + configured) : FALLBACK_HASH;
+}
+
+const expectedHash = await passwordHash();
+const validCookie = await sha256(COOKIE_SALT + expectedHash);
+
+function fullPage(): Response {
+  return new Response(pageHtml, {
+    headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'private, no-store' },
+  });
+}
+
+let error = false;
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const attempt = String(form.get('password') ?? '').trim();
+  if (attempt && (await sha256(SALT + attempt)) === expectedHash) {
+    Astro.cookies.set(COOKIE, validCookie, {
+      path: '/denize-inen-sokak',
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30,
+    });
+    return Astro.redirect('/denize-inen-sokak/', 303);
+  }
+  error = true;
+}
+
+if (Astro.cookies.get(COOKIE)?.value === validCookie) {
+  return fullPage();
+}
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+---
+
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Denize İnen Sokak</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        color: #161616;
+        font-family: "Newsreader", Georgia, serif;
+        font-optical-sizing: auto;
+        font-size: 1.125rem;
+        line-height: 1.5;
+        padding: 1.5rem;
+        -webkit-font-smoothing: antialiased;
+      }
+      form { width: 100%; max-width: 22rem; display: flex; flex-direction: column; gap: 1.25rem; }
+      .label {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #6f6f6f;
+      }
+      h1 { font-weight: 400; font-size: 2.2rem; line-height: 1.1; letter-spacing: -0.01em; }
+      label { display: flex; flex-direction: column; gap: 0.5rem; }
+      input {
+        font: inherit;
+        padding: 0.6rem 0.75rem;
+        border: 1px solid #161616;
+        border-radius: 0;
+        background: #fff;
+        color: #161616;
+      }
+      input:focus-visible { outline: 2px solid #161616; outline-offset: 2px; }
+      button {
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 0.75rem 1rem;
+        background: #161616;
+        color: #fff;
+        border: 0;
+        cursor: pointer;
+        align-self: flex-start;
+      }
+      button:focus-visible { outline: 2px solid #161616; outline-offset: 2px; }
+      .error { font-style: italic; color: #6f6f6f; }
+    </style>
+  </head>
+  <body>
+    <form method="post">
+      <span class="label">Atilla Tokatlı · 1960</span>
+      <h1>Denize İnen Sokak</h1>
+      <label>
+        <span class="label">Şifre</span>
+        <input type="password" name="password" autocomplete="current-password" autofocus required />
+      </label>
+      {error && <p class="error">Şifre yanlış.</p>}
+      <button type="submit">Devam</button>
+    </form>
+  </body>
+</html>
