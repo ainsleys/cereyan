@@ -1,0 +1,232 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import WeekSelector from '../../../components/WeekSelector.astro';
+import ScreeningFilters from '../../../components/ScreeningFilters.astro';
+import DaySection from '../../../components/DaySection.astro';
+import { t } from '../../../i18n/translations';
+import { getWeekStart, getWeekEnd, getISOWeek, formatWeekRange } from '../../../utils/dates';
+import type { Screening, Venue } from '../../../types';
+
+import screeningsData from '../../../data/screenings.json';
+import venuesData from '../../../data/venues.json';
+
+// Generate static pages for each week
+export function getStaticPaths() {
+  const now = new Date();
+  const currentWeekStart = getWeekStart(now);
+  
+  // Generate weeks (4 past + 8 future = 12 weeks)
+  const weeks = [];
+  const archiveStart = new Date(currentWeekStart);
+  archiveStart.setDate(archiveStart.getDate() - 28); // 4 weeks back
+  
+  for (let i = 0; i < 12; i++) {
+    const weekStart = new Date(archiveStart);
+    weekStart.setDate(weekStart.getDate() + (i * 7));
+    const weekId = getISOWeek(weekStart);
+    weeks.push({ params: { weekId } });
+  }
+  
+  return weeks;
+}
+
+const { weekId } = Astro.params;
+const lang = 'tr';
+const screenings = screeningsData as Screening[];
+const venues = venuesData as Venue[];
+
+const now = new Date();
+const currentWeekStart = getWeekStart(now);
+const currentWeekId = getISOWeek(currentWeekStart);
+
+// Parse selected week from URL param using proper ISO week calculation
+const match = weekId?.match(/^(\d{4})-W(\d{2})$/);
+let selectedWeekStart: Date;
+if (match) {
+  const [, yearStr, weekStr] = match;
+  const year = parseInt(yearStr);
+  const week = parseInt(weekStr);
+  
+  // Find Jan 4 of the given year (always in week 1 of ISO calendar)
+  const jan4 = new Date(year, 0, 4);
+  // Get the Monday of week 1 (the week containing Jan 4)
+  const dayOfWeek = jan4.getDay();
+  const mondayOfWeek1 = new Date(jan4);
+  // Adjust to Monday: if Sunday (0), go back 6 days; otherwise go back (day - 1) days
+  mondayOfWeek1.setDate(jan4.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+  
+  // Now add (week - 1) * 7 days to get to the target week
+  selectedWeekStart = new Date(mondayOfWeek1);
+  selectedWeekStart.setDate(mondayOfWeek1.getDate() + (week - 1) * 7);
+  selectedWeekStart.setHours(0, 0, 0, 0);
+} else {
+  selectedWeekStart = currentWeekStart;
+}
+
+const selectedWeekEnd = getWeekEnd(selectedWeekStart);
+const selectedWeekId = getISOWeek(selectedWeekStart);
+
+// Generate weeks for navigation (4 past + 8 future)
+const weeks: { id: string; label: string; labelEn: string; isCurrent: boolean; isPast: boolean }[] = [];
+const archiveStart = new Date(currentWeekStart);
+archiveStart.setDate(archiveStart.getDate() - 28);
+
+for (let i = 0; i < 12; i++) {
+  const weekStart = new Date(archiveStart);
+  weekStart.setDate(weekStart.getDate() + (i * 7));
+  const weekEnd = getWeekEnd(weekStart);
+  const wId = getISOWeek(weekStart);
+  
+  weeks.push({
+    id: wId,
+    label: formatWeekRange(weekStart, weekEnd, 'tr'),
+    labelEn: formatWeekRange(weekStart, weekEnd, 'en'),
+    isCurrent: wId === currentWeekId,
+    isPast: weekStart < currentWeekStart,
+  });
+}
+
+// Filter screenings for selected week
+const weekScreenings = screenings.filter(s => {
+  const screeningDate = new Date(s.date);
+  return screeningDate >= selectedWeekStart && screeningDate <= selectedWeekEnd;
+});
+
+// Helper to parse time for sorting (returns minutes from midnight, or Infinity for special values)
+function parseTimeForSort(time: string): number {
+  if (!time || time.trim() === '' || time === 'Farklı Saatler' || time === 'Tüm Gün') {
+    return Infinity; // Put special times at the end
+  }
+  const match = time.match(/^(\d{1,2}):(\d{2})/);
+  if (match) {
+    return parseInt(match[1]) * 60 + parseInt(match[2]);
+  }
+  return Infinity;
+}
+
+// Group screenings by date and sort within each day
+const screeningsByDate = weekScreenings.reduce((acc, screening) => {
+  const date = screening.date;
+  if (!acc[date]) {
+    acc[date] = [];
+  }
+  acc[date].push(screening);
+  return acc;
+}, {} as Record<string, Screening[]>);
+
+// Sort screenings within each day: by time first, then by venue
+Object.keys(screeningsByDate).forEach(date => {
+  screeningsByDate[date].sort((a, b) => {
+    const timeA = parseTimeForSort(a.time);
+    const timeB = parseTimeForSort(b.time);
+    if (timeA !== timeB) return timeA - timeB;
+    // Same time: sort by venue name
+    return (a.venue || '').localeCompare(b.venue || '', 'tr');
+  });
+});
+
+// Get today's date in local timezone
+const today = new Date();
+const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+// Split dates into upcoming and past
+const allDates = Object.keys(screeningsByDate).sort();
+const upcomingDates = allDates.filter(date => date >= todayISO);
+const pastDates = allDates.filter(date => date < todayISO).sort().reverse();
+
+const isCurrentWeek = selectedWeekId === currentWeekId;
+
+// Get unique venues for filter (map venue IDs to actual venue objects)
+const uniqueVenueIds = [...new Set(weekScreenings.map(s => s.venueId).filter(Boolean))];
+const uniqueVenues = uniqueVenueIds
+  .map(id => venues.find(v => v.id === id))
+  .filter((v): v is Venue => v !== undefined);
+
+// Get unique series names (trimmed, non-empty) for filter
+const activeSeriesNames = [...new Set(
+  weekScreenings
+    .map(s => (s.eventSeries || '').trim())
+    .filter(s => s !== '')
+)].sort((a, b) => a.localeCompare(b, 'tr'));
+
+// Check if any Cereyan Selects exist this week (language-independent canonical boolean)
+const hasCereyanSelects = weekScreenings.some(s =>
+  s.isCereyanSelect || !!s.programmersNote || !!s.programmersNoteEn
+);
+---
+
+<Layout lang={lang}>
+  <div class="space-y-6">
+    <header class="text-center mb-8">
+      <h1 class="sr-only">{t(lang, 'site.subtitle')}</h1>
+      <a 
+        href="https://cereyan.substack.com" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="text-text-muted text-sm hover:text-cereyan-red-dark transition-colors"
+      >
+        {t(lang, 'site.subtitle')}
+      </a>
+    </header>
+
+    <WeekSelector 
+      weeks={weeks} 
+      currentWeekId={selectedWeekId} 
+      lang={lang} 
+      basePath="/takvim/hafta"
+    />
+
+    {weekScreenings.length > 0 ? (
+      <>
+        <ScreeningFilters
+          venues={venues}
+          activeVenueIds={uniqueVenueIds}
+          activeSeriesNames={activeSeriesNames}
+          hasCereyanSelects={hasCereyanSelects}
+          lang={lang}
+        />
+        
+        <div class="screening-list space-y-8">
+          {upcomingDates.map((date, index) => (
+            <DaySection 
+              date={date} 
+              screenings={screeningsByDate[date]} 
+              lang={lang}
+              scrollLinkTargetId={index === 0 && isCurrentWeek && pastDates.length > 0 ? "past-screenings" : undefined}
+            />
+          ))}
+          
+          {pastDates.length > 0 && (
+            <>
+              <div id="past-screenings" class="flex items-center gap-4 py-4 max-w-2xl mx-auto">
+                <div class="flex-1 h-px bg-border"></div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-text-muted px-2">
+                  {t(lang, 'calendar.pastScreenings')}
+                </span>
+                <div class="flex-1 h-px bg-border"></div>
+              </div>
+              
+              {pastDates.map(date => (
+                <DaySection 
+                  date={date} 
+                  screenings={screeningsByDate[date]} 
+                  lang={lang}
+                />
+              ))}
+            </>
+          )}
+        </div>
+      </>
+    ) : (
+      <div class="text-center py-16">
+        <div class="w-16 h-16 mx-auto mb-4 bg-cinema-dark rounded-full flex items-center justify-center">
+          <svg class="w-8 h-8 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+          </svg>
+        </div>
+        <p class="text-text-muted">{t(lang, 'calendar.noScreenings')}</p>
+      </div>
+    )}
+  </div>
+</Layout>
+

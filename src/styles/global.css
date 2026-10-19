@@ -39,7 +39,7 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-cereyan-pink;
+    @apply bg-cereyan-red;
   }
 }
 
@@ -48,14 +48,19 @@
    ============================================================================= */
 
 @layer components {
-  /* Brand gradient */
+  /* Wordmark: DM Sans 600, tracked caps */
+  .wordmark {
+    @apply font-sans font-semibold uppercase tracking-brand;
+  }
+
+  /* Brand ground */
   .cereyan-gradient {
-    background: linear-gradient(135deg, #C74B9B 0%, #A33D80 100%);
+    background: #F2542D;
   }
 
   /* Glow effect for hover states */
   .cereyan-glow {
-    box-shadow: 0 4px 20px rgba(199, 75, 155, 0.15);
+    box-shadow: 0 4px 20px rgba(242, 84, 45, 0.15);
   }
 
   /* Screening card - centered design with top accent */
@@ -67,10 +72,10 @@
            max-w-2xl mx-auto;
   }
 
-  /* Top gradient accent bar */
+  /* Top accent bar */
   .screening-card-accent {
     height: 4px;
-    background: linear-gradient(90deg, #A33D80, #C74B9B, #D86AAF);
+    background: #F2542D;
   }
 
   /* Card content area */
@@ -81,34 +86,34 @@
   /* Featured screening card - has Cereyan commentary (Cereyan Selects) */
   .screening-card-featured {
     @apply shadow-md;
-    background: linear-gradient(to bottom, rgba(184, 134, 11, 0.05), transparent);
+    background: linear-gradient(to bottom, rgba(13, 62, 45, 0.06), transparent);
   }
 
   .screening-card-featured .screening-card-accent {
     height: 6px;
-    background: linear-gradient(90deg, #996515, #B8860B, #DAA520);
+    background: #0D3E2D;
   }
 
   /* Time badge - compact square style */
   .time-badge {
-    @apply inline-block font-mono text-xs font-semibold text-cereyan-pink
+    @apply inline-block font-mono text-xs font-semibold text-cereyan-red-dark
            px-2.5 py-1;
-    background: rgba(199, 75, 155, 0.08);
+    background: rgba(242, 84, 45, 0.08);
   }
 
   /* Week navigation tab */
   .week-tab {
     @apply px-4 py-2 text-sm font-medium transition-colors duration-200
-           text-text-muted hover:text-cereyan-pink;
+           text-text-muted hover:text-cereyan-red-dark;
   }
 
   .week-tab-active {
-    @apply text-cereyan-pink border-b-2 border-cereyan-pink;
+    @apply text-cereyan-red-dark border-b-2 border-cereyan-red;
   }
 
   /* Date section header */
   .date-header {
-    @apply text-sm font-bold tracking-widest uppercase text-cereyan-pink mb-4;
+    @apply text-sm font-bold tracking-widest uppercase text-cereyan-red-dark mb-4;
   }
 
   /* Venue tag - shows cinema venue name */
@@ -118,8 +123,8 @@
 
   /* Event series tag - shows retrospective/series name */
   .event-tag {
-    @apply font-mono text-xs px-2.5 py-1 text-cereyan-pink font-semibold;
-    background-color: #FDF2F8;
+    @apply font-mono text-xs px-2.5 py-1 text-cereyan-red-dark font-semibold;
+    background-color: #FDE8E2;
   }
 
   /* Venue card - for mekanlar/venues page */
@@ -132,15 +137,15 @@
   /* Primary button */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-4 py-2
-           bg-cereyan-pink text-white font-medium rounded
+           bg-cereyan-red-dark text-white font-medium
            transition-all duration-200
-           hover:bg-cereyan-pink-light hover:scale-105;
+           hover:bg-cereyan-red;
   }
 
   /* External link style */
   .link-external {
-    @apply text-cereyan-pink hover:text-cereyan-pink-light
-           underline underline-offset-2 decoration-cereyan-pink/50
+    @apply text-cereyan-red-dark hover:text-cereyan-red
+           underline underline-offset-2 decoration-cereyan-red/50
            transition-colors duration-200;
   }
 }

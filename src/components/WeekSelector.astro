@@ -78,10 +78,10 @@ const currentWeekIsAhead = selectedIndex < actualCurrentIndex;
             <g transform="translate(400,0) scale(-1,1)">
               <path fill="#0A0A0A" d="m70 360v-260l180 90 40-20-260-130v300z"/>
               <path fill="white" d="m70 100l40 20v180l260-130v40l-300 150z"/>
-              <path fill="#C74B9B" d="m110 260l180-90-260-130 40-20 300 150-260 130z"/>
+              <path fill="#F2542D" d="m110 260l180-90-260-130 40-20 300 150-260 130z"/>
             </g>
             <g clip-path="url(#clip-prev)">
-              <path d="M330,100 L290,120 L290,300 L30,170 L30,210 L330,360 Z" fill="none" stroke="#C74B9B" stroke-width="8"/>
+              <path d="M330,100 L290,120 L290,300 L30,170 L30,210 L330,360 Z" fill="none" stroke="#F2542D" stroke-width="8"/>
             </g>
           </svg>
         </a>
@@ -119,9 +119,9 @@ const currentWeekIsAhead = selectedIndex < actualCurrentIndex;
             </defs>
             <path fill="#0A0A0A" d="m70 360v-260l180 90 40-20-260-130v300z"/>
             <path fill="white" d="m70 100l40 20v180l260-130v40l-300 150z"/>
-            <path fill="#C74B9B" d="m110 260l180-90-260-130 40-20 300 150-260 130z"/>
+            <path fill="#F2542D" d="m110 260l180-90-260-130 40-20 300 150-260 130z"/>
             <g clip-path="url(#clip-next)">
-              <path d="m70 100l40 20v180l260-130v40l-300 150z" fill="none" stroke="#C74B9B" stroke-width="8"/>
+              <path d="m70 100l40 20v180l260-130v40l-300 150z" fill="none" stroke="#F2542D" stroke-width="8"/>
             </g>
           </svg>
         </a>
@@ -141,7 +141,7 @@ const currentWeekIsAhead = selectedIndex < actualCurrentIndex;
     {!isOnCurrentWeek && (
       <a 
         href={currentWeekUrl}
-        class="current-week-link text-sm text-cereyan-pink hover:text-cereyan-pink-dark transition-colors flex items-center gap-1"
+        class="current-week-link text-sm text-cereyan-red-dark hover:text-cereyan-red-dark transition-colors flex items-center gap-1"
       >
         {currentWeekIsAhead ? (
           <>

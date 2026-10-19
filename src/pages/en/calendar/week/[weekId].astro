@@ -1,14 +1,14 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import WeekSelector from '../../../components/WeekSelector.astro';
-import ScreeningFilters from '../../../components/ScreeningFilters.astro';
-import DaySection from '../../../components/DaySection.astro';
-import { t } from '../../../i18n/translations';
-import { getWeekStart, getWeekEnd, getISOWeek, formatWeekRange } from '../../../utils/dates';
-import type { Screening, Venue } from '../../../types';
+import Layout from '../../../../layouts/Layout.astro';
+import WeekSelector from '../../../../components/WeekSelector.astro';
+import ScreeningFilters from '../../../../components/ScreeningFilters.astro';
+import DaySection from '../../../../components/DaySection.astro';
+import { t } from '../../../../i18n/translations';
+import { getWeekStart, getWeekEnd, getISOWeek, formatWeekRange } from '../../../../utils/dates';
+import type { Screening, Venue } from '../../../../types';
 
-import screeningsData from '../../../data/screenings.json';
-import venuesData from '../../../data/venues.json';
+import screeningsData from '../../../../data/screenings.json';
+import venuesData from '../../../../data/venues.json';
 
 // Generate static pages for each week
 export function getStaticPaths() {
@@ -163,7 +163,7 @@ const hasCereyanSelects = weekScreenings.some(s =>
         href="https://cereyan.substack.com" 
         target="_blank" 
         rel="noopener noreferrer"
-        class="text-text-muted text-sm hover:text-cereyan-pink transition-colors"
+        class="text-text-muted text-sm hover:text-cereyan-red-dark transition-colors"
       >
         {t(lang, 'site.subtitle')}
       </a>
@@ -173,7 +173,7 @@ const hasCereyanSelects = weekScreenings.some(s =>
       weeks={weeks} 
       currentWeekId={selectedWeekId} 
       lang={lang} 
-      basePath="/en/week"
+      basePath="/en/calendar/week"
     />
 
     {weekScreenings.length > 0 ? (
