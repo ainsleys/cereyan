@@ -18,7 +18,6 @@ const description =
     ? 'Sinema kültürü üzerine bağımsız bir oluşum: yapım, restorasyon, etkinlik, danışmanlık. İstanbul film takvimi.'
     : 'An independent organization for film culture: production, restoration, events, consulting. The Istanbul film calendar.';
 const canonicalURL = new URL(Astro.url.pathname, 'https://cereyan.xyz');
-const calendarPath = lang === 'tr' ? '/takvim' : '/en/calendar';
 ---
 
 <!DOCTYPE html>
@@ -46,15 +45,12 @@ const calendarPath = lang === 'tr' ? '/takvim' : '/en/calendar';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body class="min-h-screen flex flex-col">
-    <header class="border-b border-border">
-      <div class="max-w-xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href={lang === 'tr' ? '/' : '/en/'} class="wordmark text-lg text-cereyan-red-dark hover:text-cereyan-red transition-colors">Cereyan</a>
-        <nav class="flex items-center gap-5 text-xs tracking-widest uppercase">
-          <a href={calendarPath} class="text-text-muted hover:text-cereyan-red-dark transition-colors">{lang === 'tr' ? 'Takvim' : 'Calendar'}</a>
-          <a href={altPath} class="text-text-muted hover:text-cereyan-red-dark transition-colors">{lang === 'tr' ? 'EN' : 'TR'}</a>
-        </nav>
-      </div>
-    </header>
+    <a
+      href={altPath}
+      class="absolute top-6 right-6 text-xs tracking-widest uppercase text-text-muted hover:text-cereyan-red-dark transition-colors"
+    >
+      {lang === 'tr' ? 'EN' : 'TR'}
+    </a>
 
     <main class="flex-1 flex items-center">
       <div class="w-full max-w-xl mx-auto px-6 py-20">
