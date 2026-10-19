@@ -2,10 +2,36 @@
   "buildCommand": "npm run build",
   "framework": "astro",
   "redirects": [
-    { "source": "/hafta/:weekId", "destination": "/takvim/hafta/:weekId", "permanent": true },
-    { "source": "/mekanlar", "destination": "/takvim/mekanlar", "permanent": true },
-    { "source": "/en/week/:weekId", "destination": "/en/calendar/week/:weekId", "permanent": true },
-    { "source": "/en/venues", "destination": "/en/calendar/venues", "permanent": true }
+    {
+      "source": "/hafta/:weekId",
+      "destination": "/takvim/hafta/:weekId",
+      "permanent": true
+    },
+    {
+      "source": "/mekanlar",
+      "destination": "/takvim/mekanlar",
+      "permanent": true
+    },
+    {
+      "source": "/en/week/:weekId",
+      "destination": "/en/calendar/week/:weekId",
+      "permanent": true
+    },
+    {
+      "source": "/en/venues",
+      "destination": "/en/calendar/venues",
+      "permanent": true
+    },
+    {
+      "source": "/DenizeInenSokak",
+      "destination": "/denize-inen-sokak/",
+      "permanent": true
+    },
+    {
+      "source": "/denizeinensokak",
+      "destination": "/denize-inen-sokak/",
+      "permanent": true
+    }
   ],
   "headers": [
     {
