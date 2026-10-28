@@ -3,9 +3,8 @@
  * Uses Tailwind CSS with custom components and utilities
  */
 
-/* Google Fonts - DM Sans, Instrument Serif, IBM Plex Mono
-   Using font-display: swap for better performance */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
+/* Fonts are self-hosted from /public/fonts (see fonts.css): no third-party request on the critical path. */
+@import './fonts.css';
 
 @tailwind base;
 @tailwind components;
