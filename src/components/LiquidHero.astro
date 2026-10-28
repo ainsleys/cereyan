@@ -150,10 +150,12 @@ void main(){
     const U = (n: string) => gl.getUniformLocation(prog, n);
     const uRes = U('uRes'), uT = U('uT'), uScale = U('uScale'), uBox = U('uBox'), uDpr = U('uDpr'), uGrain = U('uGrain');
 
-    const DPR = Math.min(window.devicePixelRatio || 1, 1); // the field is soft; 1x is plenty
     let speed = 0.6;
     function resize() {
       const w = cv!.clientWidth, h = cv!.clientHeight;
+      // Render at native density when the band is small (phones), and fall back toward 1x on big
+      // windows: a budget of ~0.7 Mpx keeps the cost flat while stopping highlights from pixellating.
+      const DPR = Math.max(1, Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(700000 / (w * h))));
       cv!.width = Math.round(w * DPR);
       cv!.height = Math.round(h * DPR);
       gl!.viewport(0, 0, cv!.width, cv!.height);
