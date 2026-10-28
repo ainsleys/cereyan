@@ -42,8 +42,7 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://cereyan.xyz');
     <meta name="twitter:title" content="Cereyan" />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://cereyan.xyz/og.jpg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="/fonts/dm-sans-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body class="min-h-screen flex flex-col bg-surface">
     <LiquidHero lang={lang} altPath={altPath} />
