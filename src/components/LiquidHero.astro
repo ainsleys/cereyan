@@ -1,0 +1,181 @@
+---
+/**
+ * The home-page hero: the Cereyan wordmark on a slowly moving terracotta "river".
+ *
+ * The surface is a single WebGL2 fragment shader (noise heightfield, lit and
+ * grained the same way as the LinkedIn banner). A pre-rendered frame of the
+ * same field sits behind the canvas as a background image, so the band looks
+ * finished at first paint and is what people with reduced motion, no WebGL2,
+ * or a struggling GPU see. Nothing readable depends on the canvas.
+ */
+interface Props {
+  lang: 'tr' | 'en';
+  /** Path of this page in the other language, for the toggle */
+  altPath: string;
+}
+const { lang, altPath } = Astro.props;
+---
+
+<section class="liquid-hero relative overflow-hidden bg-cereyan-red" aria-label="Cereyan">
+  <canvas id="liquid" class="absolute inset-0 w-full h-full" aria-hidden="true"></canvas>
+  <a
+    href={altPath}
+    class="absolute top-6 right-6 z-10 text-xs tracking-widest uppercase text-cereyan-alabaster/80 hover:text-cereyan-alabaster transition-colors"
+  >
+    {lang === 'tr' ? 'EN' : 'TR'}
+  </a>
+  <div class="relative z-10 h-full flex items-end">
+    <div class="w-full max-w-xl mx-auto px-6 pb-10 sm:pb-12">
+      <h1 id="wordmark" class="wordmark text-4xl sm:text-5xl text-cereyan-alabaster">Cereyan</h1>
+    </div>
+  </div>
+</section>
+
+<style>
+  .liquid-hero {
+    height: 46vh;
+    min-height: 300px;
+    background-image: url('/liquid-frame.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  @media (max-width: 640px) {
+    .liquid-hero { height: 40vh; min-height: 260px; }
+  }
+</style>
+
+<script is:inline id="liquid-frag" type="x-shader/x-fragment">#version 300 es
+precision highp float;
+out vec4 o;
+uniform vec2 uRes;      // canvas size in CSS px
+uniform float uT;       // seconds
+uniform float uScale;   // swell size multiplier (1 = banner scale)
+uniform vec4 uBox;      // calm zone around the wordmark, CSS px (x0,y0,x1,y1); negative = none
+uniform float uDpr;
+
+// 3D gradient noise; z carries time so the field evolves in place rather than scrolling
+vec3 hash3(vec3 p){ p = vec3(dot(p, vec3(127.1, 311.7, 74.7)), dot(p, vec3(269.5, 183.3, 246.1)), dot(p, vec3(113.5, 271.9, 124.6))); return -1.0 + 2.0 * fract(sin(p) * 43758.5453123); }
+float gnoise(vec3 p){
+  vec3 i = floor(p), f = fract(p);
+  vec3 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+  return mix(mix(mix(dot(hash3(i + vec3(0,0,0)), f - vec3(0,0,0)), dot(hash3(i + vec3(1,0,0)), f - vec3(1,0,0)), u.x),
+                 mix(dot(hash3(i + vec3(0,1,0)), f - vec3(0,1,0)), dot(hash3(i + vec3(1,1,0)), f - vec3(1,1,0)), u.x), u.y),
+             mix(mix(dot(hash3(i + vec3(0,0,1)), f - vec3(0,0,1)), dot(hash3(i + vec3(1,0,1)), f - vec3(1,0,1)), u.x),
+                 mix(dot(hash3(i + vec3(0,1,1)), f - vec3(0,1,1)), dot(hash3(i + vec3(1,1,1)), f - vec3(1,1,1)), u.x), u.y), u.z);
+}
+float fbm(vec3 p, int oct){ float s = 0.0, a = 1.0, m = 0.0; for (int i = 0; i < 4; i++){ if (i >= oct) break; s += a * gnoise(p); m += a; a *= 0.5; p *= 2.05; } return s / m; }
+
+// the river: horizontally stretched fbm, domain-warped by a slower field
+const float FX = 0.0022, FY = 0.012, WARP = 60.0;
+vec2 warp(vec2 q, float t){
+  return vec2(fbm(vec3(q * vec2(FX, FY) * 0.5, t * 0.05), 2),
+              fbm(vec3(q * vec2(FX, FY) * 0.5 + 40.0, 7.0 + t * 0.04), 2)) * WARP;
+}
+float height(vec2 q, vec2 w, float t){ return fbm(vec3((q + w) * vec2(FX, FY), 3.0 + t * 0.06), 3); }
+float hash1(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+float sstep(float e0, float e1, float x){ float t = clamp((x - e0) / (e1 - e0), 0.0, 1.0); return t * t * (3.0 - 2.0 * t); }
+
+void main(){
+  vec2 px = gl_FragCoord.xy / uDpr;
+  vec2 q = vec2(px.x, uRes.y - px.y) / uScale;
+  float t = uT, e = 0.5;
+  vec2 w = warp(q, t);
+  float h  = height(q, w, t);
+  float hx = height(q + vec2(e, 0.0), w, t) - h;
+  float hy = height(q + vec2(0.0, e), w, t) - h;
+
+  // soft calm zone around the wordmark: fewer highlights, slightly flatter swells
+  float mk = 0.0;
+  if (uBox.x >= 0.0) {
+    vec2 p = vec2(px.x, uRes.y - px.y);
+    vec2 d = max(max(uBox.xy - 4.0 - p, vec2(0.0)), p - (uBox.zw + 4.0));
+    mk = (1.0 - sstep(0.0, 140.0, length(d))) * 0.6;
+  }
+  float amp = 260.0 * (1.0 - 0.35 * mk);
+  vec3 n = normalize(vec3(-hx * amp, hy * amp, 1.0));
+  vec3 L = normalize(vec3(-0.45, 0.6, 0.66));
+  vec3 H = normalize(L + vec3(0.0, 0.0, 1.0));
+  float ndl = max(0.0, dot(n, L)), ndh = max(0.0, dot(n, H));
+  float spec = min(1.0, pow(ndh, 90.0) * 0.75 + pow(ndh, 8.0) * 0.22) * (1.0 - 0.85 * mk);
+
+  vec3 DARK = vec3(0.788, 0.255, 0.122), LIGHT = vec3(0.961, 0.463, 0.353), ALAB = vec3(0.918, 0.882, 0.875);
+  vec3 base = mix(DARK, LIGHT, clamp(0.5 + h * 0.6, 0.0, 1.0));
+  float diff = 0.84 + 0.16 * ndl;
+  vec3 c = mix(base * diff, ALAB, spec);
+
+  // film grain, stronger in the shadows, reseeded ten times a second
+  float g = (hash1(floor(px * 1.5) + floor(t * 10.0) * 0.37) - 0.5) * 0.07;
+  float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
+  c += g * (0.6 + 0.4 * (1.0 - lum)) * vec3(1.0, 0.92, 0.85);
+  o = vec4(c, 1.0);
+}
+</script>
+
+<script>
+  (() => {
+    const cv = document.getElementById('liquid') as HTMLCanvasElement | null;
+    const wm = document.getElementById('wordmark');
+    if (!cv || !wm) return;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return; // the pre-rendered frame stays
+
+    const gl = cv.getContext('webgl2', { antialias: false, alpha: false, powerPreference: 'low-power' });
+    if (!gl) return;
+
+    const src = document.getElementById('liquid-frag')?.textContent?.trim();
+    if (!src) return;
+    const compile = (type: number, code: string) => {
+      const s = gl.createShader(type)!;
+      gl.shaderSource(s, code);
+      gl.compileShader(s);
+      return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+    };
+    const vs = compile(gl.VERTEX_SHADER, '#version 300 es\nin vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }');
+    const fs = compile(gl.FRAGMENT_SHADER, src);
+    if (!vs || !fs) return;
+    const prog = gl.createProgram()!;
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const U = (n: string) => gl.getUniformLocation(prog, n);
+    const uRes = U('uRes'), uT = U('uT'), uScale = U('uScale'), uBox = U('uBox'), uDpr = U('uDpr');
+
+    const DPR = Math.min(window.devicePixelRatio || 1, 1); // the field is soft; 1x is plenty
+    const SPEED = 0.5;
+    function resize() {
+      const w = cv!.clientWidth, h = cv!.clientHeight;
+      cv!.width = Math.round(w * DPR);
+      cv!.height = Math.round(h * DPR);
+      gl!.viewport(0, 0, cv!.width, cv!.height);
+      gl!.uniform2f(uRes, w, h);
+      gl!.uniform1f(uDpr, DPR);
+      gl!.uniform1f(uScale, w < 640 ? 0.85 : 1.25); // smaller swells on phones
+      const r = wm!.getBoundingClientRect(), c = cv!.getBoundingClientRect();
+      gl!.uniform4f(uBox, r.left - c.left, r.top - c.top + 4, r.right - c.left - 12, r.bottom - c.top - 4);
+    }
+    addEventListener('resize', resize);
+    resize();
+
+    const t0 = performance.now();
+    let raf = 0;
+    const frame = (now: number) => {
+      gl.uniform1f(uT, 1000 + ((now - t0) / 1000) * SPEED);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      raf = requestAnimationFrame(frame);
+    };
+    const start = () => { if (!raf) raf = requestAnimationFrame(frame); };
+    const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    // the background image shows until the first frame is drawn, so there is no flash
+    start();
+  })();
+</script>

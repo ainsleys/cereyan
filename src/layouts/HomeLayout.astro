@@ -1,10 +1,11 @@
 ---
 /**
  * Layout for the Cereyan company pages (/ and /en/).
- * One column of type on a white ground. Terracotta carries the wordmark and nothing else.
+ * The wordmark rides a slowly moving terracotta river (LiquidHero); below it, one column of type on white.
  */
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro';
+import LiquidHero from '../components/LiquidHero.astro';
 
 interface Props {
   lang: 'tr' | 'en';
@@ -33,27 +34,22 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://cereyan.xyz');
     <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:title" content="Cereyan" />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://cereyan.xyz/api/og.png" />
+    <meta property="og:image" content="https://cereyan.xyz/og.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content={lang === 'tr' ? 'tr_TR' : 'en_US'} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Cereyan" />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://cereyan.xyz/api/og.png" />
+    <meta name="twitter:image" content="https://cereyan.xyz/og.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
-  <body class="min-h-screen flex flex-col">
-    <a
-      href={altPath}
-      class="absolute top-6 right-6 text-xs tracking-widest uppercase text-text-muted hover:text-cereyan-red-dark transition-colors"
-    >
-      {lang === 'tr' ? 'EN' : 'TR'}
-    </a>
+  <body class="min-h-screen flex flex-col bg-surface">
+    <LiquidHero lang={lang} altPath={altPath} />
 
-    <main class="flex-1 flex items-center">
-      <div class="w-full max-w-xl mx-auto px-6 py-20">
+    <main class="flex-1">
+      <div class="w-full max-w-xl mx-auto px-6 py-12 sm:py-16">
         <slot />
       </div>
     </main>
