@@ -52,6 +52,7 @@ uniform float uT;       // seconds
 uniform float uScale;   // swell size multiplier (1 = banner scale)
 uniform vec4 uBox;      // calm zone around the wordmark, CSS px (x0,y0,x1,y1); negative = none
 uniform float uDpr;
+uniform float uGrain;   // grain amplitude; lighter on phones, where the 1x canvas is stretched
 
 // 3D gradient noise; z carries time so the field evolves in place rather than scrolling
 vec3 hash3(vec3 p){ p = vec3(dot(p, vec3(127.1, 311.7, 74.7)), dot(p, vec3(269.5, 183.3, 246.1)), dot(p, vec3(113.5, 271.9, 124.6))); return -1.0 + 2.0 * fract(sin(p) * 43758.5453123); }
@@ -104,7 +105,7 @@ void main(){
   vec3 c = mix(base * diff, ALAB, spec);
 
   // film grain, stronger in the shadows, reseeded ten times a second
-  float g = (hash1(floor(px * 1.5) + floor(t * 10.0) * 0.37) - 0.5) * 0.07;
+  float g = (hash1(floor(px * 1.5) + floor(t * 10.0) * 0.37) - 0.5) * uGrain;
   float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
   c += g * (0.6 + 0.4 * (1.0 - lum)) * vec3(1.0, 0.92, 0.85);
   o = vec4(c, 1.0);
@@ -147,7 +148,7 @@ void main(){
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const U = (n: string) => gl.getUniformLocation(prog, n);
-    const uRes = U('uRes'), uT = U('uT'), uScale = U('uScale'), uBox = U('uBox'), uDpr = U('uDpr');
+    const uRes = U('uRes'), uT = U('uT'), uScale = U('uScale'), uBox = U('uBox'), uDpr = U('uDpr'), uGrain = U('uGrain');
 
     const DPR = Math.min(window.devicePixelRatio || 1, 1); // the field is soft; 1x is plenty
     const SPEED = 0.5;
@@ -159,6 +160,7 @@ void main(){
       gl!.uniform2f(uRes, w, h);
       gl!.uniform1f(uDpr, DPR);
       gl!.uniform1f(uScale, w < 640 ? 0.85 : 1.25); // smaller swells on phones
+      gl!.uniform1f(uGrain, w < 640 ? 0.03 : 0.07); // the stretched canvas magnifies grain, so use less
       const r = wm!.getBoundingClientRect(), c = cv!.getBoundingClientRect();
       gl!.uniform4f(uBox, r.left - c.left, r.top - c.top + 4, r.right - c.left - 12, r.bottom - c.top - 4);
     }
