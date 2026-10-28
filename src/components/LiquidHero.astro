@@ -151,7 +151,7 @@ void main(){
     const uRes = U('uRes'), uT = U('uT'), uScale = U('uScale'), uBox = U('uBox'), uDpr = U('uDpr'), uGrain = U('uGrain');
 
     const DPR = Math.min(window.devicePixelRatio || 1, 1); // the field is soft; 1x is plenty
-    const SPEED = 0.5;
+    let speed = 0.6;
     function resize() {
       const w = cv!.clientWidth, h = cv!.clientHeight;
       cv!.width = Math.round(w * DPR);
@@ -161,6 +161,7 @@ void main(){
       gl!.uniform1f(uDpr, DPR);
       gl!.uniform1f(uScale, w < 640 ? 0.85 : 1.25); // smaller swells on phones
       gl!.uniform1f(uGrain, w < 640 ? 0.03 : 0.07); // the stretched canvas magnifies grain, so use less
+      speed = w < 640 ? 1.0 : 0.6;                     // at half pace the phone band read as stalled
       const r = wm!.getBoundingClientRect(), c = cv!.getBoundingClientRect();
       gl!.uniform4f(uBox, r.left - c.left, r.top - c.top + 4, r.right - c.left - 12, r.bottom - c.top - 4);
     }
@@ -170,7 +171,7 @@ void main(){
     const t0 = performance.now();
     let raf = 0;
     const frame = (now: number) => {
-      gl.uniform1f(uT, 1000 + ((now - t0) / 1000) * SPEED);
+      gl.uniform1f(uT, 1000 + ((now - t0) / 1000) * speed);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       raf = requestAnimationFrame(frame);
     };
