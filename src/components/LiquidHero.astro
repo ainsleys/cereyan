@@ -120,7 +120,9 @@ void main(){
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return; // the pre-rendered frame stays
 
-    const gl = cv.getContext('webgl2', { antialias: false, alpha: false, powerPreference: 'low-power' });
+    // alpha: true keeps the canvas transparent until the first frame draws, so the still frame
+    // behind it shows while the shader compiles or whenever the loop is paused (background tab).
+    const gl = cv.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: false, powerPreference: 'low-power' });
     if (!gl) return;
 
     const src = document.getElementById('liquid-frag')?.textContent?.trim();
