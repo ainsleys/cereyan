@@ -170,17 +170,27 @@ void main(){
     addEventListener('resize', resize);
     resize();
 
+    // The motion is slow, so 30 frames a second is indistinguishable from 60 and costs half.
+    const FRAME_MS = 1000 / 30;
     const t0 = performance.now();
-    let raf = 0;
+    let raf = 0, last = 0, visible = true, focused = !document.hidden;
     const frame = (now: number) => {
+      raf = requestAnimationFrame(frame);
+      if (now - last < FRAME_MS) return;
+      last = now;
       gl.uniform1f(uT, 1000 + ((now - t0) / 1000) * speed);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-      raf = requestAnimationFrame(frame);
     };
-    const start = () => { if (!raf) raf = requestAnimationFrame(frame); };
-    const stop = () => { cancelAnimationFrame(raf); raf = 0; };
-    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-    // the background image shows until the first frame is drawn, so there is no flash
-    start();
+    // Run only while the band is on screen and the page is in front; otherwise the GPU sleeps.
+    const update = () => {
+      const run = visible && focused;
+      if (run && !raf) raf = requestAnimationFrame(frame);
+      if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
+    };
+    document.addEventListener('visibilitychange', () => { focused = !document.hidden; update(); });
+    addEventListener('blur', () => { focused = false; update(); });
+    addEventListener('focus', () => { focused = true; update(); });
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; update(); }, { threshold: 0 }).observe(cv);
+    update();
   })();
 </script>
